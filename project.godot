@@ -1,0 +1,55 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "Main",
+"language": "GDScript",
+"path": "res://Scripts/Main.gd"
+}, {
+"base": "HBoxContainer",
+"class": "MenuItem",
+"language": "GDScript",
+"path": "res://Scripts/UI/MenuItem.gd"
+}, {
+"base": "Node2D",
+"class": "SceneManager",
+"language": "GDScript",
+"path": "res://Scripts/Scene_Manager.gd"
+} ]
+_global_script_class_icons={
+"Main": "",
+"MenuItem": "",
+"SceneManager": ""
+}
+
+[application]
+
+config/name="Metamorphosizing Organisms"
+run/main_scene="res://Scenes/Main.tscn"
+config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
+window/size/fullscreen=true
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+
+[global]
+
+port=false
+
+[rendering]
+
+quality/driver/driver_name="GLES2"
+quality/driver/fallback_to_gles2=true
+vram_compression/import_etc=true
