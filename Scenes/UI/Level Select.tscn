@@ -26,29 +26,31 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 41.0
-margin_top = 183.0
-margin_right = 1879.0
-margin_bottom = 896.0
+margin_left = 86.0
+margin_top = 59.0
+margin_right = 1834.0
+margin_bottom = 1020.0
 
 [node name="C1" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
-margin_right = 1838.0
-margin_bottom = 245.0
+margin_right = 1748.0
+margin_bottom = 493.0
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer/C1"]
-margin_right = 1838.0
-margin_bottom = 245.0
+margin_right = 1748.0
+margin_bottom = 493.0
 custom_fonts/font = SubResource( 1 )
-text = "Deterministic Risk"
+text = "Metamorphosing
+Organisms"
+align = 1
 
 [node name="C2" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
-margin_top = 249.0
-margin_right = 1838.0
-margin_bottom = 372.0
+margin_top = 497.0
+margin_right = 1748.0
+margin_bottom = 620.0
 
 [node name="Label2" type="Label" parent="CenterContainer/VBoxContainer/C2"]
-margin_left = 623.0
-margin_right = 1215.0
+margin_left = 578.0
+margin_right = 1170.0
 margin_bottom = 123.0
 custom_fonts/font = ExtResource( 2 )
 text = "Select Level"
@@ -57,13 +59,13 @@ __meta__ = {
 }
 
 [node name="C3" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
-margin_top = 376.0
-margin_right = 1838.0
-margin_bottom = 510.0
+margin_top = 624.0
+margin_right = 1748.0
+margin_bottom = 758.0
 
 [node name="H1" type="HBoxContainer" parent="CenterContainer/VBoxContainer/C3"]
-margin_left = 216.0
-margin_right = 1622.0
+margin_left = 171.0
+margin_right = 1577.0
 margin_bottom = 134.0
 rect_clip_content = true
 
@@ -137,13 +139,13 @@ text = "Evolving heals 10HP"
 align = 1
 
 [node name="C4" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
-margin_top = 514.0
-margin_right = 1838.0
-margin_bottom = 713.0
+margin_top = 762.0
+margin_right = 1748.0
+margin_bottom = 961.0
 
 [node name="H1" type="HBoxContainer" parent="CenterContainer/VBoxContainer/C4"]
-margin_left = 87.0
-margin_right = 1751.0
+margin_left = 42.0
+margin_right = 1706.0
 margin_bottom = 199.0
 rect_clip_content = true
 

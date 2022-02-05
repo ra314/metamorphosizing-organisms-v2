@@ -28,25 +28,27 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 41.0
-margin_top = 384.0
-margin_right = 1879.0
-margin_bottom = 695.0
+margin_left = 86.0
+margin_top = 260.0
+margin_right = 1834.0
+margin_bottom = 819.0
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
-margin_right = 1838.0
-margin_bottom = 245.0
+margin_right = 1748.0
+margin_bottom = 493.0
 custom_fonts/font = SubResource( 1 )
-text = "Deterministic Risk"
+text = "Metamorphosing
+Organisms"
+align = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
-margin_top = 249.0
-margin_right = 1838.0
-margin_bottom = 311.0
+margin_top = 497.0
+margin_right = 1748.0
+margin_bottom = 559.0
 
 [node name="Label2" type="Label" parent="CenterContainer/VBoxContainer/CenterContainer"]
-margin_left = 819.0
-margin_right = 1019.0
+margin_left = 774.0
+margin_right = 974.0
 margin_bottom = 62.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )

@@ -25,33 +25,38 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 41.0
-margin_top = 282.0
-margin_right = 1879.0
-margin_bottom = 797.0
+margin_left = 86.0
+margin_top = 158.0
+margin_right = 1834.0
+margin_bottom = 921.0
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
-margin_right = 1838.0
-margin_bottom = 245.0
+margin_right = 1748.0
+margin_bottom = 493.0
 custom_fonts/font = SubResource( 1 )
-text = "Deterministic Risk"
+text = "Metamorphosing
+Organisms"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Host" parent="CenterContainer/VBoxContainer" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 249.0
-margin_right = 1838.0
-margin_bottom = 380.0
+margin_top = 497.0
+margin_right = 1748.0
+margin_bottom = 628.0
 item_name = "Host"
 
 [node name="Guest" parent="CenterContainer/VBoxContainer" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 384.0
-margin_right = 1838.0
-margin_bottom = 515.0
+margin_top = 632.0
+margin_right = 1748.0
+margin_bottom = 763.0
 item_name = "Guest"
 
 [node name="TextureButton" type="TextureButton" parent="."]
