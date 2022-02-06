@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Levels/Level Main.gd" type="Script" id=2]
-[ext_resource path="res://Scenes/Levels/Level Components/Drag_Camera.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Levels/Level Components/Player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/Fonts/Font_50.tres" type="DynamicFont" id=8]
 [ext_resource path="res://Assets/restart.svg" type="Texture" id=12]
@@ -317,7 +316,3 @@ texture_normal = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Camera2D" parent="." instance=ExtResource( 3 )]
-position = Vector2( 0, 0 )
-anchor_mode = 0

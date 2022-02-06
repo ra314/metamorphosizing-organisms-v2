@@ -1,0 +1,52 @@
+1. Saving the game state nad loading back into it
+- Save function for Organism
+-- The easy part is saving the name of the organism and the amount of mana it has.
+-- The hard part is storing the persistent action.
+--- Eg: flower dance which heals 5 and deals 5 for 3 turns.
+
+- Save function for Player
+-- Only need to be storing num berries, max berries, HP and max HP.
+-- And the organisms that it contains
+
+- Save function for level_main
+-- Needs to store the state of the grid.
+-- The current player
+-- The current stadium
+
+- A load button that can restore the game state with this data
+
+
+2. Populate data.save with all the other organisms
+
+
+3. Create a grid object
+- Should handle initialization
+- Swapping tiles and matching
+- Identifying extra moves
+- Needs support for dragging tiles to swap
+- Also needs to have support for click and click to swap
+- Needs to display icons for each type
+
+
+4. UI
+- HP bar
+- Berries bar
+- Organism cutouts and mana bars
+- Turn number
+- Resign button
+
+5. Level Main
+- Move counter
+- Switching to the next player
+
+6. Mon Select menu
+- need a scroll box
+- Show the pokemon and it's evolution and it's types
+- Need to show a description of their abilities
+- This information also needs to be in the help menu to be referenced mid game
+
+7. Networking
+- Same kind of click synchronization as in deterministic risk
+- One caveat is managing the grid.
+-- Perhaps setting both entities to have the same random seed will be enough
+-- But if it's not enoughYou can create a grid, sync it. And then create a long list of randomized tiles and these tiles can be consumed as needed to add tiles to the grid.

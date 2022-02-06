@@ -15,6 +15,15 @@ var mana = 0
 func save():
 	pass
 
+func create_mon(mon_name):
+	var data = File.new()
+	var data_location = "res://data.save"
+	data.open(data_location, File.READ)
+	data = JSON.parse(data.get_as_text()).result
+	var mon_data = data[mon_name]
+	
+	data.close()
+
 func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_activate, _game):
 	self.id = _id
 	self.oname = _oname

@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/UI/Mon Select.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Fonts/Font_50.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Assets/Montserrat-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/back-arrow.svg" type="Texture" id=5]
 
@@ -26,9 +27,9 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 margin_left = 85.0
-margin_top = 282.0
+margin_top = 246.0
 margin_right = 1833.0
-margin_bottom = 797.0
+margin_bottom = 833.0
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
 margin_right = 1748.0
@@ -48,6 +49,18 @@ columns = 2
 margin_top = 501.0
 margin_right = 1748.0
 margin_bottom = 515.0
+text = "Selected: "
+
+[node name="Next" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 519.0
+margin_right = 130.0
+margin_bottom = 587.0
+size_flags_horizontal = 0
+custom_fonts/font = ExtResource( 2 )
+text = "Next"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TextureButton" type="TextureButton" parent="."]
 margin_right = 40.0

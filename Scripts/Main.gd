@@ -18,14 +18,16 @@ const MAX_PLAYERS = 2
 const LOCAL_HOST = "127.0.0.1"
 # Dictionary mapping player names ("host", "guest") to network ids
 var players = {}
+var world_str = ""
 
-remotesync func load_level(scene_str, world_str, game_modes):
+remotesync func select_mon(scene_str, _world_str):
+	world_str = _world_str
 	var scene = scene_manager._load_scene(scene_str)
-	scene._root = self
-	scene.game_modes = game_modes
-	scene.world_str = world_str
 	scene_manager._replace_scene(scene)
-	game_started = true
+
+remotesync func load_level(scene_str):
+	var scene = scene_manager._load_scene(scene_str).init(world_str)
+	scene_manager._replace_scene(scene)
 
 func _ready():
 	# The event that triggers when a player connects to this instance of the game
