@@ -85,13 +85,13 @@ func create_notification(notification_str):
 	var notification = Label.new()
 	notification.text = notification_str
 	notification.add_font_override("font", load("res://Assets/Fonts/Font_50.tres"))
-	add_child(notification)
+	$CL/VBox.add_child(notification)
 	notifications.append(notification)
-	get_tree().create_timer(2).connect("timeout", self, "delete_last_notification")
+	get_tree().create_timer(3).connect("timeout", self, "delete_last_notification")
 
 func delete_last_notification():
-	var notification = notifications.pop_back()
-	remove_child(notification)
+	var notification = notifications.pop_front()
+	$CL/VBox.remove_child(notification)
 	notification.queue_free()
 #######
 
