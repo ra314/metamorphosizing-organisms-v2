@@ -29,12 +29,15 @@ func _remove_children(node: Node):
 var saved_scene = null
 
 func save_and_hide_current_scene():
-	saved_scene = _root.get_children()[0]
-	_root.remove_child(saved_scene)
-	
+	_root.get_children()[0].visible = false
+	# CL = Canvas Layer
+	# C = Control Node
+	_root.get_children()[0].get_node("CL/C").visible = false
+
 func load_saved_scene():
-	_root.remove_child(_root.get_children()[0])
-	_root.add_child(saved_scene)
+	_root.remove_child(_root.get_children()[1])
+	_root.get_children()[0].visible = true
+	_root.get_children()[0].get_node("CL/C").visible = true
 
 func reset():
 	loaded_scene_history = []

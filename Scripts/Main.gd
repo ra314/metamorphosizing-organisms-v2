@@ -7,10 +7,10 @@ var scene_manager: SceneManager = SceneManager.new(self)
 var online_game = false
 var player_name = ""
 var network_data = {}
-var game_modes = []
 var stored_IP = ""
 var game_started: bool = false
 var disconnection_container = null
+var world_str = ""
 
 var peer = null
 const SERVER_PORT = 9658
@@ -18,16 +18,23 @@ const MAX_PLAYERS = 2
 const LOCAL_HOST = "127.0.0.1"
 # Dictionary mapping player names ("host", "guest") to network ids
 var players = {}
-var world_str = ""
 
-remotesync func select_mon(scene_str, _world_str):
+remotesync func change_to_select_mon_scene(scene_str, _world_str):
 	world_str = _world_str
 	var scene = scene_manager._load_scene(scene_str)
 	scene_manager._replace_scene(scene)
 
-remotesync func load_level(scene_str):
-	var scene = scene_manager._load_scene(scene_str).init(world_str)
+func get_other_player_network_id():
+	var player_keys = players.keys()
+	player_keys.erase(player_name)
+	return players[player_keys[0]]
+
+remotesync func load_level(scene_str, world_str):
+	var scene = scene_manager._load_scene(scene_str)
+	scene._root = self
+	scene.world_str = world_str
 	scene_manager._replace_scene(scene)
+	game_started = true
 
 func _ready():
 	# The event that triggers when a player connects to this instance of the game
@@ -87,71 +94,19 @@ func guest(server_IP):
 
 func load_save(save_dict):
 	# Setting up the game
-	game_modes = save_dict["game_modes"]
-	rpc("load_level", "Levels/Level Main", save_dict["map"],  game_modes)
+	rpc("load_level", "Levels/Level Main", save_dict["world"])
 	
 	# Setting up curr_player and curr_player_index
 	var main = get_children()[0]
-	main.curr_player = main.players[save_dict["curr_player_color"]]
-	# Finding the current player index
-	var players_colors = []
-	for player in main.players.values():
-		players_colors.append(player.color)
-	main.curr_player_index = players_colors.find(save_dict["curr_player_color"])
+	main.curr_player = main.players[save_dict["curr_player"]]
 	
-	# Assigning all countries their saved properties
-	for country_dict in save_dict["countries"]:
-		var country = main.all_countries[country_dict["name"]]
-		country.set_max_troops(country_dict["max_troops"])
-		country.set_num_troops(country_dict["troops"])
-		for status in country_dict["status"]:
-			country.set_statused(status, country_dict["status"][status])
-	
-	# Assigning ownership of countries to players
-	for player_dict in save_dict["players"]:
-		var player = main.players[player_dict["color"]]
-		player.reset()
-		for country_name in player_dict["owned_countries"]:
-			main.all_countries[country_name].change_ownership_to(player)
+	#TODO
+	# Load in the organisms from the save file and attach them to the players
+	# Give the players their berries, and health
 	
 	if online_game:
-		main.Sync.synchronize(players["guest"])
+		main.Sync.synchronize_all(players["guest"])
 	main.update_labels()
-	main.Phase.update_player_status()
-
-# PING SYSTEM
-#######
-# Send the current unix time and wait to receive it back 
-# to confirm that the ping is successful
-var ping_unique_response = 0
-
-func ping_send(id):
-	var unix_time = OS.get_unix_time()
-	rpc_id(id, "ping_respond", unix_time)
-	yield(get_tree().create_timer(2), "timeout")
-	return (ping_unique_response == unix_time)
-
-remote func ping_respond(ping_response):
-	rpc_id(get_tree().get_rpc_sender_id(), "set_ping_unique_response", ping_response)
-
-remote func set_ping_unique_response(ping_reponse):
-	ping_unique_response = ping_reponse
-
-func ping_host():
-	if player_name == "host":
-		return true
-	else:
-		return ping_send(players["host"])
-
-func ping_host_with_notification():
-	var boolean = ping_host()
-	if boolean is GDScriptFunctionState:
-		boolean = yield(boolean, "completed")
-	if boolean:
-		create_notification("Successfully pinged host")
-	else:
-		create_notification("Unable to ping host")
-#######
 
 # NETWORKING CALLBACKS
 #######
@@ -194,6 +149,7 @@ func disconnection_routine(message_str):
 	if game_started:
 		scene_manager._get_curr_scene().stop_game()
 
+# Send the player to the first relevant UI menu and nuke game data
 func hard_reboot():
 	scene_manager.reset()
 	var scene = scene_manager._load_scene("UI/Local Online")

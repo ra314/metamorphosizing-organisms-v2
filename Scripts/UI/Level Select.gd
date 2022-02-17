@@ -44,7 +44,7 @@ func _load_scene(scene_str, world_str):
 	
 	# Remote Procedure Call if the game is online
 	if _root.online_game:
-		_root.rpc("select_mon", scene_str, world_str)
+		_root.rpc("change_to_select_mon_scene", scene_str, world_str)
 	# Regular function call for offline game
 	else:
-		_root.select_mon(scene_str, world_str)
+		_root.change_to_select_mon_scene(scene_str, world_str)
