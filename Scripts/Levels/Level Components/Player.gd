@@ -6,7 +6,6 @@ var game
 
 var max_HP = 80
 var curr_HP = max_HP
-var moves = 0
 var max_berries = 4
 var berries = 0
 
@@ -24,3 +23,7 @@ func change_HP(delta):
 func change_berries(delta):
 	# Clamping berries
 	berries = clamp(berries + delta, 0, max_berries)
+	
+func update_ui():
+	$Health_Control/Health/Text.text = curr_HP.str
+	$Berry_Control/Berry/Text.text = berries.str + "/" + max_berries.str

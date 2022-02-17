@@ -64,7 +64,19 @@ func flare_p():
 	game.next_player.change_HP(25)
 	game.grid.force_grid_match([-1,1,2])
 
-
+func update_ui():
+	$Mana_Bar.value = float(mana) / float(mana_to_activate)
+	$Mana_Text.text = mana.str + "/" + mana_to_activate.str
+	
+func show_berry_actions():
+	$Berry_Control.show()
+	if is_evolved:
+		$Berry_Control/Boost_Text.show()
+	else:
+		$Berry_Control/Evolve_Text.show()
+		
+func hide_berry_actions():
+	$Berry_Control.hide()
 
 # The organisms are to be stored in a list
 # Each item in the list is a dictionary of the structure shown below.
