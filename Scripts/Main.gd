@@ -46,11 +46,16 @@ func _ready():
 	scene_manager._replace_scene(scene)
 
 # Register a player to a dictionary that contains player names and player ids
-remote func register_player(player_name, id):	
-	players[player_name] = id
-	create_notification(player_name + " has connected")
+remote func register_player(_player_name, id):	
+	players[_player_name] = id
+	create_notification(_player_name + " has connected")
 	# Remove the back button for the host once the guest has connected
 	get_children()[0].get_node("TextureButton").visible = false
+	
+	print("registering")
+	if _player_name == "guest" and player_name == "host":
+		var scene = scene_manager._load_scene("UI/Level Select")
+		scene_manager._replace_scene(scene)
 
 # General purpose notification system
 ####### 

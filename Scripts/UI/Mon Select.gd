@@ -9,8 +9,8 @@ func _ready():
 	var data = File.new()
 	var data_location = "res://data.save"
 	data.open(data_location, File.READ)
-	data = JSON.parse(data.get_as_text()).result
-	for mon in data:
+	var json = JSON.parse(data.get_as_text()).result
+	for mon in json:
 		var button = Button.new()
 		button.text = mon["base_organism"]["name"]
 		button.connect("button_down", self, "add_selection", [button.text])
@@ -41,8 +41,6 @@ func add_selection(mon):
 const Player = preload("res://Scenes/Levels/Level Components/Player.tscn")
 func next():
 	var new_player = Player.new().init()
-	if not ('player1' in _root.players):
-		
 
 func back():
 	# Removing the current scene from history

@@ -5,7 +5,7 @@ onready var _root: Main = get_tree().get_root().get_node("Main")
 # Called when the node enters the scene tree for the first time.
 func _ready(): 
 	var container = $CenterContainer/VBoxContainer
-	container.get_node("Host/Button").connect("button_down", self, "_load_scene", ["UI/Level Select"])
+	container.get_node("Host/Button").connect("button_down", self, "_load_scene", ["UI/Waiting"])
 	container.get_node("Guest/Button").connect("button_down", self, "_load_scene",  ["UI/IP Select"])
 	
 	$TextureButton.connect("button_down", self, "back")
@@ -23,7 +23,7 @@ func back():
 
 func _load_scene(scene_str):
 	# Dirty workaround to check if the pressed button was host
-	if scene_str == "UI/Level Select":
+	if scene_str == "UI/Waiting":
 		_root.player_name = "host"
 		_root.host()
 	# Dirty workaround to check if the pressed button was guest
