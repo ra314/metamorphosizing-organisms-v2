@@ -1,8 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
+[ext_resource path="res://Scenes/Levels/Level Components/Organism.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/Levels/Level Main.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/Levels/Level Components/Organism.gd" type="Script" id=3]
+[ext_resource path="res://Assets/UI/Player/Game_Player_Turn_Icon_1.png" type="Texture" id=4]
+[ext_resource path="res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png" type="Texture" id=5]
 [ext_resource path="res://Scenes/Levels/Level Components/Player.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/UI/Player/Game_Player_Turn_Icon_2.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Fonts/Font_50.tres" type="DynamicFont" id=8]
+[ext_resource path="res://Assets/Fonts/Frick_Regular.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Assets/restart.svg" type="Texture" id=12]
 [ext_resource path="res://Assets/Fonts/Font_100.tres" type="DynamicFont" id=22]
 
@@ -12,21 +18,169 @@ script = ExtResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="Match_Control" type="Control" parent="CanvasLayer"]
+margin_left = 973.507
+margin_top = 66.3202
+margin_right = 1013.51
+margin_bottom = 106.32
+rect_scale = Vector2( 0.890607, 0.890607 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time_Control" type="Control" parent="CanvasLayer/Match_Control"]
+margin_right = 39.9999
+margin_bottom = 40.0
+rect_scale = Vector2( 0.366092, 0.366092 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
+margin_left = -348.009
+margin_top = -149.762
+margin_right = 375.991
+margin_bottom = 92.2376
+rect_scale = Vector2( 0.947225, 0.947225 )
+rect_clip_content = false
+custom_fonts/normal_font = ExtResource( 9 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+tab_size = 0
+text = "Time"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time_Text" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
+margin_left = -326.93
+margin_top = 78.9552
+margin_right = 397.07
+margin_bottom = 320.955
+rect_scale = Vector2( 2.14925, 2.14925 )
+rect_clip_content = false
+custom_fonts/normal_font = ExtResource( 9 )
+custom_colors/default_color = Color( 0.99, 0.8316, 0.0396, 1 )
+tab_size = 0
+text = "13"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="CanvasLayer/Match_Control/Time_Control/Time_Text"]
+
+[node name="Moves_Control" type="Control" parent="CanvasLayer/Match_Control"]
+margin_left = 3.36475
+margin_top = 231.443
+margin_right = 43.3647
+margin_bottom = 271.443
+rect_scale = Vector2( 0.366092, 0.366092 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Moves_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Moves_Control"]
+margin_left = -434.29
+margin_top = -126.577
+margin_right = 289.71
+margin_bottom = 115.423
+rect_scale = Vector2( 0.947225, 0.947225 )
+rect_clip_content = false
+custom_fonts/normal_font = ExtResource( 9 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+tab_size = 0
+text = "Moves"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Moves_Container" type="HBoxContainer" parent="CanvasLayer/Match_Control/Moves_Control"]
+margin_left = -680.336
+margin_top = 81.4068
+margin_right = 863.664
+margin_bottom = 542.407
+rect_scale = Vector2( 0.698945, 0.698945 )
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Move_Icon_1" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+margin_left = 258.0
+margin_right = 770.0
+margin_bottom = 461.0
+texture = ExtResource( 5 )
+
+[node name="Move_Icon_2" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+margin_left = 774.0
+margin_right = 1286.0
+margin_bottom = 461.0
+texture = ExtResource( 5 )
+
+[node name="Player1_Turn" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 600, 225.641 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
+
+[node name="Player2_Turn" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 1320, 225.641 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 7 )
+
+[node name="Players" type="Control" parent="CanvasLayer"]
+margin_left = 126.479
+margin_top = 109.419
+margin_right = 166.479
+margin_bottom = 149.419
+rect_scale = Vector2( 0.407958, 0.407958 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player 1" parent="CanvasLayer/Players" instance=ExtResource( 6 )]
+position = Vector2( 105.972, 40.9915 )
+rotation = 0.181514
+
+[node name="Player 2" parent="CanvasLayer/Players" instance=ExtResource( 6 )]
+position = Vector2( 3958.61, 40.9916 )
+rotation = -0.181514
+
+[node name="Organisms" type="Control" parent="CanvasLayer"]
+margin_left = 334.101
+margin_top = 513.11
+margin_right = 374.101
+margin_bottom = 553.11
+rect_scale = Vector2( 0.710139, 0.710139 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="P1_Organism_1" parent="CanvasLayer/Organisms" instance=ExtResource( 1 )]
+position = Vector2( -112.909, 56.2471 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="P1_Organism_2" parent="CanvasLayer/Organisms" instance=ExtResource( 1 )]
+position = Vector2( -112.909, 519.538 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="P2_Organism_1" parent="CanvasLayer/Organisms" instance=ExtResource( 1 )]
+position = Vector2( 1910.44, 56.2471 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="P2_Organism_2" parent="CanvasLayer/Organisms" instance=ExtResource( 1 )]
+position = Vector2( 1910.44, 525.913 )
+scale = Vector2( 0.5, 0.5 )
+
 [node name="Help" type="Button" parent="CanvasLayer"]
-margin_left = 1791.0
-margin_right = 1921.0
-margin_bottom = 68.0
+margin_left = 1787.81
+margin_top = 1022.48
+margin_right = 1917.81
+margin_bottom = 1090.48
 custom_fonts/font = ExtResource( 8 )
 text = "Help"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Player Red" parent="CanvasLayer" instance=ExtResource( 6 )]
-position = Vector2( 0, 251 )
-
-[node name="Player Blue" parent="CanvasLayer" instance=ExtResource( 6 )]
-position = Vector2( 0, 513 )
 
 [node name="Game Info" type="HBoxContainer" parent="CanvasLayer"]
 margin_top = 960.0
@@ -50,8 +204,8 @@ alignment = 2
 
 [node name="Status" type="TextureRect" parent="CanvasLayer/Game Info/blue/VBoxContainer"]
 visible = false
-margin_top = 15.0
-margin_right = 122.0
+margin_top = 122.0
+margin_right = 110.0
 margin_bottom = 122.0
 stretch_mode = 4
 
@@ -245,7 +399,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Organism" parent="CanvasLayer/Resign" instance=ExtResource( 1 )]
+position = Vector2( -1479.27, 611.255 )
+
 [node name="Start Game" type="Button" parent="CanvasLayer"]
+visible = false
 margin_left = 0.0701532
 margin_top = 1012.03
 margin_right = 298.07
