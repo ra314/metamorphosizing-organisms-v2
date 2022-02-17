@@ -12,5 +12,8 @@ func _load_scene(scene_str):
 	if scene_str == "UI/Host Guest":
 		_root.online_game = true
 	
-	var scene = _root.scene_manager._load_scene(scene_str)
-	_root.scene_manager._replace_scene(scene)
+	if _root.online_game:
+		var scene = _root.scene_manager._load_scene(scene_str)
+		_root.scene_manager._replace_scene(scene)
+	else:
+		_root.all_players_connected()

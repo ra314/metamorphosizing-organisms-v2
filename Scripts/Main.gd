@@ -52,10 +52,30 @@ remote func register_player(_player_name, id):
 	# Remove the back button for the host once the guest has connected
 	get_children()[0].get_node("TextureButton").visible = false
 	
-	print("registering")
 	if _player_name == "guest" and player_name == "host":
-		var scene = scene_manager._load_scene("UI/Level Select")
-		scene_manager._replace_scene(scene)
+		all_players_connected()
+
+
+# A function that is trigggered when all players are connected
+func all_players_connected():
+	var scene = scene_manager._load_scene("UI/Level Select")
+	scene_manager._replace_scene(scene)
+	
+	if online_game:
+		var first_player = select_random(["host", "guest"])
+		if first_player == "host":
+			create_notification("You are player 1.")
+			rpc_id(players["guest"], "create_notification", "You are player 2.")
+		else:
+			create_notification("You are player 2.")
+			rpc_id(players["guest"], "create_notification", "You are player 1.")
+	else:
+		create_notification("Pick between the two of you who goes first.")
+
+func select_random(array):
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	return array[rng.randi() % len(array)]
 
 # General purpose notification system
 ####### 

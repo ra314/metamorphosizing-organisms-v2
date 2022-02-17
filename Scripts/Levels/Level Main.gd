@@ -15,10 +15,7 @@ func init(_world_str):
 	world_str = _world_str
 	return self
 
-func select_random(array):
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	return array[rng.randi() % len(array)]
+
 
 func spawn():
 	# Creating players
