@@ -36,6 +36,10 @@ config/name="Metamorphosizing Organisms"
 run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Dex="*res://Scripts/Levels/Level Components/Dex.gd"
+
 [display]
 
 window/size/width=1920

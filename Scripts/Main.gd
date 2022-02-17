@@ -19,6 +19,9 @@ const LOCAL_HOST = "127.0.0.1"
 # Dictionary mapping player names ("host", "guest") to network ids
 var players = {}
 
+var player_index
+var players_for_level_main = [null, null]
+
 remotesync func change_to_select_mon_scene(scene_str, _world_str):
 	world_str = _world_str
 	var scene = scene_manager._load_scene(scene_str)
@@ -44,6 +47,8 @@ func _ready():
 	
 	var scene = scene_manager._load_scene("UI/Local Online")
 	scene_manager._replace_scene(scene)
+	
+	Dex.init()
 
 # Register a player to a dictionary that contains player names and player ids
 remote func register_player(_player_name, id):	
@@ -66,11 +71,16 @@ func all_players_connected():
 		if first_player == "host":
 			create_notification("You are player 1.")
 			rpc_id(players["guest"], "create_notification", "You are player 2.")
+			player_index = 0
+			rset_id(players["guest"], "player_index", 1)
 		else:
 			create_notification("You are player 2.")
 			rpc_id(players["guest"], "create_notification", "You are player 1.")
+			player_index = 1
+			rset_id(players["guest"], "player_index", 0)
 	else:
 		create_notification("Pick between the two of you who goes first.")
+		player_index = 0
 
 func select_random(array):
 	var rng = RandomNumberGenerator.new()

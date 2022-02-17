@@ -1,18 +1,27 @@
-[{"base_organism": 
-    {"name": "bonzumi", 
-    "ability": "flare",
-    "ability_description": "Flare: Attacks for 20 HP and matches 1 random columns."},
-"evolved_organism":
-    {"name": "bonzire", 
-    "ability": "flare_p",
-    "ability_description": "Flare+: Attacks for 25 HP and matches 2 random columns."}
-},
-{"base_organism": 
-    {"name": "pelijet", 
-    "ability": "hydro_rush",
-    "ability_description": "Hydro Rush: Attacks for 10 HP and converts 2 random tiles to Water."},
-"evolved_organism":
-    {"name": "sephanix", 
-    "ability": "hydro_rush_p",
-    "ability_description": "Hydro Rush+: Attacks for 20 HP and converts 3 random tiles to Water."}
-}]
+[{
+  "base_organism": 
+  {"name": "bonzumi", 
+  "ability": "flare",
+  "ability_description": "Flare: Attacks for 20 HP and matches 1 random columns."},
+
+  "evolved_organism":
+  {"name": "bonzire", 
+  "ability": "flare_p",
+  "ability_description": "Flare+: Attacks for 25 HP and matches 2 random columns."},
+
+  "mana_type": "fire",
+  "mana_to_activate": 8
+},{
+  "base_organism": 
+      {"name": "pelijet", 
+      "ability": "hydro_rush",
+      "ability_description": "Hydro Rush: Attacks for 10 HP and converts 2 random tiles to Water."},
+      
+  "evolved_organism":
+      {"name": "sephanix", 
+      "ability": "hydro_rush_p",
+      "ability_description": "Hydro Rush+: Attacks for 20 HP and converts 3 random tiles to Water."},
+
+   "mana_type": "water",
+   "mana_to_activate": 6
+ }]

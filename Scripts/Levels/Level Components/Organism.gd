@@ -6,6 +6,7 @@ var ability
 var ability_description
 var mana_type
 var mana_to_activate
+var player
 var game
 
 var is_evolved = false
@@ -15,22 +16,29 @@ var mana = 0
 func save():
 	pass
 
-func create_mon(mon_name):
-	var data = File.new()
-	var data_location = "res://data.save"
-	data.open(data_location, File.READ)
-	data = JSON.parse(data.get_as_text()).result
-	var mon_data = data[mon_name]
-	
-	data.close()
+func get_organism_id(mon_name):
+	for i in range(len(Dex.data)):
+		if Dex.data[i]["base_organism"]["name"] == mon_name:
+			return i
+		if Dex.data[i]["evolved_organism"]["name"] == mon_name:
+			return i
+	print("Mon is not found")
+	assert(false)
 
-func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_activate, _game):
+func create_base_mon(mon_name, _player, _game):
+	var _id = get_organism_id(mon_name)
+	var mon_data = Dex.data[_id]["base_organism"]
+	return init(_id, mon_name, mon_data["ability"], mon_data["ability_description"], \
+		Dex.data[_id]["mana_type"], Dex.data[_id]["mana_to_activate"], _player, _game)
+
+func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_activate, _player, _game):
 	self.id = _id
 	self.oname = _oname
 	self.ability = _ability
 	self.ability_description = _ability_description
 	self.mana_type = _mana_type
-	self.mana_to_active = _mana_to_activate
+	self.mana_to_activate = _mana_to_activate
+	self.player = _player
 	self.game = _game
 	return self
 
@@ -39,6 +47,7 @@ func evolve():
 		oname = data[id]['evolved_organism']['name']
 		ability = data[id]['evolved_organism']['ability_name']
 		ability_description = data[id]['evolved_organism']['ability_description']
+		data.close()
 
 func change_mana(delta):
 	# Clamping mana

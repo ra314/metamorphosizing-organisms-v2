@@ -6,16 +6,11 @@ onready var _root: Main = get_tree().get_root().get_node("Main")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Adding buttons to select organism
-	var data = File.new()
-	var data_location = "res://data.save"
-	data.open(data_location, File.READ)
-	var json = JSON.parse(data.get_as_text()).result
-	for mon in json:
+	for mon in Dex.data:
 		var button = Button.new()
 		button.text = mon["base_organism"]["name"]
 		button.connect("button_down", self, "add_selection", [button.text])
 		$CenterContainer/VBoxContainer/GridContainer.add_child(button)
-	data.close()
 	
 	# Label to display selected organisms
 	$CenterContainer/VBoxContainer/Selection_Label.text = selection_text
@@ -38,9 +33,24 @@ func add_selection(mon):
 		final_text = selection_text + selected_mons[0] + ", " + selected_mons[1]
 	$CenterContainer/VBoxContainer/Selection_Label.text = final_text
 
-const Player = preload("res://Scenes/Levels/Level Components/Player.tscn")
 func next():
-	var new_player = Player.new().init()
+	create_player(selected_mons[0], selected_mons[1], _root.player_index)
+	if null in _root.players_for_level_main:
+		_load_scene("UI/Waiting")
+	else:
+		pass
+		#TODO start the new game
+
+onready var Organism = load("res://Scenes/Levels/Level Components/Organism.tscn")
+onready var Player = load("res://Scenes/Levels/Level Components/Player.tscn")
+
+remotesync func create_player(mon1_name, mon2_name, player_index):
+	var mon1 = Organism.instance().create_base_mon(mon1_name, null, null)
+	var mon2 = Organism.instance().create_base_mon(mon2_name, null, null)
+	var player = Player.instance().init(mon1, mon2, "P"+str(player_index+1), null)
+	mon1.player = player
+	mon2.player = player
+	_root.players_for_level_main[player_index] = player
 
 func back():
 	# Removing the current scene from history
@@ -51,4 +61,8 @@ func back():
 	_root.online_game = false
 	# Loading the previous scene
 	var scene = _root.scene_manager._load_scene(prev_scene_str)
+	_root.scene_manager._replace_scene(scene)
+
+func _load_scene(scene_str):	
+	var scene = _root.scene_manager._load_scene(scene_str)
 	_root.scene_manager._replace_scene(scene)
