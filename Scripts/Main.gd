@@ -82,8 +82,9 @@ func all_players_connected():
 		create_notification("Pick between the two of you who goes first.")
 		player_index = 0
 
+var rng = RandomNumberGenerator.new()
+
 func select_random(array):
-	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	return array[rng.randi() % len(array)]
 
