@@ -17,16 +17,17 @@ var texture_arr = textures_dict.values()
 
 func _ready():
 	# Initializing var grid with sprites
-	for y in range(grid_size[1]):
+	for y in range(grid_size.y):
 		var row = []
-		for x in range(grid_size[0]):
+		for x in range(grid_size.x):
 			var sprite = Sprite.new()
 			sprite.centered = false
 			sprite.scale *= tile_scale_factor
 			sprite.texture = texture_arr[generate_tile_index()]
 			sprite.position = Vector2(x, y)*sprite_size*tile_scale_factor
+			
 			add_child(sprite)
-			row.append(Sprite.new())
+			row.append(sprite)
 		grid.append(row)
 	
 #	rng.randomize()
