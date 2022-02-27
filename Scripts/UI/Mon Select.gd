@@ -24,6 +24,10 @@ func add_selection(mon):
 	# If there's already 2 selected organisms, 
 	# pop the last one and insert the new one at the front
 	if len(selected_mons) == 2:
+		# You aren't allowed to have duplicate monsters
+		if mon in selected_mons:
+			return
+			
 		selected_mons.pop_back()
 	selected_mons.push_front(mon)
 	

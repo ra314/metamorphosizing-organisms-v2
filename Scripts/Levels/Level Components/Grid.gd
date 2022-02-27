@@ -25,7 +25,8 @@ func _ready():
 			sprite.scale *= tile_scale_factor
 			sprite.texture = texture_arr[generate_tile_index()]
 			sprite.position = Vector2(x, y)*sprite_size*tile_scale_factor
-			
+			print(str(x) + "/" + str(y))
+			print(sprite.position)
 			add_child(sprite)
 			row.append(sprite)
 		grid.append(row)
