@@ -25,7 +25,8 @@ func init(_world_str):
 
 func spawn():
 	# Creating players
-	players = {"red": get_node("CanvasLayer/Player Red").init("red"), "blue": get_node("CanvasLayer/Player Blue").init("blue")}
+	
+	players = {"P1": get_node("CanvasLayer/Players/Player 1").init("red"), "blue": get_node("CanvasLayer/Players/Player 2").init("blue")}
 	# Randomizing players
 	randomize()
 	curr_player_index = randi() % num_players
@@ -35,14 +36,12 @@ func spawn():
 	print(curr_player.color)
 	
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	spawn()
-	
+func _ready():	
 	# Button to start the game, when clicked it removes itself and the reroll button
 	if _root.online_game:
-		get_node("CanvasLayer/Init Buttons/Start Game").queue_free()
+		get_node("CanvasLayer/Start Game").queue_free()
 	else:
-		get_node("CanvasLayer/Init Buttons/Start Game").connect("button_down", self, "remove_reroll_and_start_butttons")
+		get_node("CanvasLayer/Start Game").connect("button_down", self, "remove_reroll_and_start_butttons")
 		
 	# Button to go to help menu
 	get_node("CanvasLayer/Help").connect("button_down", self, "show_help_menu")

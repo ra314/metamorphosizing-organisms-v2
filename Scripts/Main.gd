@@ -19,11 +19,11 @@ const LOCAL_HOST = "127.0.0.1"
 # Dictionary mapping player names ("host", "guest") to network ids
 var players = {}
 
-remote var player_index
+remotesync var player_index
 var players_for_level_main = [null, null]
 
 remotesync func change_to_select_mon_scene(scene_str, _world_str):
-	world_str = _world_str
+	rset("world_str", _world_str)
 	var scene = scene_manager._load_scene(scene_str)
 	scene_manager._replace_scene(scene)
 

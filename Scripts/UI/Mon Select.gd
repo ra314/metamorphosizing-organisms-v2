@@ -2,6 +2,8 @@ extends Control
 var selected_mons = []
 const selection_text = "Selected: "
 onready var _root: Main = get_tree().get_root().get_node("Main")
+onready var Organism = load("res://Scenes/Levels/Level Components/Organism.tscn")
+onready var Player = load("res://Scenes/Levels/Level Components/Player.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,16 +37,15 @@ func add_selection(mon):
 
 func next():
 	rpc("create_player", selected_mons[0], selected_mons[1], _root.player_index)
-	
 	if null in _root.players_for_level_main:
-		_load_scene("UI/Waiting")
+		if _root.online_game:
+			_load_scene("UI/Waiting")
+		else:
+			_root.player_index = 1
+			$CenterContainer/VBoxContainer/Selection_Label.text = selection_text
+			selected_mons = []
 	else:
-		print("it's time to start")
-		pass
-		#TODO start the new game
-
-onready var Organism = load("res://Scenes/Levels/Level Components/Organism.tscn")
-onready var Player = load("res://Scenes/Levels/Level Components/Player.tscn")
+		_root.rpc("load_level", "Levels/Level Main", _root.world_str)
 
 remotesync func create_player(mon1_name, mon2_name, player_index):
 	var mon1 = Organism.instance().create_base_mon(mon1_name, null, null)

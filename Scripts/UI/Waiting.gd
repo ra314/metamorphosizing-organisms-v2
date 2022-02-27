@@ -18,4 +18,3 @@ func back():
 	# Loading the previous scene
 	var scene = _root.scene_manager._load_scene(prev_scene_str)
 	_root.scene_manager._replace_scene(scene)
-	print("tyring to go back")

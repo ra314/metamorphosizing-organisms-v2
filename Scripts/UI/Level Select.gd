@@ -42,9 +42,10 @@ func _load_scene(scene_str, world_str):
 	if world_str == "":
 		world_str = select_random(worlds)
 	
+	_root.rpc("change_to_select_mon_scene", scene_str, world_str)
 	# Remote Procedure Call if the game is online
-	if _root.online_game:
-		_root.rpc("change_to_select_mon_scene", scene_str, world_str)
-	# Regular function call for offline game
-	else:
-		_root.change_to_select_mon_scene(scene_str, world_str)
+#	if _root.online_game:
+#		_root.rpc("change_to_select_mon_scene", scene_str, world_str)
+#	# Regular function call for offline game
+#	else:
+#		_root.change_to_select_mon_scene(scene_str, world_str)
