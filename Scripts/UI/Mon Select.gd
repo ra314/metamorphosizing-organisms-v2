@@ -34,10 +34,12 @@ func add_selection(mon):
 	$CenterContainer/VBoxContainer/Selection_Label.text = final_text
 
 func next():
-	create_player(selected_mons[0], selected_mons[1], _root.player_index)
+	rpc("create_player", selected_mons[0], selected_mons[1], _root.player_index)
+	
 	if null in _root.players_for_level_main:
 		_load_scene("UI/Waiting")
 	else:
+		print("it's time to start")
 		pass
 		#TODO start the new game
 

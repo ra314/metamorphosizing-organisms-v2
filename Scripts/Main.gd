@@ -19,7 +19,7 @@ const LOCAL_HOST = "127.0.0.1"
 # Dictionary mapping player names ("host", "guest") to network ids
 var players = {}
 
-var player_index
+remote var player_index
 var players_for_level_main = [null, null]
 
 remotesync func change_to_select_mon_scene(scene_str, _world_str):
@@ -91,7 +91,7 @@ func select_random(array):
 ####### 
 var notifications = []
 
-func create_notification(notification_str):
+remote func create_notification(notification_str):
 	var notification = Label.new()
 	notification.text = notification_str
 	notification.add_font_override("font", load("res://Assets/Fonts/Font_50.tres"))
