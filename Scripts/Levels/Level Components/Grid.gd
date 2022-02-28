@@ -11,6 +11,7 @@ var grid_tex = []
 var grid_matrix = []
 
 const textures_dict = {
+	"null": null,
 	"fire": preload("res://Assets/UI/Tiles/Tile_Fire.png"),
 	"water": preload("res://Assets/UI/Tiles/Tile_Water.png"),
 	"electric": preload("res://Assets/UI/Tiles/Tile_Electric.png"),
@@ -26,11 +27,12 @@ func _ready():
 	create_empty_grid()
 	initialize_grid()
 	print(find_matches_in_grid())
+	remove_matched_tiles_and_fill_grid(find_matches_in_grid())
 
 var rng = RandomNumberGenerator.new()
 
 func generate_tile_index():
-	return rng.randi() % len(texture_arr)
+	return (rng.randi() % (len(texture_arr)-1))+1
 
 # Add empty sprites to grid_tex and creates 0's for grid_matrix
 func create_empty_grid():
@@ -53,7 +55,8 @@ func initialize_grid():
 			grid_matrix[y][x] = generate_tile_index()
 			grid_tex[y][x].texture = texture_arr[grid_matrix[y][x]]
 
-# Returns a 2d array with 1's where there are tiles that form a match
+# Returns a 2d array where tiles that aren't part of a match are 0.
+# Tiles that are part of a match retain their number.
 func find_matches_in_grid():
 	var matches = np.zeros(grid_size)
 	for y in range(grid_size[0]):
@@ -62,16 +65,16 @@ func find_matches_in_grid():
 			# Check for matches above the curr tile
 			if y - 2 >= 0:
 				if grid_matrix[y - 1][x] == curr_tile and grid_matrix[y - 2][x] == curr_tile:
-					matches[y][x] = 1
-					matches[y - 1][x] = 1
-					matches[y - 2][x] = 1
+					matches[y][x] = curr_tile
+					matches[y - 1][x] = curr_tile
+					matches[y - 2][x] = curr_tile
 
 			# Check for matches to the left of the curr tile
 			if x - 2 >= 0:
 				if grid_matrix[y][x - 1] == curr_tile and grid_matrix[y][x - 2] == curr_tile:
-					matches[y][x] = 1
-					matches[y][x - 1] = 1
-					matches[y][x - 2] = 1
+					matches[y][x] = curr_tile
+					matches[y][x - 1] = curr_tile
+					matches[y][x - 2] = curr_tile
 	
 	return matches
 
@@ -86,8 +89,8 @@ func inside_grid(y,x):
 # 451
 # For example if flood fill was performed at the center of the image above, the
 # returned value is 3. Since 3 2's are connected by adjacency.
-func flood_fill(y, x):
-	var curr_tile = grid_matrix[y][x]
+func flood_fill(y, x, matrix):
+	var curr_tile = matrix[y][x]
 	var queue = [[y,x]]
 	var match_size = 1
 	var processed_tiles = [str(y) + "," + str(x)]
@@ -100,8 +103,24 @@ func flood_fill(y, x):
 			var dy = delta[0]
 			var dx = delta[1]
 			if inside_grid(y+dy, x+dx):
-				if grid_matrix[y+dy][x+dx] == curr_tile:
+				if matrix[y+dy][x+dx] == curr_tile:
 					match_size += 1
 					queue.append([y+dy, x+dx])
 	
 	return match_size
+
+# Returns true if there is a continuous region of matches tiles bigger than 3
+func check_for_extra_move():
+	var matches = find_matches_in_grid()
+	for y in range(grid_size[0]):
+		for x in range(grid_size[1]):
+			if matches[y][x] != 0:
+				if flood_fill(y, x, matches) > 3:
+					return true
+	return false
+
+func remove_matched_tiles_and_fill_grid(matches):
+	for y in range(grid_size[0]):
+		for x in range(grid_size[1]):
+			if matches[y][x] != 0:
+				grid_tex[y][x].visible = false
