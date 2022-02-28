@@ -53,6 +53,7 @@ func initialize_grid():
 			grid_matrix[y][x] = generate_tile_index()
 			grid_tex[y][x].texture = texture_arr[grid_matrix[y][x]]
 
+# Returns a 2d array with 1's where there are tiles that form a match
 func find_matches_in_grid():
 	var matches = np.zeros(grid_size)
 	for y in range(grid_size[0]):
@@ -74,3 +75,33 @@ func find_matches_in_grid():
 	
 	return matches
 
+# True if coordinates are inside the grid, false otherwise
+func inside_grid(y,x):
+	return (x>=0) and (y>=0) and (x<grid_size[1]) and (y<grid_size[0])
+
+# Performs flood fill from the provided coordinates.
+# Fills like a flood for every tile that is the same tile type as the tile type at the provided coordinates.
+# 123
+# 122
+# 451
+# For example if flood fill was performed at the center of the image above, the
+# returned value is 3. Since 3 2's are connected by adjacency.
+func flood_fill(y, x):
+	var curr_tile = grid_matrix[y][x]
+	var queue = [[y,x]]
+	var match_size = 1
+	var processed_tiles = [str(y) + "," + str(x)]
+	
+	while queue:
+		var curr = queue.pop_back()
+		y = curr[0]
+		x = curr[1]
+		for delta in [[-1,0],[1,0],[0,-1],[0,1]]:
+			var dy = delta[0]
+			var dx = delta[1]
+			if inside_grid(y+dy, x+dx):
+				if grid_matrix[y+dy][x+dx] == curr_tile:
+					match_size += 1
+					queue.append([y+dy, x+dx])
+	
+	return match_size
