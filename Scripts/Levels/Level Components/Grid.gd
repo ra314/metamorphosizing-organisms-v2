@@ -26,8 +26,13 @@ func _ready():
 	rng.randomize()
 	create_empty_grid()
 	initialize_grid()
-	print(find_matches_in_grid())
-	var matches = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 6, 6, 6, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]]
+	# print(find_matches_in_grid())
+	# Adjusted for readability
+	var matches = [[0, 0, 0, 0, 0, 0, 0],
+				   [0, 0, 6, 6, 6, 0, 0], 
+				   [0, 0, 0, 0, 0, 0, 0], 
+				   [0, 0, 0, 0, 0, 0, 0], 
+				   [0, 0, 0, 0, 0, 0, 0]]
 	remove_matched_tiles_and_fill_grid(matches)
 
 var rng = RandomNumberGenerator.new()
@@ -54,7 +59,7 @@ func create_new_tile(y, x):
 
 # Takes in grid position, returns pixel position
 func get_tile_position(y, x):
-	return Vector2(x, y)*sprite_size*tile_scale_factor
+	return Vector2(x, y) * sprite_size * tile_scale_factor
 
 # Randomly pick textures
 func initialize_grid():
@@ -132,22 +137,31 @@ func remove_matched_tiles_and_fill_grid(matches):
 	# We want to iterate from the bottom row up
 	var ys = range(grid_size[0])
 	ys.invert()
+	
+	# Moves from column to column then row by row, starting from the bottom row
+	# [0, 7] -> [0, 6] -> etc...
+	# [1, 7] -> [1, 6] -> etc...
 	for x in range(grid_size[1]):
 		var num_new_tiles_in_columns = 0
 		for y in ys:
+			# Check if the tile is in |matches|
 			if matches[y][x] != 0:
 				# Delete the matched tile
 				grid_tex[y][x].visible = false
-				grid_tex[y][x].queue_free()
-				grid_tex[y][x] = null
+				# grid_tex[y][x].queue_free()
+				# grid_tex[y][x] = null
 				
+				# Returns the first tile that isn't in |matches|
 				var unmatched_tile_coordinate = find_unmatched_tile(y, x, matches)
-				print([y,x], unmatched_tile_coordinate)
+				
 				# Create a new tile
 				if unmatched_tile_coordinate == null:
 					grid_matrix[y][x] = generate_tile_index()
+					grid_tex[y][x].visible = true
 					grid_tex[y][x] = create_new_tile(-num_new_tiles_in_columns, x)
 					grid_tex[y][x].texture = texture_arr[grid_matrix[y][x]]
+					grid_tex[y][x].position = Vector2(x, y - 1) * sprite_size * tile_scale_factor
+					move_tile(y, x, grid_tex[y][x])
 					num_new_tiles_in_columns += 1
 				# Shift down existing tile
 				else:
@@ -161,6 +175,7 @@ func remove_matched_tiles_and_fill_grid(matches):
 					matches[y-1][x] = 10
 				move_tile(y, x, grid_tex[y][x])
 	$Tween.start()
+	print_grid("Matrix", grid_matrix)
 
 func vec_sum(array):
 	return array[0] + array[1]
@@ -169,9 +184,9 @@ func vec_sum(array):
 # Eg: 2 -> 2 seconds to move from [3,4] to [2,4]
 const seconds_per_tile = 1
 func move_tile(y, x, tile):
-	var destination = Vector2(x, y)*sprite_size*tile_scale_factor
-	var duration = vec_sum((tile.position - destination).abs())/(sprite_size*tile_scale_factor) * seconds_per_tile
-	$Tween.interpolate_property(tile, "position", tile.position, destination, duration)
+	var destination = Vector2(x, y) * sprite_size * tile_scale_factor
+	var duration = vec_sum((tile.position - destination).abs()) / (sprite_size*tile_scale_factor) * seconds_per_tile
+	$Tween.interpolate_property(tile, "position", tile.position, destination, duration, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
 
 # Look upwards in the grid until you find an unmatched tile
 func find_unmatched_tile(y, x, matches):
@@ -183,3 +198,11 @@ func find_unmatched_tile(y, x, matches):
 		else:
 			return [new_y, x]
 	return null
+
+# Prints any grid along with its name
+func print_grid(name, grid):
+	print("Start of " + name + " Grid")
+	for y in range(len(grid)):
+		print(grid[y])
+	print("End of " + name + " Grid")
+	print("")
