@@ -15,9 +15,10 @@ var texture_arr = textures_dict.values()
 
 # The index of the texture
 var value
-
 # The tween node of the Grid that is composed of tiles
 var tween
+# The grid coordinate of the tile
+var location
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,12 +31,17 @@ func randomize_tile_tex(rand_num):
 	value = (rand_num % (len(texture_arr)-1))+1
 	change_tile_texture(value)
 
-func init(y, x, rand_num, _tween):
+func init(y, x, rand_num, _tween, _grid):
 	rect_scale *= tile_scale_factor
 	rect_position = get_tile_position(y, x)
+	location = Vector2(y, x)
 	tween = _tween
+	connect("button_down", _grid, "select_tile", [self])
 	randomize_tile_tex(rand_num)
 	return self
+
+func can_swap(other_tile):
+	return vec_sum((location-other_tile.location).abs()) == 1
 
 func vec_sum(array):
 	return array[0] + array[1]
@@ -45,6 +51,7 @@ func vec_sum(array):
 const seconds_per_tile = 1
 # If animate is false, the movement is instant with no tween used.
 func move_tile(y, x, animate):
+	location = Vector2(y, x)
 	var destination = Vector2(x, y) * sprite_size * tile_scale_factor
 	if animate:
 		var duration = vec_sum((rect_position - destination).abs()) / (sprite_size*tile_scale_factor) * seconds_per_tile

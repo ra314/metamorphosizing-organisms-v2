@@ -21,7 +21,7 @@ func initialize_grid():
 	for y in range(grid_size[0]):
 		var row = []
 		for x in range(grid_size[1]):
-			row.append(Tile.instance().init(y, x, rng.randi(), $Tween))
+			row.append(Tile.instance().init(y, x, rng.randi(), $Tween, self))
 			add_child(row[-1])
 		grid.append(row)
 
@@ -119,7 +119,7 @@ func remove_matched_tiles_and_fill_grid(matches, animate=true):
 				# Create a new tile
 				if unmatched_tile_coordinate == null:
 					num_new_tiles_in_columns += 1
-					grid[y][x] = Tile.instance().init(-num_new_tiles_in_columns, x, rng.randi(), $Tween)
+					grid[y][x] = Tile.instance().init(-num_new_tiles_in_columns, x, rng.randi(), $Tween, self)
 					add_child(grid[y][x])
 				# Shift down existing tile
 				else:
@@ -153,3 +153,26 @@ func print_grid(name, grid):
 		print(row)
 	print("End of " + name + " Grid")
 	print("")
+
+var selected_tile = null
+func select_tile(tile):
+	print("trying to swap")
+	if selected_tile == null:
+		selected_tile = tile
+	elif tile.can_swap(selected_tile):
+		print('can swap')
+		swap(tile, selected_tile)
+		selected_tile = null
+	elif selected_tile == tile:
+		selected_tile = null
+
+func swap(tile1, tile2):
+	var y1 = tile1.location[0]
+	var x1 = tile1.location[1]
+	var y2 = tile2.location[0]
+	var x2 = tile2.location[1]
+	grid[y2][x2] = tile1.location
+	grid[y1][x1] = tile2.location
+	tile1.move_tile(y2, x2, true)
+	tile2.move_tile(y1, x1, true)
+	$Tween.start()
