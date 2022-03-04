@@ -26,8 +26,8 @@ func _ready():
 	rng.randomize()
 	create_empty_grid()
 	initialize_grid()
-	remove_matched_tiles_and_fill_grid(find_matches_in_grid())
 	print_grid("grid", grid_matrix)
+	remove_matched_tiles_and_fill_grid(find_matches_in_grid(), false)
 
 var rng = RandomNumberGenerator.new()
 
@@ -126,7 +126,7 @@ func check_for_extra_move():
 					return true
 	return false
 
-func remove_matched_tiles_and_fill_grid(matches):
+func remove_matched_tiles_and_fill_grid(matches, animate=true):
 	matches = matches.duplicate()
 	
 	# Remove the tiles that are part of a match
@@ -168,7 +168,7 @@ func remove_matched_tiles_and_fill_grid(matches):
 					# Mark the "unmatched_tile" as matched since it is being 
 					# used now for the current tile.
 					matches[new_y][x] = 10
-				move_tile(y, x, grid_tex[y][x])
+				move_tile(y, x, grid_tex[y][x], animate)
 	$Tween.start()
 
 func vec_sum(array):
@@ -177,10 +177,14 @@ func vec_sum(array):
 # This is the speed of the movement of the tile
 # Eg: 2 -> 2 seconds to move from [3,4] to [2,4]
 const seconds_per_tile = 1
-func move_tile(y, x, tile):
+# If animate is false, the movement is instant with no tween used.
+func move_tile(y, x, tile, animate):
 	var destination = Vector2(x, y) * sprite_size * tile_scale_factor
-	var duration = vec_sum((tile.position - destination).abs()) / (sprite_size*tile_scale_factor) * seconds_per_tile
-	$Tween.interpolate_property(tile, "position", tile.position, destination, duration, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+	if animate:
+		var duration = vec_sum((tile.position - destination).abs()) / (sprite_size*tile_scale_factor) * seconds_per_tile
+		$Tween.interpolate_property(tile, "position", tile.position, destination, duration, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+	else:
+		tile.position = destination
 
 # Look upwards in the grid until you find an unmatched tile
 func find_unmatched_tile(y, x, matches):
