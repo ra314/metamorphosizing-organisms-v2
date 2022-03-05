@@ -15,13 +15,11 @@ var curr_moves = 0
 var max_moves = 2
 
 var curr_time = 0
-var time_per_move = 30
+const time_per_move = 30
 
 func init(_world_str):
 	world_str = _world_str
 	return self
-
-
 
 func spawn():
 	# Creating players
@@ -54,10 +52,14 @@ func _ready():
 	
 	#update_player_status(curr_player.color, true)
 	
+	$"CanvasLayer/Players/".add_child(_root.players_for_level_main[0])
+	$"CanvasLayer/Players/".add_child(_root.players_for_level_main[1])
+	_root.players_for_level_main[1].position = Vector2(1000, 500)
+
 func start_turn():
 	restart_timer()
-	update_moves()
-	update_turn_icon()
+	update_move_icons()
+	update_turn_icons()
 	
 # TODO:
 # Replace with the signal emitted when the grid starts processing a move
@@ -67,20 +69,20 @@ func before_process():
 	
 	# Assuming that level main handles all the moves, player moves will update here
 	curr_moves -= 1;
-	update_moves()
+	update_move_icons()
 
 # TODO:
 # Replace with the signal emitted when the grid is done processing a move
 func after_process():
 	restart_timer()
-	update_moves()
+	update_move_icons()
 	
 	# Show available berry actions when the player reaches the max berry count
 	if curr_player.berries >= curr_player.max_berries:
 		for organism in curr_player.organisms:
 			organism.show_berry_actions()
-		
-func update_moves():
+
+func update_move_icons():
 	# Get the container so we can add moves textures inside of it
 	var container = $CanvasLayer/Match_Control/Moves_Control/Moves_Container
 	
@@ -97,8 +99,8 @@ func update_moves():
 		var texture = TextureRect.new()
 		texture.texture = "res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png"
 		container.add_child(texture)
-		
-func update_turn_icon():
+
+func update_turn_icons():
 	var dark = [0.5, 0.5, 0.5, 1]
 	var light = [1, 1, 1, 1]
 	
@@ -110,15 +112,15 @@ func update_turn_icon():
 		$CanvasLayer/Player1_Turn.modulate = dark
 		$CanvasLayer/Player2_Turn.modulate = light
 
+# Restart the move timer
 func restart_timer():
-	# Restart the move timer
 	curr_time = time_per_move
 	
 	var timer = $CanvasLayer/Match_Control/Time_Control/Time_Text/Timer
 	
 	timer.start()
 	timer.connect("timeout", self, "on_timer_timeout") 
-	
+
 # The timer waits every second but don't update the text. We do it here.
 func on_timer_timeout():
 	curr_time -= 1

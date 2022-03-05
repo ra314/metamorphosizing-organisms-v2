@@ -3,15 +3,7 @@ extends TextureButton
 const tile_scale_factor = 0.25
 const sprite_size = 512
 
-const textures_dict = {
-	"null": null,
-	"fire": preload("res://Assets/UI/Tiles/Tile_Fire.png"),
-	"water": preload("res://Assets/UI/Tiles/Tile_Water.png"),
-	"electric": preload("res://Assets/UI/Tiles/Tile_Electric.png"),
-	"grass": preload("res://Assets/UI/Tiles/Tile_Grass.png"),
-	"psychic": preload("res://Assets/UI/Tiles/Tile_Psychic.png"),
-	"berry": preload("res://Assets/UI/Tiles/Tile_Berry.png")}
-var texture_arr = textures_dict.values()
+
 
 # The index of the texture
 var value
@@ -25,10 +17,10 @@ func _ready():
 	pass # Replace with function body.
 
 func change_tile_texture(tex_num):
-	texture_normal = texture_arr[tex_num]
+	texture_normal = ManaTex.arr[tex_num]
 
 func randomize_tile_tex(rand_num):
-	value = (rand_num % (len(texture_arr)-1))+1
+	value = (rand_num % (len(ManaTex.arr)-1))+1
 	change_tile_texture(value)
 
 func init(y, x, rand_num, _tween, _grid):

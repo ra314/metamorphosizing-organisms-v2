@@ -40,6 +40,8 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 	self.mana_to_activate = _mana_to_activate
 	self.player = _player
 	self.game = _game
+	$Mana_Icon.texture = ManaTex.dict[_mana_type]
+	update_ui()
 	return self
 
 func evolve():
@@ -66,7 +68,7 @@ func flare_p():
 
 func update_ui():
 	$Mana_Bar.value = float(mana) / float(mana_to_activate)
-	$Mana_Text.text = mana.str + "/" + mana_to_activate.str
+	$Mana_Text.text = str(mana) + "/" + str(mana_to_activate)
 	
 func show_berry_actions():
 	$Berry_Control.show()
