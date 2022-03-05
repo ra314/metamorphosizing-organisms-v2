@@ -240,6 +240,15 @@ func remove_tile(object):
 	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, Vector2(0, 0), tile_disappear_speed, Tween.TRANS_SINE, Tween.EASE_OUT)
 	$Tween.interpolate_callback(self, tile_disappear_speed, "delete_tile", object)
 	$Tween.start()
+	
+# Called when certain abilities convert or add tiles to the grid
+const tile_appear_speed = 0.5
+func add_tile(object):
+	var original_scale = object.rect_scale
+	object.rect_scale = Vector2(0, 0)
+	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, original_scale, tile_appear_speed, Tween.TRANS_BOUNCE, Tween.EASE_OUT, tile_appear_speed)
+	$Tween.start()
+	
 
 func delete_tile(tile):
 	tile.queue_free()	
@@ -289,8 +298,10 @@ func convert_tiles(tile_type, num_tiles):
 			var coords = generate_random_coordinates()
 			var y = coords[0]
 			var x = coords[1]
-			if grid[y][x].value != ManaTex.enum(tile_type):
+			if grid[y][x].value != tile_type:
 				remove_tile(grid[y][x])
-				grid[y][x] = Tile.instance().init(y, x, ManaTex.enum(tile_type), self)
-				add_child(grid[y][x])
+				var new_tile = Tile.instance().init(y, x, tile_type, self, true)
+				grid[y][x] = new_tile
+				add_child(new_tile)
+				add_tile(new_tile)
 				break

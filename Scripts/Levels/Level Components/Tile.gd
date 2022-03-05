@@ -13,19 +13,24 @@ func _ready():
 	pass # Replace with function body.
 
 func change_tile_texture(tex_num):
+	value = tex_num
 	texture_normal = ManaTex.values[tex_num]
 
 func randomize_tile_tex(rand_num):
 	value = (rand_num % (len(ManaTex.values)-1))+1
 	change_tile_texture(value)
 
-func init(y, x, rand_num, _grid):
+# The value of rand_num will be the tile texture we'll force if force_type is true
+func init(y, x, rand_num, _grid, force_type = false):
 	rect_scale *= tile_scale_factor
 	rect_position = get_tile_position(y, x)
 	location = Vector2(y, x)
 	connect("button_down", _grid, "select_tile", [self])
 	connect("move_tile", _grid, "move_tile")
-	randomize_tile_tex(rand_num)
+	if force_type:
+		change_tile_texture(rand_num)
+	else:
+		randomize_tile_tex(rand_num)
 	return self
 
 func can_swap(other_tile):
