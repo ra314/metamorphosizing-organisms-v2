@@ -131,6 +131,50 @@ func remove_matched_tiles_and_fill_grid(matches, animate=true):
 				animation_durations.append(grid[y][x].move_tile(y, x, animate))
 	yield(animate(), "completed")
 
+func force_grid_match(height, width, num_shapes):
+	# Replace -1s with height and width of grid
+	if height == -1:
+		height = grid_size[0]
+	if width == -1:
+		width = grid_size[1]
+	
+	var matches = np.zeros(grid_size)
+	for i in range(num_shapes):
+		# Pick a random tile and check that the shape is inside the grid
+		var coords
+		while true:
+			coords = generate_random_coordinates()
+			if shape_in_grid(height, width, coords):
+				break
+		
+		# Checking that where the shape is placed does not interefe with already matched tiles
+		for y in range(coords[0], coords[0] + height):
+			for x in range(coords[1], coords[1] + width):
+				if matches[y][x] != 0:
+					continue
+		
+		# Mark the tiles within the shape as matched
+		for y in range(coords[0], coords[0] + height):
+			for x in range(coords[1], coords[1] + width):
+				matches[y][x] = grid[y][x].value
+	
+	emit_signal("collect_mana", get_matches_array(matches))
+	yield(remove_matched_tiles_and_fill_grid(matches, true), "completed")
+	yield(cascading_match(), "completed")
+
+func generate_random_coordinates():
+		var y = rng.randi() % grid_size[0]
+		var x = rng.randi() % grid_size[1]
+		return [y, x]
+
+# Given a shape and coordinates will tell you if the shape is in the grid
+func shape_in_grid(height, width, coords):
+	# Start from the given seed and extend by the height and width of the shape
+	# Check if these parts of the shape are also within the grid
+	var y = coords[0]
+	var x = coords[1]
+	return y + height <= grid_size[0] and x + width <= grid_size[1]
+
 # Look upwards in the grid until you find an unmatched tile
 func find_unmatched_tile(y, x, matches):
 	var new_y = y
@@ -165,7 +209,10 @@ func select_tile(tile):
 		elif selected_tile == tile:
 			selected_tile = null
 
+# Stores the durations of all of the tile animations
 var animation_durations = [0]
+# Start tile animations, and wait until all of them are done
+# This is done by waiting the duration of the longest tile animation
 func animate():
 	$Tween.start()
 	yield(get_tree().create_timer(animation_durations.max()), "timeout")
@@ -201,10 +248,12 @@ func swap(tile1, tile2):
 	animation_durations.append(tile1.move_tile(y2, x2, true))
 	animation_durations.append(tile2.move_tile(y1, x1, true))
 	yield(animate(), "completed")
-	
-	while np.sum2d(find_matches_in_grid()):
-		emit_signal("collect_mana", get_matches_array(find_matches_in_grid()))
-		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
+	yield(cascading_match(), "completed")
 	
 	in_middle_of_swap = false
 	emit_signal("swap_end")
+
+func cascading_match():
+	while np.sum2d(find_matches_in_grid()):
+		emit_signal("collect_mana", get_matches_array(find_matches_in_grid()))
+		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
