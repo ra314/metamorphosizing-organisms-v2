@@ -9,14 +9,13 @@ var curr_HP = max_HP
 var max_berries = 4
 var berries = 0
 
-func init(organism1, organism2, _pname, _game):
+func init(organism1, organism2, _pname):
 	self.organisms = [organism1, organism2]
 	add_child(organism1)
 	add_child(organism2)
-	organism1.position = Vector2(0, 300)
-	organism1.position = Vector2(0, 600)
+	organism1.position = Vector2(0, 900)
+	organism2.position = Vector2(0, 1600)
 	self.pname = _pname
-	self.game = _game
 	return self
 
 func change_HP(delta):

@@ -5,14 +5,13 @@ onready var _root: Main = get_tree().get_root().get_node("Main")
 var game_over = false
 
 var curr_player
-var curr_player_index
+var next_player
 const num_players = 2
 var players = []
-func get_next_player():
-	return players[(curr_player_index+1)%num_players]
 func change_to_next_player():
-	curr_player_index = (curr_player_index+1)%num_players
-	curr_player = players[curr_player_index]
+	var temp_player = curr_player
+	curr_player = next_player
+	next_player = temp_player
 
 var game_started = false
 var world_str = ""
@@ -26,6 +25,8 @@ const time_per_move = 30
 func init(_world_str):
 	world_str = _world_str
 	return self
+
+onready var grid = $Grid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():	
@@ -51,7 +52,13 @@ func _ready():
 	$"CanvasLayer/Players/".add_child(players[1])
 	players[1].position = Vector2(3500, 000)
 	curr_player = players[0]
-	curr_player_index = 0
+	next_player = players[1]
+	
+	# Giving the organisms and players a reference to the game
+	for player in players:
+		for organism in player.organisms:
+			organism.game = self
+		player.game = self
 	
 	$Grid.connect("swap_start", self, "before_process")
 	$Grid.connect("swap_end", self, "after_process")
@@ -84,6 +91,9 @@ func before_process():
 func after_process():
 	restart_timer()
 	update_move_icons()
+	
+	for organism in curr_player.organisms:
+		organism.do_ability()
 	
 	# Show available berry actions when the player reaches the max berry count
 	if curr_player.berries >= curr_player.max_berries:
