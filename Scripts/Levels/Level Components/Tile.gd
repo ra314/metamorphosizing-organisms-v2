@@ -72,9 +72,6 @@ func move_tile(y, x, animate, falling = true):
 		rect_position = destination
 	return duration + delay
 
-# The speed of the disappearing animation
-# const tile_disappear_speed = 1
-
 # Takes in grid position, returns pixel position
 func get_tile_position(y, x):
 	return Vector2(x, y) * sprite_size * tile_scale_factor

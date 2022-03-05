@@ -2,7 +2,6 @@ extends Node2D
 
 # [num rows, num cols]
 const grid_size = [5,7]
-const tile_disappear_speed = 1
 
 # 2d array containing tiles
 var grid = []
@@ -222,6 +221,7 @@ func animate():
 func move_tile(object, destination, duration, curr_position, delay):
 	$Tween.interpolate_property(object, "rect_position", curr_position, destination, duration, Tween.TRANS_BOUNCE, Tween.EASE_OUT, delay)
 
+const tile_disappear_speed = 1
 func remove_tile(object):
 	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, Vector2(0, 0), tile_disappear_speed, Tween.TRANS_SINE, Tween.EASE_OUT)
 	$Tween.interpolate_callback(self, tile_disappear_speed, "delete_tile", object)
