@@ -240,7 +240,7 @@ func remove_tile(object):
 	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, Vector2(0, 0), tile_disappear_speed, Tween.TRANS_SINE, Tween.EASE_OUT)
 	$Tween.interpolate_callback(self, tile_disappear_speed, "delete_tile", object)
 	$Tween.start()
-	
+
 func delete_tile(tile):
 	tile.queue_free()	
 
@@ -281,3 +281,16 @@ func swap(tile1, tile2):
 	
 	in_middle_of_swap = false
 	emit_signal("swap_end")
+
+func convert_tiles(tile_type, num_tiles):
+	for i in range(num_tiles):
+		# Pick a random tile and check that the type is different to the desired type
+		while true:
+			var coords = generate_random_coordinates()
+			var y = coords[0]
+			var x = coords[1]
+			if grid[y][x].value != ManaTex.enum(tile_type):
+				remove_tile(grid[y][x])
+				grid[y][x] = Tile.instance().init(y, x, ManaTex.enum(tile_type), self)
+				add_child(grid[y][x])
+				break

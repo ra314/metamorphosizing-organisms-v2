@@ -90,11 +90,11 @@ func desear():
 
 func splash():
 	game.next_player.change_HP(-10)
-	# TODO change 2 random tiles to water
+	game.grid.convert_tiles(ManaTex.enum("water"), 2)
 
 func crash():
 	game.next_player.change_HP(-20)
-	# TODO change 3 random tiles to water
+	game.grid.convert_tiles(ManaTex.enum("water"), 3)
 
 func shock():
 	game.next_player.change_HP(-15)
@@ -122,11 +122,17 @@ func fortitude_mini():
 
 func ovation():
 	game.next_player.change_HP(10)
-	# TODO grant extra move in the next turn
+	game.register_repeated_action(self, "ovation_mini", 1, "turn_start")
+
+func ovation_mini():
+	game.add_extra_move()
 
 func encore():
 	game.next_player.change_HP(15)
-	# TODO grant extra move in the next 2 turns
+	game.register_repeated_action(self, "encore_mini", 2, "turn_start")
+
+func encore_mini():
+	game.add_extra_move()
 
 ####### Abilities
 
