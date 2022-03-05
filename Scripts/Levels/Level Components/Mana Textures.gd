@@ -8,4 +8,8 @@ const dict = {
 	"grass": preload("res://Assets/UI/Tiles/Tile_Grass.png"),
 	"psychic": preload("res://Assets/UI/Tiles/Tile_Psychic.png"),
 	"berry": preload("res://Assets/UI/Tiles/Tile_Berry.png")}
-var arr = dict.values()
+var values = dict.values()
+var keys = dict.keys()
+
+func enum(mana_type):
+	return keys.find(mana_type)

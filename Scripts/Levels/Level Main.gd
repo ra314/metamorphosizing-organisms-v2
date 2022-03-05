@@ -55,10 +55,14 @@ func _ready():
 	
 	$Grid.connect("swap_start", self, "before_process")
 	$Grid.connect("swap_end", self, "after_process")
+	$Grid.connect("collect_mana", self, "distribute_mana")
 	
 	start_turn()
 
-
+func distribute_mana(mana_array):
+	for organism in curr_player.organisms:
+		var mana_to_give = mana_array[organism.mana_enum]
+		mana_array[organism.mana_enum] -= organism.change_mana(mana_to_give)
 
 func start_turn():
 	curr_moves = 2

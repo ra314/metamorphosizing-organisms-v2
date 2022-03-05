@@ -15,10 +15,10 @@ func _ready():
 	pass # Replace with function body.
 
 func change_tile_texture(tex_num):
-	texture_normal = ManaTex.arr[tex_num]
+	texture_normal = ManaTex.values[tex_num]
 
 func randomize_tile_tex(rand_num):
-	value = (rand_num % (len(ManaTex.arr)-1))+1
+	value = (rand_num % (len(ManaTex.values)-1))+1
 	change_tile_texture(value)
 
 func init(y, x, rand_num, _grid):

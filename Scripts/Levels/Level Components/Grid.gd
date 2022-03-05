@@ -176,16 +176,16 @@ func interpolate(object, destination, duration, curr_position):
 
 # Returns an array where each index contains the number of tiles matches of that type
 # Eg: [0,0,3,0,0,0,0] = 3 water tiles
-var matches_array = null
 func get_matches_array(matches):
-	matches_array = np.zeros([7])
+	var matches_array = np.zeros([7])
 	for row in matches:
 		for elem in row:
 			matches_array[elem] += 1
+	return matches_array
 
 signal swap_start
 signal swap_end
-signal collect_matches
+signal collect_mana
 func swap(tile1, tile2):
 	emit_signal("swap_start")
 	in_middle_of_swap = true
@@ -203,6 +203,7 @@ func swap(tile1, tile2):
 	yield(animate(), "completed")
 	
 	while np.sum2d(find_matches_in_grid()):
+		emit_signal("collect_mana", get_matches_array(find_matches_in_grid()))
 		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
 	
 	in_middle_of_swap = false
