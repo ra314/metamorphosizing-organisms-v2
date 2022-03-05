@@ -208,13 +208,20 @@ var selected_tile = null
 var in_middle_of_swap = false
 func select_tile(tile):
 	if not in_middle_of_swap:
+		# Select new tile if no tile is currently selected
 		if selected_tile == null:
 			selected_tile = tile
+		# Swap if the prev selected tile and curr selected tile are adjacent
 		elif tile.can_swap(selected_tile):
 			swap(tile, selected_tile)
 			selected_tile = null
+		# Deselection if you click the same tile twice
 		elif selected_tile == tile:
 			selected_tile = null
+		# Select a different tile if the tile you just clicked was too far 
+		# from the tile you previously clicked
+		else:
+			selected_tile = tile
 
 # Stores the durations of all of the tile animations
 var animation_durations = [0]
