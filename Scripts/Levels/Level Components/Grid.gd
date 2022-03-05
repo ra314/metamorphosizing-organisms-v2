@@ -129,8 +129,8 @@ func remove_matched_tiles_and_fill_grid(matches, animate=true):
 					# Mark the "unmatched_tile" as matched since it is being 
 					# used now for the current tile.
 					matches[new_y][new_x] = 10
-				grid[y][x].move_tile(y, x, animate)
-	$Tween.start()
+				animation_durations.append(grid[y][x].move_tile(y, x, animate))
+	yield(animate(), "completed")
 
 # Look upwards in the grid until you find an unmatched tile
 func find_unmatched_tile(y, x, matches):
@@ -155,24 +155,43 @@ func print_grid(name, grid):
 	print("")
 
 var selected_tile = null
+var in_middle_of_swap = false
 func select_tile(tile):
-	print("trying to swap")
-	if selected_tile == null:
-		selected_tile = tile
-	elif tile.can_swap(selected_tile):
-		print('can swap')
-		swap(tile, selected_tile)
-		selected_tile = null
-	elif selected_tile == tile:
-		selected_tile = null
+	if not in_middle_of_swap:
+		if selected_tile == null:
+			selected_tile = tile
+		elif tile.can_swap(selected_tile):
+			swap(tile, selected_tile)
+			selected_tile = null
+		elif selected_tile == tile:
+			selected_tile = null
 
+var animation_durations = [0]
+func animate():
+	$Tween.start()
+	yield(get_tree().create_timer(animation_durations.max()), "timeout")
+	animation_durations = [0]
+
+signal swap_start
+signal swap_end
 func swap(tile1, tile2):
+	emit_signal("swap_start")
+	in_middle_of_swap = true
+	
 	var y1 = tile1.location[0]
 	var x1 = tile1.location[1]
 	var y2 = tile2.location[0]
 	var x2 = tile2.location[1]
-	grid[y2][x2] = tile1.location
-	grid[y1][x1] = tile2.location
-	tile1.move_tile(y2, x2, true)
-	tile2.move_tile(y1, x1, true)
-	$Tween.start()
+	
+	grid[y2][x2] = tile1
+	grid[y1][x1] = tile2
+	
+	animation_durations.append(tile1.move_tile(y2, x2, true))
+	animation_durations.append(tile2.move_tile(y1, x1, true))
+	yield(animate(), "completed")
+	
+	while np.sum2d(find_matches_in_grid()):
+		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
+	
+	in_middle_of_swap = false
+	emit_signal("swap_end")

@@ -45,11 +45,14 @@ const seconds_per_tile = 1
 func move_tile(y, x, animate):
 	location = Vector2(y, x)
 	var destination = Vector2(x, y) * sprite_size * tile_scale_factor
+	var duration
 	if animate:
-		var duration = vec_sum((rect_position - destination).abs()) / (sprite_size*tile_scale_factor) * seconds_per_tile
+		duration = vec_sum((rect_position - destination).abs()) / (sprite_size*tile_scale_factor) * seconds_per_tile
 		tween.interpolate_property(self, "rect_position", rect_position, destination, duration, tween.TRANS_BOUNCE, tween.EASE_OUT)
 	else:
+		duration = 0
 		rect_position = destination
+	return duration
 
 # Takes in grid position, returns pixel position
 func get_tile_position(y, x):
