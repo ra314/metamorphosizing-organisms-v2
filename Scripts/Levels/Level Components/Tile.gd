@@ -7,8 +7,6 @@ const sprite_size = 512
 
 # The index of the texture
 var value
-# The tween node of the Grid that is composed of tiles
-var tween
 # The grid coordinate of the tile
 var location
 
@@ -23,12 +21,12 @@ func randomize_tile_tex(rand_num):
 	value = (rand_num % (len(ManaTex.arr)-1))+1
 	change_tile_texture(value)
 
-func init(y, x, rand_num, _tween, _grid):
+func init(y, x, rand_num, _grid):
 	rect_scale *= tile_scale_factor
 	rect_position = get_tile_position(y, x)
 	location = Vector2(y, x)
-	tween = _tween
 	connect("button_down", _grid, "select_tile", [self])
+	connect("move_tile", _grid, "interpolate")
 	randomize_tile_tex(rand_num)
 	return self
 
@@ -38,6 +36,7 @@ func can_swap(other_tile):
 func vec_sum(array):
 	return array[0] + array[1]
 
+signal move_tile
 # This is the speed of the movement of the tile
 # Eg: 2 -> 2 seconds to move from [3,4] to [2,4]
 const seconds_per_tile = 1
@@ -48,7 +47,7 @@ func move_tile(y, x, animate):
 	var duration
 	if animate:
 		duration = vec_sum((rect_position - destination).abs()) / (sprite_size*tile_scale_factor) * seconds_per_tile
-		tween.interpolate_property(self, "rect_position", rect_position, destination, duration, tween.TRANS_BOUNCE, tween.EASE_OUT)
+		emit_signal("move_tile", self, destination, duration, rect_position)
 	else:
 		duration = 0
 		rect_position = destination

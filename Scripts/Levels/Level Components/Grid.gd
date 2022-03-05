@@ -13,7 +13,6 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	rng.randomize()
 	initialize_grid()
-	print_grid("grid", grid)
 	remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true)
 
 # Create all tiles and randomly pick textures
@@ -21,7 +20,7 @@ func initialize_grid():
 	for y in range(grid_size[0]):
 		var row = []
 		for x in range(grid_size[1]):
-			row.append(Tile.instance().init(y, x, rng.randi(), $Tween, self))
+			row.append(Tile.instance().init(y, x, rng.randi(), self))
 			add_child(row[-1])
 		grid.append(row)
 
@@ -119,7 +118,7 @@ func remove_matched_tiles_and_fill_grid(matches, animate=true):
 				# Create a new tile
 				if unmatched_tile_coordinate == null:
 					num_new_tiles_in_columns += 1
-					grid[y][x] = Tile.instance().init(-num_new_tiles_in_columns, x, rng.randi(), $Tween, self)
+					grid[y][x] = Tile.instance().init(-num_new_tiles_in_columns, x, rng.randi(), self)
 					add_child(grid[y][x])
 				# Shift down existing tile
 				else:
@@ -172,8 +171,21 @@ func animate():
 	yield(get_tree().create_timer(animation_durations.max()), "timeout")
 	animation_durations = [0]
 
+func interpolate(object, destination, duration, curr_position):
+	$Tween.interpolate_property(object, "rect_position", curr_position, destination, duration, $Tween.TRANS_BOUNCE, $Tween.EASE_OUT)
+
+# Returns an array where each index contains the number of tiles matches of that type
+# Eg: [0,0,3,0,0,0,0] = 3 water tiles
+var matches_array = null
+func get_matches_array(matches):
+	matches_array = np.zeros([7])
+	for row in matches:
+		for elem in row:
+			matches_array[elem] += 1
+
 signal swap_start
 signal swap_end
+signal collect_matches
 func swap(tile1, tile2):
 	emit_signal("swap_start")
 	in_middle_of_swap = true
