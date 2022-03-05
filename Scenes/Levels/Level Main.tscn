@@ -132,10 +132,10 @@ scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 7 )
 
 [node name="Players" type="Control" parent="CanvasLayer"]
-margin_left = 126.479
-margin_top = 109.419
-margin_right = 166.479
-margin_bottom = 149.419
+margin_left = 213.088
+margin_top = 621.672
+margin_right = 253.088
+margin_bottom = 661.672
 rect_scale = Vector2( 0.407958, 0.407958 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -242,4 +242,4 @@ __meta__ = {
 }
 
 [node name="Grid" parent="." instance=ExtResource( 10 )]
-position = Vector2( 510.451, 448.267 )
+position = Vector2( 275.516, 260 )

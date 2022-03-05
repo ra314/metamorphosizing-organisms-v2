@@ -95,8 +95,8 @@ func remove_matched_tiles_and_fill_grid(matches, animate=true):
 	for y in range(grid_size[0]):
 		for x in range(grid_size[1]):
 			if matches[y][x] != 0:
-				grid[y][x].visible = false
-				grid[y][x].queue_free()
+				# Tile will have a disappear animation but the place it occupied will be null
+				remove_tile(grid[y][x])
 				grid[y][x] = null
 	
 	# We want to iterate from the bottom row up
@@ -218,8 +218,17 @@ func animate():
 	yield(get_tree().create_timer(animation_durations.max()), "timeout")
 	animation_durations = [0]
 
-func interpolate(object, destination, duration, curr_position):
-	$Tween.interpolate_property(object, "rect_position", curr_position, destination, duration, $Tween.TRANS_BOUNCE, $Tween.EASE_OUT)
+func move_tile(object, destination, duration, curr_position, delay):
+	$Tween.interpolate_property(object, "rect_position", curr_position, destination, duration, Tween.TRANS_BOUNCE, Tween.EASE_OUT, delay)
+
+const tile_disappear_speed = 1
+func remove_tile(object):
+	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, Vector2(0, 0), tile_disappear_speed, Tween.TRANS_SINE, Tween.EASE_OUT)
+	$Tween.interpolate_callback(self, tile_disappear_speed, "delete_tile", object)
+	$Tween.start()
+	
+func delete_tile(tile):
+	tile.queue_free()	
 
 # Returns an array where each index contains the number of tiles matches of that type
 # Eg: [0,0,3,0,0,0,0] = 3 water tiles
@@ -245,8 +254,8 @@ func swap(tile1, tile2):
 	grid[y2][x2] = tile1
 	grid[y1][x1] = tile2
 	
-	animation_durations.append(tile1.move_tile(y2, x2, true))
-	animation_durations.append(tile2.move_tile(y1, x1, true))
+	animation_durations.append(tile1.move_tile(y2, x2, true, false))
+	animation_durations.append(tile2.move_tile(y1, x1, true, false))
 	yield(animate(), "completed")
 	yield(cascading_match(), "completed")
 	
