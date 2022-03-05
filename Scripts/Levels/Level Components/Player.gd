@@ -13,8 +13,8 @@ func init(organism1, organism2, _pname):
 	self.organisms = [organism1, organism2]
 	add_child(organism1)
 	add_child(organism2)
-	organism1.position = Vector2(0, 900)
-	organism2.position = Vector2(0, 1600)
+	organism1.position = Vector2(0, 0)
+	organism2.position = Vector2(0, 800)
 	self.pname = _pname
 	return self
 
@@ -22,10 +22,12 @@ func change_HP(delta):
 	# Clamping health
 	# The max of current and max hp is done in the case of the start where p2 has 5 extra HP
 	curr_HP = clamp(curr_HP + delta, 0, max(max_HP, curr_HP))
+	update_ui()
 
 func change_berries(delta):
 	# Clamping berries
 	berries = clamp(berries + delta, 0, max_berries)
+	update_ui()
 	
 func update_ui():
 	$Health_Control/Health/Text.text = curr_HP.str

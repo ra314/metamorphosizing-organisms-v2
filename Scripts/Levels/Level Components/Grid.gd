@@ -160,7 +160,9 @@ func force_grid_match(height, width, num_shapes):
 	
 	emit_signal("collect_mana", get_matches_array(matches))
 	yield(remove_matched_tiles_and_fill_grid(matches, true), "completed")
-	yield(cascading_match(), "completed")
+	while np.sum2d(find_matches_in_grid()):
+		emit_signal("collect_mana", get_matches_array(find_matches_in_grid()))
+		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
 
 func generate_random_coordinates():
 		var y = rng.randi() % grid_size[0]
@@ -257,12 +259,9 @@ func swap(tile1, tile2):
 	animation_durations.append(tile1.move_tile(y2, x2, true, false))
 	animation_durations.append(tile2.move_tile(y1, x1, true, false))
 	yield(animate(), "completed")
-	yield(cascading_match(), "completed")
-	
-	in_middle_of_swap = false
-	emit_signal("swap_end")
-
-func cascading_match():
 	while np.sum2d(find_matches_in_grid()):
 		emit_signal("collect_mana", get_matches_array(find_matches_in_grid()))
 		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
+	
+	in_middle_of_swap = false
+	emit_signal("swap_end")

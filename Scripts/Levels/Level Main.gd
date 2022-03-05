@@ -67,6 +67,8 @@ func _ready():
 	start_turn()
 
 func distribute_mana(mana_array):
+	var berries_to_give = mana_array[ManaTex.enum("berry")]
+	mana_array[ManaTex.enum("berry")] -= curr_player.change_berries(berries_to_give)
 	for organism in curr_player.organisms:
 		var mana_to_give = mana_array[organism.mana_enum]
 		mana_array[organism.mana_enum] -= organism.change_mana(mana_to_give)

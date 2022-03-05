@@ -79,6 +79,8 @@ func hide_berry_actions():
 func do_ability():
 	if mana == mana_to_activate:
 		call(ability)
+		mana = 0
+		update_ui()
 
 func sear():
 	game.next_player.change_HP(20)
@@ -90,11 +92,11 @@ func desear():
 
 func splash():
 	game.next_player.change_HP(10)
-	game.grid.force_grid_match(1,1,2)
+	# TODO change 2 random tiles to water
 
 func crash():
 	game.next_player.change_HP(20)
-	game.grid.force_grid_match(1,1,3)
+	# TODO change 3 random tiles to water
 
 func shock():
 	game.next_player.change_HP(15)
