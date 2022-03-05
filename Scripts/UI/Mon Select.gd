@@ -48,11 +48,9 @@ func next():
 		_root.rpc("load_level", "Levels/Level Main", _root.world_str)
 
 remotesync func create_player(mon1_name, mon2_name, player_index):
-	var mon1 = Organism.instance().create_base_mon(mon1_name, null)
-	var mon2 = Organism.instance().create_base_mon(mon2_name, null)
+	var mon1 = Organism.instance().create_base_mon(mon1_name)
+	var mon2 = Organism.instance().create_base_mon(mon2_name)
 	var player = Player.instance().init(mon1, mon2, "P"+str(player_index+1))
-	mon1.player = player
-	mon2.player = player
 	_root.players_for_level_main[player_index] = player
 
 func back():

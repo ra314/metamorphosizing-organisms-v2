@@ -7,7 +7,6 @@ var ability_description
 var mana_type
 var mana_enum
 var mana_to_activate
-var player
 var game
 
 var is_evolved = false
@@ -26,13 +25,13 @@ func get_organism_id(mon_name):
 	print("Mon is not found")
 	assert(false)
 
-func create_base_mon(mon_name, _player):
+func create_base_mon(mon_name):
 	var _id = get_organism_id(mon_name)
 	var mon_data = Dex.data[_id]["base_organism"]
 	return init(_id, mon_name, mon_data["ability"], mon_data["ability_description"], \
-		Dex.data[_id]["mana_type"], Dex.data[_id]["mana_to_activate"], _player)
+		Dex.data[_id]["mana_type"], Dex.data[_id]["mana_to_activate"])
 
-func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_activate, _player):
+func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_activate):
 	self.id = _id
 	self.oname = _oname
 	self.ability = _ability
@@ -40,7 +39,6 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 	self.mana_type = _mana_type
 	mana_enum = ManaTex.enum(_mana_type)
 	self.mana_to_activate = _mana_to_activate
-	self.player = _player
 	$Mana_Icon.texture = ManaTex.dict[_mana_type]
 	$Mana_Bar.max_value = _mana_to_activate
 	update_ui()
@@ -83,38 +81,44 @@ func do_ability():
 		update_ui()
 
 func sear():
-	game.next_player.change_HP(20)
+	game.next_player.change_HP(-20)
 	game.grid.force_grid_match(-1,1,1)
 
 func desear():
-	game.next_player.change_HP(25)
+	game.next_player.change_HP(-25)
 	game.grid.force_grid_match(-1,1,2)
 
 func splash():
-	game.next_player.change_HP(10)
+	game.next_player.change_HP(-10)
 	# TODO change 2 random tiles to water
 
 func crash():
-	game.next_player.change_HP(20)
+	game.next_player.change_HP(-20)
 	# TODO change 3 random tiles to water
 
 func shock():
-	game.next_player.change_HP(15)
+	game.next_player.change_HP(-15)
 	for organism in game.next_player.organisms:
 		organism.change_mana(-2)
 
 func awe():
-	game.next_player.change_HP(20)
+	game.next_player.change_HP(-20)
 	for organism in game.next_player.organisms:
 		organism.change_mana(-3)
 
 func perseverance():
-	pass
-	# TODO heal 5 and deal 5 for 3 turns at the end of turn
+	game.register_repeated_action(self, "perseverance_mini", 3, "turn_end")
+
+func perseverance_mini():
+	game.next_player.change_HP(-5)
+	game.curr_player.change_HP(5)
 
 func fortitude():
-	pass
-	# TODO heal 10 and deal 10 for 2 turns at the end of turn
+	game.register_repeated_action(self, "fortitude_mini", 2, "turn_end")
+
+func fortitude_mini():
+	game.next_player.change_HP(-10)
+	game.curr_player.change_HP(10)
 
 func ovation():
 	game.next_player.change_HP(10)

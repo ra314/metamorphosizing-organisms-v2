@@ -111,8 +111,28 @@ func after_process():
 			organism.show_berry_actions()
 	
 	if curr_moves == 0:
+		process_actions(turn_end_actions)
 		change_to_next_player()
 		start_turn()
+		process_actions(turn_start_actions)
+
+func process_actions(actions):
+	for action in actions:
+		var object = action[0]
+		var method = action[1]
+		# num_times = actions[2]
+		if action[2] > 0:
+			object.call(method)
+			action[2] -= 1
+
+var turn_end_actions = []
+var turn_start_actions = []
+
+func register_repeated_action(object, method, num_times, siignal):
+	if siignal == "turn_end":
+		turn_end_actions.append([object, method, num_times])
+	elif siignal == "turn_start":
+		turn_start_actions.append([object, method, num_times])
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
