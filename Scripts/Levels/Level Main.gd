@@ -11,7 +11,7 @@ var players = []
 var game_started = false
 var world_str = ""
 
-var curr_moves = 0
+var curr_moves = 2
 var max_moves = 2
 
 var curr_time = 0
@@ -21,18 +21,6 @@ func init(_world_str):
 	world_str = _world_str
 	return self
 
-func spawn():
-	# Creating players
-	
-	players = {"P1": get_node("CanvasLayer/Players/Player 1").init("red"), "blue": get_node("CanvasLayer/Players/Player 2").init("blue")}
-	# Randomizing players
-	randomize()
-	curr_player_index = randi() % num_players
-	curr_player = players.values()[curr_player_index]
-	
-	print("The first player is " + curr_player.color)
-	print(curr_player.color)
-	
 # Called when the node enters the scene tree for the first time.
 func _ready():	
 	# Button to start the game, when clicked it removes itself and the reroll button
@@ -55,6 +43,10 @@ func _ready():
 	$"CanvasLayer/Players/".add_child(_root.players_for_level_main[0])
 	$"CanvasLayer/Players/".add_child(_root.players_for_level_main[1])
 	_root.players_for_level_main[1].position = Vector2(1000, 500)
+	curr_player = _root.players_for_level_main[0]
+	
+	$Grid.connect("swap_start", self, "before_process")
+	$Grid.connect("swap_end", self, "after_process")
 
 func start_turn():
 	restart_timer()
@@ -82,23 +74,15 @@ func after_process():
 		for organism in curr_player.organisms:
 			organism.show_berry_actions()
 
+var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
+var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
+onready var move_icons = $CanvasLayer/Match_Control/Moves_Control/Moves_Container
 func update_move_icons():
-	# Get the container so we can add moves textures inside of it
-	var container = $CanvasLayer/Match_Control/Moves_Control/Moves_Container
-	
-	for child in container.get_children().duplicate():
-		container.remove_child(child)
-		child.queue_free()
-	
-	for x in curr_moves:
-		var texture = TextureRect.new()
-		texture.texture = "res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png"
-		container.add_child(texture)
-	
-	for x in max_moves - curr_moves:
-		var texture = TextureRect.new()
-		texture.texture = "res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png"
-		container.add_child(texture)
+	move_icons.get_children()[2].visible = (max_moves == 3)
+	for move_icon in move_icons.get_children():
+		move_icon.texture = move_icon_used
+	for i in range(curr_moves):
+		move_icons.get_children()[i].texture = move_icon_active
 
 func update_turn_icons():
 	var dark = [0.5, 0.5, 0.5, 1]
@@ -124,4 +108,4 @@ func restart_timer():
 # The timer waits every second but don't update the text. We do it here.
 func on_timer_timeout():
 	curr_time -= 1
-	$CanvasLayer/Match_Control/Time_Control/Time_Text.text = curr_time.str
+	$CanvasLayer/Match_Control/Time_Control/Time_Text.text = str(curr_time)

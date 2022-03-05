@@ -115,6 +115,13 @@ margin_right = 1286.0
 margin_bottom = 461.0
 texture = ExtResource( 5 )
 
+[node name="Move_Icon_3" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+visible = false
+margin_left = 1032.0
+margin_right = 1544.0
+margin_bottom = 461.0
+texture = ExtResource( 5 )
+
 [node name="Player1_Turn" type="Sprite" parent="CanvasLayer"]
 position = Vector2( 600, 225.641 )
 scale = Vector2( 0.25, 0.25 )
