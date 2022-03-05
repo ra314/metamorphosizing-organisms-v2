@@ -35,3 +35,9 @@ func change_berries(delta):
 func update_ui():
 	$Health_Control/Health/Text.text = str(curr_HP)
 	$Berry_Control/Berry/Text.text = str(berries) + "/" + str(max_berries)
+	if berries == max_berries:
+		for organism in organisms:
+			organism.show_berry_actions()
+	else:
+		for organism in organisms:
+			organism.hide_berry_actions()

@@ -69,7 +69,7 @@ func show_berry_actions():
 		$Berry_Control/Boost_Text.show()
 	else:
 		$Berry_Control/Evolve_Text.show()
-		
+
 func hide_berry_actions():
 	$Berry_Control.hide()
 
