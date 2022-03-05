@@ -4,10 +4,16 @@ onready var _root: Main = get_tree().get_root().get_node("Main")
 
 var game_over = false
 
-var curr_player = null
-var curr_player_index = null
+var curr_player
+var curr_player_index
 const num_players = 2
 var players = []
+func get_next_player():
+	return players[(curr_player_index+1)%num_players]
+func change_to_next_player():
+	curr_player_index = (curr_player_index+1)%num_players
+	curr_player = players[curr_player_index]
+
 var game_started = false
 var world_str = ""
 
@@ -40,21 +46,28 @@ func _ready():
 	
 	#update_player_status(curr_player.color, true)
 	
-	$"CanvasLayer/Players/".add_child(_root.players_for_level_main[0])
-	$"CanvasLayer/Players/".add_child(_root.players_for_level_main[1])
-	_root.players_for_level_main[1].position = Vector2(1000, 500)
-	curr_player = _root.players_for_level_main[0]
+	players = _root.players_for_level_main
+	$"CanvasLayer/Players/".add_child(players[0])
+	$"CanvasLayer/Players/".add_child(players[1])
+	players[1].position = Vector2(1000, 500)
+	curr_player = players[0]
+	curr_player_index = 0
 	
 	$Grid.connect("swap_start", self, "before_process")
 	$Grid.connect("swap_end", self, "after_process")
+	
+	start_turn()
+
+
 
 func start_turn():
+	curr_moves = 2
+	max_moves = 2
 	restart_timer()
 	update_move_icons()
 	update_turn_icons()
-	
-# TODO:
-# Replace with the signal emitted when the grid starts processing a move
+
+# Called when the grid starts processing a move
 func before_process():
 	var timer = $CanvasLayer/Match_Control/Time_Control/Time_Text/Timer
 	timer.stop()
@@ -63,8 +76,7 @@ func before_process():
 	curr_moves -= 1;
 	update_move_icons()
 
-# TODO:
-# Replace with the signal emitted when the grid is done processing a move
+# Called when the grid is done processing a move
 func after_process():
 	restart_timer()
 	update_move_icons()
@@ -73,6 +85,10 @@ func after_process():
 	if curr_player.berries >= curr_player.max_berries:
 		for organism in curr_player.organisms:
 			organism.show_berry_actions()
+	
+	if curr_moves == 0:
+		change_to_next_player()
+		start_turn()
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
@@ -85,8 +101,8 @@ func update_move_icons():
 		move_icons.get_children()[i].texture = move_icon_active
 
 func update_turn_icons():
-	var dark = [0.5, 0.5, 0.5, 1]
-	var light = [1, 1, 1, 1]
+	var dark = Color(0.5, 0.5, 0.5, 1)
+	var light = Color(1, 1, 1, 1)
 	
 	# If the current player is Player #1, darken the Player 2 Icon
 	if curr_player == players[0]:
@@ -99,6 +115,7 @@ func update_turn_icons():
 # Restart the move timer
 func restart_timer():
 	curr_time = time_per_move
+	$CanvasLayer/Match_Control/Time_Control/Time_Text.text = str(curr_time)
 	
 	var timer = $CanvasLayer/Match_Control/Time_Control/Time_Text/Timer
 	
