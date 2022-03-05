@@ -18,6 +18,7 @@ var world_str = ""
 
 var curr_moves = 2
 var max_moves = 2
+const absolute_max_moves = 3
 
 var curr_time = 0
 const time_per_move = 30
@@ -63,6 +64,7 @@ func _ready():
 	$Grid.connect("swap_start", self, "before_process")
 	$Grid.connect("swap_end", self, "after_process")
 	$Grid.connect("collect_mana", self, "distribute_mana")
+	$Grid.connect("extra_move", self, "add_extra_move")
 	
 	start_turn()
 
@@ -79,6 +81,12 @@ func start_turn():
 	restart_timer()
 	update_move_icons()
 	update_turn_icons()
+
+func add_extra_move():
+	if max_moves != absolute_max_moves:
+		curr_moves += 1
+		max_moves += 1
+		update_move_icons()
 
 # Called when the grid starts processing a move
 func before_process():
@@ -110,7 +118,7 @@ var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Activ
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
 onready var move_icons = $CanvasLayer/Match_Control/Moves_Control/Moves_Container
 func update_move_icons():
-	move_icons.get_children()[2].visible = (max_moves == 3)
+	move_icons.get_children()[2].visible = (max_moves == absolute_max_moves)
 	for move_icon in move_icons.get_children():
 		move_icon.texture = move_icon_used
 	for i in range(curr_moves):

@@ -26,9 +26,12 @@ func change_HP(delta):
 
 func change_berries(delta):
 	# Clamping berries
+	var prev_berries = berries
 	berries = clamp(berries + delta, 0, max_berries)
 	update_ui()
+	# Returning the amount change in berries
+	return abs(berries - prev_berries)
 	
 func update_ui():
-	$Health_Control/Health/Text.text = curr_HP.str
-	$Berry_Control/Berry/Text.text = berries.str + "/" + max_berries.str
+	$Health_Control/Health/Text.text = str(curr_HP)
+	$Berry_Control/Berry/Text.text = str(berries) + "/" + str(max_berries)

@@ -64,7 +64,7 @@ func flood_fill(y, x, matrix):
 	var match_size = 1
 	var processed_tiles = [str(y) + "," + str(x)]
 	
-	while queue:
+	while queue != []:
 		var curr = queue.pop_back()
 		y = curr[0]
 		x = curr[1]
@@ -73,14 +73,16 @@ func flood_fill(y, x, matrix):
 			var dx = delta[1]
 			if inside_grid(y+dy, x+dx):
 				if matrix[y+dy][x+dx] == curr_tile:
-					match_size += 1
-					queue.append([y+dy, x+dx])
+					var str_dxdy = str(y+dy) + "," + str(x+dx)
+					if not (str_dxdy in processed_tiles):
+						match_size += 1
+						queue.append([y+dy, x+dx])
+						processed_tiles.append(str_dxdy)
 	
 	return match_size
 
 # Returns true if there is a continuous region of matches tiles bigger than 3
-func check_for_extra_move():
-	var matches = find_matches_in_grid()
+func check_for_extra_move(matches):
 	for y in range(grid_size[0]):
 		for x in range(grid_size[1]):
 			if matches[y][x] != 0:
@@ -161,8 +163,11 @@ func force_grid_match(height, width, num_shapes):
 	emit_signal("collect_mana", get_matches_array(matches))
 	yield(remove_matched_tiles_and_fill_grid(matches, true), "completed")
 	while np.sum2d(find_matches_in_grid()):
-		emit_signal("collect_mana", get_matches_array(find_matches_in_grid()))
-		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
+		var matches_in_grid = find_matches_in_grid()
+		emit_signal("collect_mana", get_matches_array(matches_in_grid))
+		if check_for_extra_move(matches_in_grid):
+			emit_signal("extra_move")
+		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
 
 func generate_random_coordinates():
 		var y = rng.randi() % grid_size[0]
@@ -244,6 +249,7 @@ func get_matches_array(matches):
 signal swap_start
 signal swap_end
 signal collect_mana
+signal extra_move
 func swap(tile1, tile2):
 	emit_signal("swap_start")
 	in_middle_of_swap = true
@@ -260,8 +266,11 @@ func swap(tile1, tile2):
 	animation_durations.append(tile2.move_tile(y1, x1, true, false))
 	yield(animate(), "completed")
 	while np.sum2d(find_matches_in_grid()):
-		emit_signal("collect_mana", get_matches_array(find_matches_in_grid()))
-		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
+		var matches_in_grid = find_matches_in_grid()
+		emit_signal("collect_mana", get_matches_array(matches_in_grid))
+		if check_for_extra_move(matches_in_grid):
+			emit_signal("extra_move")
+		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
 	
 	in_middle_of_swap = false
 	emit_signal("swap_end")
