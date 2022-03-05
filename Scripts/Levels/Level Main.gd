@@ -49,7 +49,7 @@ func _ready():
 	players = _root.players_for_level_main
 	$"CanvasLayer/Players/".add_child(players[0])
 	$"CanvasLayer/Players/".add_child(players[1])
-	players[1].position = Vector2(1000, 500)
+	players[1].position = Vector2(3500, 000)
 	curr_player = players[0]
 	curr_player_index = 0
 	
