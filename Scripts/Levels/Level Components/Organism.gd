@@ -46,6 +46,7 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 
 func _ready():
 	$Berry_Control/Evolve_Text.connect("button_down", self, "evolve1")
+	$Berry_Control/Boost_Text.connect("button_down", self, "boost1")
 
 signal evolving_start
 signal evolving_end
@@ -59,9 +60,15 @@ remotesync func evolve2():
 	oname = Dex.data[id]['evolved_organism']['name']
 	ability = Dex.data[id]['evolved_organism']['ability']
 	ability_description = Dex.data[id]['evolved_organism']['ability_description']
-	is_evolved = false
+	is_evolved = true
 	
 	emit_signal("evolving_end")
+
+signal boosting
+func boost1():
+	rpc("boost2")
+remotesync func boost2():
+	emit_signal("boosting", self)
 
 func change_mana(delta):
 	# Clamping mana
@@ -79,7 +86,9 @@ func show_berry_actions():
 	$Berry_Control.show()
 	if is_evolved:
 		$Berry_Control/Boost_Text.show()
+		$Berry_Control/Evolve_Text.hide()
 	else:
+		$Berry_Control/Boost_Text.hide()
 		$Berry_Control/Evolve_Text.show()
 
 func hide_berry_actions():

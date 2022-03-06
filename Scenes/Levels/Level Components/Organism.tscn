@@ -50,6 +50,7 @@ scale = Vector2( 0.482615, 0.482615 )
 texture = ExtResource( 5 )
 
 [node name="Berry_Control" type="Control" parent="."]
+visible = false
 margin_left = -136.661
 margin_right = -96.6606
 margin_bottom = 40.0

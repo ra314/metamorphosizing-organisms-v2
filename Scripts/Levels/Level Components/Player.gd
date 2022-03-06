@@ -14,11 +14,16 @@ func init(_pname):
 	for organism in organisms:
 		add_child(organism)
 		organism.connect("evolving_end", self, "consume_all_berries")
+		organism.connect("boosting", self, "boost")
 	self.pname = _pname
 	return self
 
 func consume_all_berries():
 	change_berries(-berries)
+
+func boost(organism):
+	consume_all_berries()
+	organism.change_mana(max_berries)
 
 func change_HP(delta):
 	# Clamping health
@@ -37,7 +42,7 @@ func change_berries(delta):
 func update_ui(hide_berries=true):
 	$Health_Control/Health/Text.text = str(curr_HP)
 	$Berry_Control/Berry/Text.text = str(berries) + "/" + str(max_berries)
-	if berries == max_berries and not hide_berries:
+	if berries == max_berries and not hide_berries and game.is_current_player():
 		for organism in organisms:
 			organism.show_berry_actions()
 	else:
