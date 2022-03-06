@@ -170,3 +170,8 @@ func restart_timer():
 func on_timer_timeout():
 	curr_time -= 1
 	$CanvasLayer/Match_Control/Time_Control/Time_Text.text = str(curr_time)
+
+func is_current_player():
+	if not _root.online_game:
+		return true
+	return players[_root.player_index] == curr_player

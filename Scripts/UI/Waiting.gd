@@ -18,3 +18,13 @@ func back():
 	# Loading the previous scene
 	var scene = _root.scene_manager._load_scene(prev_scene_str)
 	_root.scene_manager._replace_scene(scene)
+
+# I'm putting this function here so that when you go to the waiting screen
+# from mon select, the remotesync call of create_player still executes.
+onready var Organism = load("res://Scenes/Levels/Level Components/Organism.tscn")
+onready var Player = load("res://Scenes/Levels/Level Components/Player.tscn")
+remotesync func create_player(mon1_name, mon2_name, player_index):
+	var mon1 = Organism.instance().create_base_mon(mon1_name)
+	var mon2 = Organism.instance().create_base_mon(mon2_name)
+	var player = Player.instance().init(mon1, mon2, "P"+str(player_index+1))
+	_root.players_for_level_main[player_index] = player

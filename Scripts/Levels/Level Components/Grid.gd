@@ -11,9 +11,11 @@ var Tile = load("res://Scenes/Levels/Level Components/Tile.tscn")
 var rng = RandomNumberGenerator.new()
 
 func _ready():
-	rng.randomize()
+	rng.seed = 10
 	initialize_grid()
-	remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true)
+	# Cascading matches but with no collection of mana or extra moves
+	while np.sum2d(find_matches_in_grid()):
+		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
 
 # Create all tiles and randomly pick textures
 func initialize_grid():
@@ -212,8 +214,8 @@ func select_tile(tile):
 		if selected_tile == null:
 			selected_tile = tile
 		# Swap if the prev selected tile and curr selected tile are adjacent
-		elif tile.can_swap(selected_tile):
-			swap(tile, selected_tile)
+		elif tile.can_swap(selected_tile) and is_current_player():
+			rpc("swap", tile.location, selected_tile.location)
 			selected_tile = null
 		# Deselection if you click the same tile twice
 		elif selected_tile == tile:
@@ -222,6 +224,12 @@ func select_tile(tile):
 		# from the tile you previously clicked
 		else:
 			selected_tile = tile
+
+func is_current_player():
+	if get_parent()!=null:
+		var game = get_parent()
+		return game.is_current_player()
+	return true
 
 # Stores the durations of all of the tile animations
 var animation_durations = [0]
@@ -266,14 +274,17 @@ signal swap_start
 signal swap_end
 signal collect_mana
 signal extra_move
-func swap(tile1, tile2):
+remotesync func swap(tile1_location, tile2_location):
+	
 	emit_signal("swap_start")
 	in_middle_of_swap = true
 	
-	var y1 = tile1.location[0]
-	var x1 = tile1.location[1]
-	var y2 = tile2.location[0]
-	var x2 = tile2.location[1]
+	var y1 = tile1_location[0]
+	var x1 = tile1_location[1]
+	var tile1 = grid[y1][x1]
+	var y2 = tile2_location[0]
+	var x2 = tile2_location[1]
+	var tile2 = grid[y2][x2]
 	
 	grid[y2][x2] = tile1
 	grid[y1][x1] = tile2
