@@ -29,6 +29,19 @@ func init(_world_str):
 
 onready var grid = $Grid
 
+func create_mons_and_players():
+	for i in range(len(_root.players_for_level_main)):
+		var info = _root.players_for_level_main[i]
+		var mon1_name = info[0]
+		var mon2_name = info[1]
+		var player_index = i
+		
+		var player = get_node("CanvasLayer/Players/Player" + str(player_index+1))
+		player.get_node("Organism1").create_base_mon(mon1_name)
+		player.get_node("Organism2").create_base_mon(mon2_name)
+		player.init("P"+str(player_index+1))
+		_root.players_for_level_main[player_index] = player
+
 # Called when the node enters the scene tree for the first time.
 func _ready():	
 	# Button to start the game, when clicked it removes itself and the reroll button
@@ -46,8 +59,7 @@ func _ready():
 	get_node("CanvasLayer/Confirm Resign/VBoxContainer/CenterContainer/HBoxContainer/Yes").connect("button_down", self, "confirm_resign", [true])
 	get_node("CanvasLayer/Restart").connect("button_down", self, "restart")
 	
-	#update_player_status(curr_player.color, true)
-	
+	create_mons_and_players()
 	players = _root.players_for_level_main
 	$"CanvasLayer/Players/".add_child(players[0])
 	$"CanvasLayer/Players/".add_child(players[1])
@@ -59,6 +71,8 @@ func _ready():
 	for player in players:
 		for organism in player.organisms:
 			organism.game = self
+			organism.connect("evolving_start", self, "before_process")
+			organism.connect("evolving_end", self, "after_process")
 		player.game = self
 	
 	$Grid.connect("swap_start", self, "before_process")
@@ -81,6 +95,7 @@ func start_turn():
 	restart_timer()
 	update_move_icons()
 	update_turn_icons()
+	curr_player.update_ui(false)
 
 func add_extra_move():
 	if max_moves != absolute_max_moves:
@@ -105,16 +120,15 @@ func after_process():
 	for organism in curr_player.organisms:
 		organism.do_ability()
 	
-	# Show available berry actions when the player reaches the max berry count
-	if curr_player.berries >= curr_player.max_berries:
-		for organism in curr_player.organisms:
-			organism.show_berry_actions()
-	
+	# Changing turns
 	if curr_moves == 0:
 		process_actions(turn_end_actions)
+		curr_player.update_ui()
 		change_to_next_player()
 		start_turn()
 		process_actions(turn_start_actions)
+	else:
+		curr_player.update_ui(false)
 
 func process_actions(actions):
 	for action in actions:

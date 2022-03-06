@@ -2,8 +2,6 @@ extends Control
 var selected_mons = []
 const selection_text = "Selected: "
 onready var _root: Main = get_tree().get_root().get_node("Main")
-onready var Organism = load("res://Scenes/Levels/Level Components/Organism.tscn")
-onready var Player = load("res://Scenes/Levels/Level Components/Player.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -47,11 +45,9 @@ func next():
 	else:
 		_root.rpc("load_level", "Levels/Level Main", _root.world_str)
 
+# Here we just store the inputs, we create the players and mons in level main
 remotesync func create_player(mon1_name, mon2_name, player_index):
-	var mon1 = Organism.instance().create_base_mon(mon1_name)
-	var mon2 = Organism.instance().create_base_mon(mon2_name)
-	var player = Player.instance().init(mon1, mon2, "P"+str(player_index+1))
-	_root.players_for_level_main[player_index] = player
+	_root.players_for_level_main[player_index] = [mon1_name, mon2_name]
 
 func back():
 	# Removing the current scene from history

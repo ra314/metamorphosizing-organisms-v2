@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Levels/Level Components/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/UI/Player/Game_Player_Resource_Bar.png" type="Texture" id=2]
 [ext_resource path="res://Assets/UI/Player/Game_Player_Resource_Heart.png" type="Texture" id=3]
 [ext_resource path="res://Assets/UI/Player/Game_Player_Resource_Berry.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Fonts/Frick_Regular.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Scenes/Levels/Level Components/Organism.tscn" type="PackedScene" id=6]
 
 [node name="Player" type="Node2D"]
 script = ExtResource( 1 )
@@ -91,3 +92,8 @@ text = "0/4"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Organism1" parent="." instance=ExtResource( 6 )]
+
+[node name="Organism2" parent="." instance=ExtResource( 6 )]
+position = Vector2( -37.755, 868.364 )

@@ -50,7 +50,6 @@ scale = Vector2( 0.482615, 0.482615 )
 texture = ExtResource( 5 )
 
 [node name="Berry_Control" type="Control" parent="."]
-visible = false
 margin_left = -136.661
 margin_right = -96.6606
 margin_bottom = 40.0
@@ -63,33 +62,29 @@ position = Vector2( -204.153, -326.663 )
 scale = Vector2( 0.509961, 0.509961 )
 texture = ExtResource( 7 )
 
-[node name="Boost_Text" type="RichTextLabel" parent="Berry_Control"]
-visible = false
-margin_left = -33.1415
-margin_top = -381.645
-margin_right = 586.858
-margin_bottom = -139.645
-rect_scale = Vector2( 0.947225, 0.947225 )
-rect_clip_content = false
-custom_fonts/normal_font = ExtResource( 6 )
-custom_colors/default_color = Color( 0.83, 0.6972, 0.0332, 1 )
-tab_size = 0
-text = "Boost"
+[node name="Evolve_Text" type="Button" parent="Berry_Control"]
+margin_left = -31.7839
+margin_top = -411.072
+margin_right = 683.216
+margin_bottom = -225.072
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.831373, 0.698039, 0.0313726, 1 )
+text = "Evolve"
+flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Evolve_Text" type="RichTextLabel" parent="Berry_Control"]
-margin_left = -33.0
-margin_top = -382.0
-margin_right = 691.0
-margin_bottom = -140.0
-rect_scale = Vector2( 0.947225, 0.947225 )
-rect_clip_content = false
-custom_fonts/normal_font = ExtResource( 6 )
-custom_colors/default_color = Color( 0.83, 0.6972, 0.0332, 1 )
-tab_size = 0
-text = "Evolve"
+[node name="Boost_Text" type="Button" parent="Berry_Control"]
+visible = false
+margin_left = -31.7839
+margin_top = -413.191
+margin_right = 683.216
+margin_bottom = -227.191
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.831373, 0.698039, 0.0313726, 1 )
+text = "Boost"
+flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

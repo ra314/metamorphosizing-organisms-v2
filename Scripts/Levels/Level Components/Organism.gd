@@ -44,12 +44,24 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 	update_ui()
 	return self
 
-func evolve():
-	if not is_evolved:
-		oname = data[id]['evolved_organism']['name']
-		ability = data[id]['evolved_organism']['ability_name']
-		ability_description = data[id]['evolved_organism']['ability_description']
-		data.close()
+func _ready():
+	$Berry_Control/Evolve_Text.connect("button_down", self, "evolve1")
+
+signal evolving_start
+signal evolving_end
+func evolve1():
+	rpc("evolve2")
+remotesync func evolve2():
+	if is_evolved:
+		return
+	emit_signal("evolving_start")
+	
+	oname = Dex.data[id]['evolved_organism']['name']
+	ability = Dex.data[id]['evolved_organism']['ability']
+	ability_description = Dex.data[id]['evolved_organism']['ability_description']
+	is_evolved = false
+	
+	emit_signal("evolving_end")
 
 func change_mana(delta):
 	# Clamping mana

@@ -9,14 +9,16 @@ var curr_HP = max_HP
 var max_berries = 4
 var berries = 0
 
-func init(organism1, organism2, _pname):
-	self.organisms = [organism1, organism2]
-	add_child(organism1)
-	add_child(organism2)
-	organism1.position = Vector2(0, 0)
-	organism2.position = Vector2(0, 800)
+func init(_pname):
+	self.organisms = [$Organism1, $Organism2]
+	for organism in organisms:
+		add_child(organism)
+		organism.connect("evolving_end", self, "consume_all_berries")
 	self.pname = _pname
 	return self
+
+func consume_all_berries():
+	change_berries(-berries)
 
 func change_HP(delta):
 	# Clamping health
@@ -32,10 +34,10 @@ func change_berries(delta):
 	# Returning the amount change in berries
 	return abs(berries - prev_berries)
 	
-func update_ui():
+func update_ui(hide_berries=true):
 	$Health_Control/Health/Text.text = str(curr_HP)
 	$Berry_Control/Berry/Text.text = str(berries) + "/" + str(max_berries)
-	if berries == max_berries:
+	if berries == max_berries and not hide_berries:
 		for organism in organisms:
 			organism.show_berry_actions()
 	else:
