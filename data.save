@@ -25,7 +25,7 @@
   "mana_type": "water",
   "mana_to_activate": 6
 },{
-	"base_organism": 
+  "base_organism": 
 		{"name": "digenstil", 
 		"ability": "shock",
 		"ability_description": "Shock: Attacks for 15 HP and drains 2 Mana from the opponent's monsters."},
@@ -38,7 +38,7 @@
   "mana_type": "psychic",
   "mana_to_activate": 6
 },{
-	"base_organism": 
+  "base_organism": 
 		{"name": "ruusei", 
 		"ability": "perseverance",
 		"ability_description": "Perseverance: Attacks for 5 HP and heals 5 HP at the end of turn for 3 turns."},
@@ -51,7 +51,7 @@
   "mana_type": "grass",
   "mana_to_activate": 6
 },{
-	"base_organism": 
+  "base_organism": 
 		{"name": "trimenta", 
 		"ability": "ovation",
 		"ability_description": "Ovation: Attacks for 10 HP and grants 1 extra move for the next turn."},
@@ -59,8 +59,34 @@
   "evolved_organism":
 		{"name": "trimenta", 
 		"ability": "encore",
-		"ability_description": "Fortitude: Attacks for 15 HP and grants 1 extra move for the next 2 turns."},
+		"ability_description": "Encore: Attacks for 15 HP and grants 1 extra move for the next 2 turns."},
 
   "mana_type": "electric",
   "mana_to_activate": 7
+},{
+  "base_organism": 
+		{"name": "yolesik", 
+		"ability": "mobilize",
+		"ability_description": "Mobilize: Attacks for 10 HP and gives 2 mana to your other monster."},
+		
+  "evolved_organism":
+		{"name": "yolesik", 
+		"ability": "reform",
+		"ability_description": "Reform: Attacks for 15 HP and gives 3 mana to your other monster."},
+
+  "mana_type": "fire",
+  "mana_to_activate": 6
+},{
+  "base_organism": 
+		{"name": "matligas", 
+		"ability": "headway",
+		"ability_description": "Headway: Attacks for 35 HP but loses 1 move for the next 1 turn."},
+		
+  "evolved_organism":
+		{"name": "matligas", 
+		"ability": "breakthrough",
+		"ability_description": "Breakthrough: Attacks for 45 HP and loses 1 move for the next 2 turns."},
+
+  "mana_type": "water",
+  "mana_to_activate": 10
 }]

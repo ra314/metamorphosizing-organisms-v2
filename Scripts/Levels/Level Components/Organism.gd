@@ -42,6 +42,7 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 	$Mana_Icon.texture = ManaTex.dict[_mana_type]
 	$Mana_Bar.max_value = _mana_to_activate
 	update_ui()
+	tween_mana(0, 0)
 	return self
 
 func _ready():
@@ -69,17 +70,26 @@ func boost1():
 	rpc("boost2")
 remotesync func boost2():
 	emit_signal("boosting", self)
+	
+func flip_sprite():
+	$Sprite.scale *= Vector2(-1, 1)
 
 func change_mana(delta):
 	# Clamping mana
 	var prev_mana = mana
 	mana = clamp(mana + delta, 0, mana_to_activate)
 	update_ui()
+	tween_mana(prev_mana, mana)
 	# Returning the amount change in mana
 	return abs(mana - prev_mana)
 
+const animation_mana_speed = 1
+func tween_mana(prev_mana, mana):
+	$Tween.interpolate_property($Mana_Bar, "value", prev_mana, mana, animation_mana_speed, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+	$Tween.start()
+	
 func update_ui():
-	$Mana_Bar.value = mana
+	# $Mana_Bar.value = mana
 	$Mana_Text.text = str(mana) + "/" + str(mana_to_activate)
 	
 func show_berry_actions():
@@ -99,6 +109,7 @@ func do_ability():
 	if mana == mana_to_activate:
 		call(ability)
 		mana = 0
+		tween_mana(mana_to_activate, mana)
 		update_ui()
 
 func sear():
@@ -128,32 +139,56 @@ func awe():
 		organism.change_mana(-3)
 
 func perseverance():
-	game.register_repeated_action(self, "perseverance_mini", 3, "turn_end")
+	game.register_repeated_action(self, "perseverance_mini", 3, null, "turn_end")
 
 func perseverance_mini():
 	game.next_player.change_HP(-5)
 	game.curr_player.change_HP(5)
 
 func fortitude():
-	game.register_repeated_action(self, "fortitude_mini", 2, "turn_end")
+	game.register_repeated_action(self, "fortitude_mini", 2, null, "turn_end")
 
 func fortitude_mini():
 	game.next_player.change_HP(-10)
 	game.curr_player.change_HP(10)
 
 func ovation():
-	game.next_player.change_HP(10)
-	game.register_repeated_action(self, "ovation_mini", 1, "turn_start")
+	game.next_player.change_HP(-10)
+	game.register_repeated_action(self, "ovation_mini", 1, null, "turn_start")
 
 func ovation_mini():
 	game.add_extra_move()
 
 func encore():
-	game.next_player.change_HP(15)
-	game.register_repeated_action(self, "encore_mini", 2, "turn_start")
+	game.next_player.change_HP(-15)
+	game.register_repeated_action(self, "encore_mini", 2, null, "turn_start")
 
 func encore_mini():
 	game.add_extra_move()
+	
+func mobilize():
+	for organism in game.curr_player.organisms:
+		if organism != self:
+			organism.change_mana(2)
+
+func reform():
+	for organism in game.curr_player.organisms:
+		if organism != self:
+			organism.change_mana(3)
+
+func headway():
+	game.next_player.change_HP(-35)
+	game.register_repeated_action(self, "headway_mini", 1, game.curr_player, "player_turn")
+
+func headway_mini():
+	game.remove_move()
+	
+func breakthrough():
+	game.next_player.change_HP(-45)
+	game.register_repeated_action(self, "headway_mini", 2, game.curr_player, "player_turn")
+
+func reakthrough_mini():
+	game.remove_move()
 
 ####### Abilities
 
