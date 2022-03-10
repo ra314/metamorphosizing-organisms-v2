@@ -163,7 +163,7 @@ func process_actions(actions):
 			# Check if the action can be executed
 			if a['object'].call(a['action'], a['caster']):
 				a['num_times'] -= 1
-		if a['num_times'] == 0 and ('cleanup' in a):
+		if a['num_times'] == 0 and (a['cleanup'] != null):
 			a['object'].call(a['cleanup'], a['caster'])
 			a['num_times'] -= 1
 
