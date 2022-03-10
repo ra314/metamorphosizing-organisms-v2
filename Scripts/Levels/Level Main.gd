@@ -82,6 +82,8 @@ func _ready():
 			organism.game = self
 			organism.connect("evolving_start", self, "before_process")
 			organism.connect("evolving_end", self, "after_process")
+		player.connect("boost_start", self, "before_process")
+		player.connect("boost_end", self, "after_process")
 		player.game = self
 	
 	$Grid.connect("swap_start", self, "before_process")

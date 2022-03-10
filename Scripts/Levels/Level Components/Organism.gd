@@ -80,11 +80,11 @@ remotesync func evolve2():
 	
 	emit_signal("evolving_end")
 
-signal boosting
+signal boost
 func boost1():
 	rpc("boost2")
 remotesync func boost2():
-	emit_signal("boosting", self)
+	emit_signal("boost", self)
 	
 func flip_sprite():
 	$Sprite.scale *= Vector2(-1, 1)

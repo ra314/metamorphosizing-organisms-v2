@@ -14,7 +14,7 @@ func init(_pname):
 	for organism in organisms:
 		add_child(organism)
 		organism.connect("evolving_end", self, "consume_all_berries")
-		organism.connect("boosting", self, "boost")
+		organism.connect("boost", self, "boost")
 	self.pname = _pname
 	update_ui()
 	return self
@@ -22,10 +22,13 @@ func init(_pname):
 func consume_all_berries():
 	change_berries(-berries)
 
+signal boost_end
+signal boost_start
 func boost(organism):
+	emit_signal("boost_start")
 	consume_all_berries()
 	organism.change_mana(max_berries)
-	organism.do_ability()
+	emit_signal("boost_end")
 
 func change_HP(delta):
 	# Clamping health
