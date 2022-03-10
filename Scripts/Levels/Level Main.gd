@@ -165,15 +165,7 @@ func process_actions(actions):
 				a['num_times'] -= 1
 		if a['num_times'] == 0 and ('cleanup' in a):
 			a['object'].call(a['cleanup'], a['caster'])
-	
-	# Remove actions that are done
-	var new_actions = []
-	for a in actions:
-		if a['num_times'] != 0:
-			new_actions.append(a)
-	
-	actions.clear()
-	actions = new_actions
+			a['num_times'] -= 1
 
 var turn_end_actions = []
 var turn_start_actions = []
