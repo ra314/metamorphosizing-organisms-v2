@@ -272,33 +272,39 @@ func A028_mini(player):
 
 func A029():
 	game.next_player.change_HP(-5)
+	var random_org = game._root.select_random(game.next_player.organisms)
+	random_org.mana_absorption_blocked = true
+	if 'A029' in temp_data:
+		temp_data['A029'].append(random_org)
+	else:
+		temp_data['A029'] = []
 	game.register_repeated_action(self, "A029_mini", 2, "move_start", "A029_cleanup")
 
 func A029_mini(player):
 	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.mana_absorption_blocked = true
 		return true
 	return false
 
 func A029_cleanup(player):
-	for organism in game.curr_player.organisms:
-		organism.mana_absorption_blocked = false
+	temp_data['A029'].pop_back().mana_absorption_blocked = false
 
 func A030():
 	game.next_player.change_HP(-15)
+	var random_org = game._root.select_random(game.next_player.organisms)
+	random_org.mana_absorption_blocked = true
+	if 'A030' in temp_data:
+		temp_data['A030'].append(random_org)
+	else:
+		temp_data['A030'] = []
 	game.register_repeated_action(self, "A030_mini", 2, "move_start", "A030_cleanup")
 
 func A030_mini(player):
 	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.mana_absorption_blocked = true
 		return true
 	return false
 
 func A030_cleanup(player):
-	for organism in game.curr_player.organisms:
-		organism.mana_absorption_blocked = false
+	temp_data['A030'].pop_back().mana_absorption_blocked = false
 
 func A031():
 	game.next_player.change_HP(-10)
