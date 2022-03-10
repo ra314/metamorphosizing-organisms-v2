@@ -11,8 +11,15 @@ var Tile = load("res://Scenes/Levels/Level Components/Tile.tscn")
 var rng = RandomNumberGenerator.new()
 
 func _ready():
-	# rng.seed = 10
-	rng.randomize()
+	if get_parent() != null:
+		return
+	
+	initialize_grid()
+	# Cascading matches but with no collection of mana or extra moves
+	while np.sum2d(find_matches_in_grid()):
+		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
+
+func ready():
 	initialize_grid()
 	# Cascading matches but with no collection of mana or extra moves
 	while np.sum2d(find_matches_in_grid()):

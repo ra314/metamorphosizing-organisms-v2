@@ -61,7 +61,10 @@ remote func register_player(_player_name, id):
 	
 	if _player_name == "guest" and player_name == "host":
 		all_players_connected()
+		rpc_id(id, "set_rng_seed", rng.seed)
 
+remote func set_rng_seed(_seed):
+	rng.seed = _seed
 
 # A function that is trigggered when all players are connected
 func all_players_connected():
@@ -87,7 +90,6 @@ func all_players_connected():
 var rng = RandomNumberGenerator.new()
 
 func select_random(array):
-	rng.randomize()
 	return array[rng.randi() % len(array)]
 
 # General purpose notification system
