@@ -129,6 +129,8 @@ func after_process():
 	
 	for organism in curr_player.organisms:
 		organism.do_ability()
+		if organism.mana_blocked_moves > 0:
+			organism.mana_blocked_moves -= 1
 	
 	process_actions(move_start_actions)
 	# Changing turns
@@ -143,12 +145,6 @@ func after_process():
 
 func process_actions(actions):
 	for action in actions:
-		# Check if the action has a player value
-		if action[3]:
-			var player = action[3]
-			if player != curr_player:
-				continue
-		
 		var object = action[0]
 		var method = action[1]
 		# num_times = actions[2]
