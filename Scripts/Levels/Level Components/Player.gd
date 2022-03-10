@@ -16,6 +16,7 @@ func init(_pname):
 		organism.connect("evolving_end", self, "consume_all_berries")
 		organism.connect("boosting", self, "boost")
 	self.pname = _pname
+	update_ui()
 	return self
 
 func consume_all_berries():

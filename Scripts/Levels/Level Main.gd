@@ -73,6 +73,9 @@ func _ready():
 	curr_player = players[0]
 	next_player = players[1]
 	
+	next_player.curr_HP = 90
+	next_player.update_ui()
+	
 	# Giving the organisms and players a reference to the game
 	for player in players:
 		for organism in player.organisms:

@@ -15,9 +15,6 @@ margin_top = -1149.05
 margin_right = 40.0
 margin_bottom = -1109.05
 rect_rotation = 10.4
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Health_Bar" type="Sprite" parent="Health_Control"]
 texture = ExtResource( 2 )
@@ -43,8 +40,8 @@ margin_right = 44.2704
 margin_bottom = 189.243
 rect_scale = Vector2( 0.947225, 0.947225 )
 rect_clip_content = false
-custom_fonts/normal_font = ExtResource( 5 )
 custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = ExtResource( 5 )
 tab_size = 0
 text = "75"
 __meta__ = {
@@ -85,8 +82,8 @@ margin_right = -35.9557
 margin_bottom = 189.243
 rect_scale = Vector2( 0.947225, 0.947225 )
 rect_clip_content = false
-custom_fonts/normal_font = ExtResource( 5 )
 custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = ExtResource( 5 )
 tab_size = 0
 text = "0/4"
 __meta__ = {
