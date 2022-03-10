@@ -12,6 +12,7 @@ var game
 var is_evolved = false
 var data = null
 var mana = 0
+var mana_blocked_moves = 0
 
 func save():
 	pass
@@ -81,6 +82,11 @@ func change_mana(delta):
 	update_ui()
 	tween_mana(prev_mana, mana)
 	# Returning the amount change in mana
+	
+	if mana_blocked_moves > 0:
+		mana = prev_mana
+		$Mana_Bar.value = mana
+		
 	return abs(mana - prev_mana)
 
 const animation_mana_speed = 1
@@ -193,6 +199,59 @@ func breakthrough():
 func breakthrough_mini(player):
 	if game.curr_player == player:
 		game.remove_move()
+		
+func A025():
+	game.next_player.change_HP(-10)
+	game.register_repeated_action(self, "A025_mini", 2, "turn_start", game.curr_player)
+
+func A025_mini(player):
+	if game.curr_player == player:
+		player.change_berries(1)
+		
+func A026():
+	game.next_player.change_HP(-10)
+	game.register_repeated_action(self, "A026_mini", 3, "turn_start", game.curr_player)
+
+func A026_mini(player):
+	if game.curr_player == player:
+		player.change_berries(1)
+		
+func A027():
+	game.next_player.change_HP(-10)
+	game.force_grid_match(1, 1, 3)
+	# match 3 tiles
+	game.register_repeated_action(self, "A027_mini", 1, "turn_start", game.curr_player)
+
+func A027_mini(player):
+	if game.get_other_player(player) == player:
+		game.remove_move()
+		
+func A028():
+	game.next_player.change_HP(-20)
+	game.force_grid_match(1, 1, 6)
+	game.register_repeated_action(self, "A028_mini", 1, "turn_start", game.curr_player)
+
+func A028_mini(player):
+	if game.get_other_player(player) == player:
+		game.remove_move()
+		
+func A029():
+	game.next_player.change_HP(-5)
+	
+	# get the list of organisms of the next player
+	var organisms = game.next_player.organisms.duplicate()
+	var organism = organisms[game.root.rng.randf_range(0, organisms.size())]
+	
+	organism.mana_blocked_moves = 2
+	
+func A030():
+	game.next_player.change_HP(-15)
+	
+	# get the list of organisms of the next player
+	var organisms = game.next_player.organisms.duplicate()
+	var organism = organisms[game.root.rng.randf_range(0, organisms.size())]
+	
+	organism.mana_blocked_moves = 3
 
 ####### Abilities
 
