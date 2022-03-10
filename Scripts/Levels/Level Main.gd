@@ -145,6 +145,12 @@ func compare_actions(action1, action2):
 	return action1['num_times'] > action2['num_times']
 
 func process_actions(actions):
+	# Why sort the actions?
+	# Consider the ability that prevent an organism from absorbing mana
+	# It could be on that in the list of actions there's to instances of this ability
+	# We don't want the blocking to be set to false if there's still an ability that can set it to true
+	# But it could be that the ability that set's it to true get's processed after the one that set's it to false
+	# We sort to get around this
 	actions.sort_custom(self, "compare_actions")
 	for a in actions:
 		if a['num_times'] > 0:

@@ -7,7 +7,13 @@ var ability_description
 var mana_type
 var mana_enum
 var mana_to_activate
+
 var extra_mana_to_activate
+func change_extra_mana_to_activate(delta):
+	extra_mana_to_activate += delta
+	$Mana_Bar.max_value = mana_to_activate + extra_mana_to_activate
+	update_ui()
+
 var game
 
 var is_evolved = false
@@ -122,6 +128,8 @@ func do_ability():
 			game.curr_player.change_HP(-damage_to_take_from_activating_ability)
 		change_mana(-mana_to_activate)
 		update_ui()
+
+var temp_data = {}
 
 func sear():
 	game.next_player.change_HP(-20)
@@ -274,9 +282,8 @@ func A029_mini(player):
 	return false
 
 func A029_cleanup(player):
-	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.mana_absorption_blocked = false
+	for organism in game.curr_player.organisms:
+		organism.mana_absorption_blocked = false
 
 func A030():
 	game.next_player.change_HP(-15)
@@ -290,9 +297,8 @@ func A030_mini(player):
 	return false
 
 func A030_cleanup(player):
-	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.mana_absorption_blocked = false
+	for organism in game.curr_player.organisms:
+		organism.mana_absorption_blocked = false
 
 func A031():
 	game.next_player.change_HP(-10)
@@ -306,9 +312,8 @@ func A031_mini(player):
 	return false
 
 func A031_cleanup(player):
-	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.damage_to_take_from_activating_ability = 0
+	for organism in game.curr_player.organisms:
+		organism.damage_to_take_from_activating_ability = 0
 
 func A032():
 	game.next_player.change_HP(-15)
@@ -322,49 +327,41 @@ func A032_mini(player):
 	return false
 
 func A032_cleanup(player):
-	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.damage_to_take_from_activating_ability = 0
+	for organism in game.curr_player.organisms:
+		organism.damage_to_take_from_activating_ability = 0
 
 func A033():
 	game.next_player.change_HP(-15)
+	var random_org = game._root.select_random(game.next_player.organisms)
+	random_org.change_extra_mana_to_activate(3)
+	if 'A033' in temp_data:
+		temp_data['A033'].append(random_org)
+	else:
+		temp_data['A033'] = []
 	game.register_repeated_action(self, "A033_mini", 2, "turn_start", "A033_cleanup")
 
 func A033_mini(player):
 	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.extra_mana_to_activate = 3
-			organism.get_node("Mana_Bar").max_value = organism.extra_mana_to_activate + organism.mana_to_activate
-			organism.update_ui()
 		return true
 	return false
 
 func A033_cleanup(player):
-	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.extra_mana_to_activate = 0
-			organism.get_node("Mana_Bar").max_value = organism.mana_to_activate
-			organism.update_ui()
+	temp_data['A033'].pop_back().extra_mana_to_activate.change_extra_mana_to_activate(-3)
 
 func A034():
 	game.next_player.change_HP(-30)
-	game.register_repeated_action(self, "A034_mini", 2, "turn_start", "A034_cleanup")
+	game.register_repeated_action(self, "A034_mini", 3, "turn_start", "A034_cleanup")
 
 func A034_mini(player):
 	if game.get_other_player(player) == game.curr_player:
 		for organism in game.curr_player.organisms:
-			organism.extra_mana_to_activate = 3
-			organism.get_node("Mana_Bar").max_value = organism.extra_mana_to_activate + organism.mana_to_activate
-			organism.update_ui()
+			organism.change_extra_mana_to_activate(3)
 		return true
 	return false
 
 func A034_cleanup(player):
-	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.extra_mana_to_activate = 0
-			organism.get_node("Mana_Bar").max_value = organism.mana_to_activate
-			organism.update_ui()
+	for organism in game.curr_player.organisms:
+		organism.change_extra_mana_to_activate(-3)
 
 func A035():
 	game.next_player.change_HP(-10)
