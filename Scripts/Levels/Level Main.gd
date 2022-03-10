@@ -174,7 +174,7 @@ func register_repeated_action(object, method, num_times, action_type, cleanup = 
 						'caster': curr_player,
 						'object': object,
 						'action_type': action_type,
-						'cleanup': method}
+						'cleanup': cleanup}
 	var actions = get(subscription['action_type']+"_actions")
 	actions.append(subscription)
 

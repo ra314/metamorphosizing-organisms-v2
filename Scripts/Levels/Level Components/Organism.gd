@@ -19,7 +19,14 @@ var game
 var is_evolved = false
 var data = null
 var mana = 0
+
 var mana_absorption_blocked = false
+func set_mana_absorption_blocked(boolean):
+	mana_absorption_blocked = boolean
+	if boolean:
+		$Sprite.modulate = Color(1,0,0,1)
+	else:
+		$Sprite.modulate = Color(1,1,1,1)
 
 func save():
 	pass
@@ -273,11 +280,11 @@ func A028_mini(player):
 func A029():
 	game.next_player.change_HP(-5)
 	var random_org = game._root.select_random(game.next_player.organisms)
-	random_org.mana_absorption_blocked = true
+	random_org.set_mana_absorption_blocked(true)
 	if 'A029' in temp_data:
 		temp_data['A029'].append(random_org)
 	else:
-		temp_data['A029'] = []
+		temp_data['A029'] = [random_org]
 	game.register_repeated_action(self, "A029_mini", 2, "move_start", "A029_cleanup")
 
 func A029_mini(player):
@@ -286,16 +293,16 @@ func A029_mini(player):
 	return false
 
 func A029_cleanup(player):
-	temp_data['A029'].pop_back().mana_absorption_blocked = false
+	temp_data['A029'].pop_back().set_mana_absorption_blocked(false)
 
 func A030():
 	game.next_player.change_HP(-15)
 	var random_org = game._root.select_random(game.next_player.organisms)
-	random_org.mana_absorption_blocked = true
+	random_org.set_mana_absorption_blocked(true)
 	if 'A030' in temp_data:
 		temp_data['A030'].append(random_org)
 	else:
-		temp_data['A030'] = []
+		temp_data['A030'] = [random_org]
 	game.register_repeated_action(self, "A030_mini", 2, "move_start", "A030_cleanup")
 
 func A030_mini(player):
@@ -304,7 +311,7 @@ func A030_mini(player):
 	return false
 
 func A030_cleanup(player):
-	temp_data['A030'].pop_back().mana_absorption_blocked = false
+	temp_data['A030'].pop_back().set_mana_absorption_blocked(false)
 
 func A031():
 	game.next_player.change_HP(-10)
@@ -343,7 +350,7 @@ func A033():
 	if 'A033' in temp_data:
 		temp_data['A033'].append(random_org)
 	else:
-		temp_data['A033'] = []
+		temp_data['A033'] = [random_org]
 	game.register_repeated_action(self, "A033_mini", 2, "turn_start", "A033_cleanup")
 
 func A033_mini(player):

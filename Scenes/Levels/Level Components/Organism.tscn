@@ -28,9 +28,6 @@ texture_under = ExtResource( 4 )
 texture_progress = ExtResource( 3 )
 tint_progress = Color( 0.129852, 0.824921, 0.898438, 1 )
 nine_patch_stretch = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Mana_Text" type="RichTextLabel" parent="."]
 margin_left = -78.5992
@@ -39,8 +36,8 @@ margin_right = 421.401
 margin_bottom = 366.173
 rect_scale = Vector2( 0.947225, 0.947225 )
 rect_clip_content = false
-custom_fonts/normal_font = ExtResource( 6 )
 custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = ExtResource( 6 )
 tab_size = 0
 text = "1/4"
 __meta__ = {
@@ -71,8 +68,8 @@ margin_left = -31.7839
 margin_top = -411.072
 margin_right = 683.216
 margin_bottom = -225.072
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color = Color( 0.831373, 0.698039, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 6 )
 text = "Evolve"
 flat = true
 __meta__ = {
@@ -85,8 +82,8 @@ margin_left = -31.7839
 margin_top = -413.191
 margin_right = 683.216
 margin_bottom = -227.191
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color = Color( 0.831373, 0.698039, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 6 )
 text = "Boost"
 flat = true
 __meta__ = {
