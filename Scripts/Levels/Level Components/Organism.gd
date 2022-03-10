@@ -205,11 +205,13 @@ func encore_mini(player):
 	return false
 	
 func mobilize():
+	game.next_player.change_HP(-10)
 	for organism in game.curr_player.organisms:
 		if organism != self:
 			organism.change_mana(2)
 
 func reform():
+	game.next_player.change_HP(-15)
 	for organism in game.curr_player.organisms:
 		if organism != self:
 			organism.change_mana(3)
