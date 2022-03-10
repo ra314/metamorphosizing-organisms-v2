@@ -42,7 +42,7 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 	$Mana_Icon.texture = ManaTex.dict[_mana_type]
 	$Mana_Bar.max_value = _mana_to_activate
 	update_ui()
-	tween_mana(0, 0)
+	$Mana_Bar.value = 0
 	return self
 
 func _ready():
@@ -139,32 +139,34 @@ func awe():
 		organism.change_mana(-3)
 
 func perseverance():
-	game.register_repeated_action(self, "perseverance_mini", 3, null, "turn_end")
+	game.register_repeated_action(self, "perseverance_mini", 3, "turn_end", game.curr_player)
 
-func perseverance_mini():
-	game.next_player.change_HP(-5)
-	game.curr_player.change_HP(5)
+func perseverance_mini(player):
+	player.change_HP(5)
+	game.get_other_player(player).change_HP(-5)
 
 func fortitude():
-	game.register_repeated_action(self, "fortitude_mini", 2, null, "turn_end")
+	game.register_repeated_action(self, "fortitude_mini", 2, "turn_end", game.curr_player)
 
-func fortitude_mini():
-	game.next_player.change_HP(-10)
-	game.curr_player.change_HP(10)
+func fortitude_mini(player):
+	player.change_HP(10)
+	game.get_other_player(player).change_HP(-10)
 
 func ovation():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "ovation_mini", 1, null, "turn_start")
+	game.register_repeated_action(self, "ovation_mini", 1, "turn_start", game.curr_player)
 
-func ovation_mini():
-	game.add_extra_move()
+func ovation_mini(player):
+	if game.curr_player == player:
+		game.add_extra_move()
 
 func encore():
 	game.next_player.change_HP(-15)
-	game.register_repeated_action(self, "encore_mini", 2, null, "turn_start")
+	game.register_repeated_action(self, "encore_mini", 2, "turn_start", game.curr_player)
 
-func encore_mini():
-	game.add_extra_move()
+func encore_mini(player):
+	if game.curr_player == player:
+		game.add_extra_move()
 	
 func mobilize():
 	for organism in game.curr_player.organisms:
@@ -178,17 +180,19 @@ func reform():
 
 func headway():
 	game.next_player.change_HP(-35)
-	game.register_repeated_action(self, "headway_mini", 1, game.curr_player, "player_turn")
+	game.register_repeated_action(self, "headway_mini", 1, "turn_start", game.curr_player)
 
-func headway_mini():
-	game.remove_move()
+func headway_mini(player):
+	if game.curr_player == player:
+		game.remove_move()
 	
 func breakthrough():
 	game.next_player.change_HP(-45)
-	game.register_repeated_action(self, "headway_mini", 2, game.curr_player, "player_turn")
+	game.register_repeated_action(self, "breakthrough_mini", 2, "turn_start", game.curr_player)
 
-func reakthrough_mini():
-	game.remove_move()
+func breakthrough_mini(player):
+	if game.curr_player == player:
+		game.remove_move()
 
 ####### Abilities
 

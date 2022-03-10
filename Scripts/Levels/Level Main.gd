@@ -112,7 +112,6 @@ func add_extra_move():
 func remove_move():
 	if curr_moves > 0:
 		curr_moves -= 1
-		max_moves -= 1
 		update_move_icons()
 
 # Called when the grid starts processing a move
@@ -121,8 +120,7 @@ func before_process():
 	timer.stop()
 	
 	# Assuming that level main handles all the moves, player moves will update here
-	curr_moves -= 1;
-	update_move_icons()
+	remove_move()
 
 # Called when the grid is done processing a move
 func after_process():
@@ -155,7 +153,8 @@ func process_actions(actions):
 		var method = action[1]
 		# num_times = actions[2]
 		if action[2] > 0:
-			object.call(method)
+			# Pass player (action[3]) as the second arg
+			object.call(method, action[3])
 			action[2] -= 1
 
 var turn_end_actions = []
@@ -164,27 +163,30 @@ var turn_start_actions = []
 var player_turn_actions = []
 
 # Format for actions
-# [Organism, Ability_Name, Duration, Target Player]
-func register_repeated_action(object, method, num_times, player, siignal):
+# [Organism, Ability_Name, Duration, Casting Player]
+func register_repeated_action(object, method, num_times, siignal, caster = null):
 	if siignal == "turn_end":
-		turn_end_actions.append([object, method, num_times, null])
+		turn_end_actions.append([object, method, num_times, caster])
 	elif siignal == "turn_start":
-		turn_start_actions.append([object, method, num_times, null])
-	elif siignal == "player_turn":
-		player_turn_actions.append([object, method, num_times, player])
+		turn_start_actions.append([object, method, num_times, caster])
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
 onready var move_icons = $CanvasLayer/Match_Control/Moves_Control/Moves_Container
 func update_move_icons():
-	# move_icons.get_children()[2].visible = (max_moves == absolute_max_moves)
+	# Hide all move icons first
 	for move_icon in move_icons.get_children():
 		move_icon.visible = false
+		
+	# Set a tile visible based on how many max moves I have
 	for i in range(max_moves):
 		move_icons.get_children()[i].visible = true
-		
+	
+	# Set all the icons' textures to used move texture
 	for move_icon in move_icons.get_children():
 		move_icon.texture = move_icon_used
+		
+	# Set a icon's texture to active_move for every move I currently have
 	for i in range(curr_moves):
 		move_icons.get_children()[i].texture = move_icon_active
 
@@ -219,3 +221,9 @@ func is_current_player():
 	if not _root.online_game:
 		return true
 	return players[_root.player_index] == curr_player
+	
+# Given a player object, return the other player object (This is a 2 person game)
+func get_other_player(input_player):
+  var local_players = players.duplicate()
+  local_players.remove(input_player)
+  return local_players[0]
