@@ -132,6 +132,7 @@ func after_process():
 		if organism.mana_blocked_moves > 0:
 			organism.mana_blocked_moves -= 1
 	
+	process_actions(move_start_actions)
 	# Changing turns
 	if curr_moves == 0:
 		process_actions(turn_end_actions)
@@ -154,9 +155,7 @@ func process_actions(actions):
 
 var turn_end_actions = []
 var turn_start_actions = []
-
-# triggered when an organism uses a skill
-var organism_skill_actions = []
+var move_start_actions = []
 
 # Format for actions
 # [Organism, Ability_Name, Duration, Casting Player]
@@ -165,8 +164,8 @@ func register_repeated_action(object, method, num_times, siignal, caster = null)
 		turn_end_actions.append([object, method, num_times, caster])
 	elif siignal == "turn_start":
 		turn_start_actions.append([object, method, num_times, caster])
-	elif siignal == "organism_skill":
-		organism_skill_actions.append([object, method, num_times, caster])
+	elif siignal == "move_start":
+		move_start_actions.append([object, method, num_times, caster])
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")

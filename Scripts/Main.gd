@@ -49,6 +49,7 @@ func _ready():
 	var scene = scene_manager._load_scene("UI/Local Online")
 	scene_manager._replace_scene(scene)
 	
+	rng.randomize()
 	Dex.init()
 
 # Register a player to a dictionary that contains player names and player ids
