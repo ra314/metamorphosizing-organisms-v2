@@ -225,5 +225,5 @@ func is_current_player():
 # Given a player object, return the other player object (This is a 2 person game)
 func get_other_player(input_player):
   var local_players = players.duplicate()
-  local_players.remove(input_player)
+  local_players.remove(local_players.find(input_player))
   return local_players[0]

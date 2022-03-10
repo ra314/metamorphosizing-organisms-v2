@@ -116,6 +116,7 @@ func hide_berry_actions():
 var damage_to_take_from_activating_ability = 0
 func do_ability():
 	if mana == mana_to_activate:
+		game._root.create_notification(ability_description, 10)
 		call(ability)
 		if damage_to_take_from_activating_ability > 0:
 			game.curr_player.change_HP(-damage_to_take_from_activating_ability)

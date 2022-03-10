@@ -100,7 +100,7 @@
 		"ability": "A026",
 		"ability_description": "026: Attacks for 15 HP and adds 1 berry on your next turn for 3 turns."},
 
-  "mana_type": "earth",
+  "mana_type": "grass",
   "mana_to_activate": 9
 },{
 	"base_organism": 

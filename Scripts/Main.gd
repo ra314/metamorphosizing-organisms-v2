@@ -94,13 +94,17 @@ func select_random(array):
 ####### 
 var notifications = []
 
-remote func create_notification(notification_str):
+remote func create_notification(notification_str, duration=3):
 	var notification = Label.new()
+	notification.anchor_left = 0
+	notification.anchor_right = 1
+	notification.autowrap = true
+	notification.rect_size = Vector2(1920,1080)
 	notification.text = notification_str
 	notification.add_font_override("font", load("res://Assets/Fonts/Font_50.tres"))
 	$CL/VBox.add_child(notification)
 	notifications.append(notification)
-	get_tree().create_timer(3).connect("timeout", self, "delete_last_notification")
+	get_tree().create_timer(duration).connect("timeout", self, "delete_last_notification")
 
 func delete_last_notification():
 	var notification = notifications.pop_front()
