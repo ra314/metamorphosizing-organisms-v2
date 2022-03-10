@@ -89,4 +89,82 @@
 
   "mana_type": "water",
   "mana_to_activate": 10
+},{
+	"base_organism": 
+		{"name": "birchee", 
+		"ability": "harvest",
+		"ability_description": "Harvest: Attacks for 10 HP and adds 1 berry on your next turn for 2 turns."},
+		
+  "evolved_organism":
+		{"name": "bichard", 
+		"ability": "harvest+",
+		"ability_description": "Harvest+: Attacks for 15 HP and adds 1 berry on your next turn for 3 turns."},
+
+  "mana_type": "earth",
+  "mana_to_activate": 9
+},{
+	"base_organism": 
+		{"name": "glowzard", 
+		"ability": "overload",
+		"ability_description": "Overload: Attacks for 10 HP, removes 1 move from your opponent's next turn, and matches 3 random tiles."},
+		
+  "evolved_organism":
+		{"name": "radiaze", 
+		"ability": "overload+",
+		"ability_description": "Overload+: Attacks for 20 HP, removes 1 move from your opponent's next turn, and matches 6 random tiles."},
+
+  "mana_type": "electric",
+  "mana_to_activate": 9
+},{
+	"base_organism": 
+		{"name": "ferobite", 
+		"ability": "maim",
+		"ability_description": "Maim: Attacks for 5 HP, and prevents a random monster from receiving mana for 2 moves."},
+		
+  "evolved_organism":
+		{"name": "radiaze", 
+		"ability": "maim+",
+		"ability_description": "Maim+: Attacks for 15 HP, and prevents a random monster from receiving mana for 3 moves."},
+
+  "mana_type": "fire",
+  "mana_to_activate": 4
+},{
+	"base_organism": 
+		{"name": "gravetiery", 
+		"ability": "soul_curse",
+		"ability_description": "Soul Curse: Attacks for 10 HP, and for 2 turns every time your opponent uses a monster skill they receive 10 damage."},
+		
+  "evolved_organism":
+		{"name": "necrogeist", 
+		"ability": "soul_curse+",
+		"ability_description": "Soul Curse+: Attacks for 15 HP, and for 2 turns every time your opponent uses a monster skill they receive 16 damage."},
+
+  "mana_type": "psychic",
+  "mana_to_activate": 9
+},{
+	"base_organism": 
+		{"name": "mouskrow", 
+		"ability": "soul_curse",
+		"ability_description": "Avalance: Attacks for 15 HP, and increases the maximum mana required by 3 for a random enemy for 3 turns."},
+		
+  "evolved_organism":
+		{"name": "mousummit", 
+		"ability": "soul_curse+",
+		"ability_description": "Avalance+: Attacks for 25 HP, and increases the maximum mana required by 3 for a random enemy for 3 turns."},
+
+  "mana_type": "water",
+  "mana_to_activate": 8
+},{
+	"base_organism": 
+		{"name": "lilabaa", 
+		"ability": "dream_drain",
+		"ability_description": "Dream Drain: Attacks for 10 HP, and a random monster loses 1 mana after every move for 3 moves."},
+		
+  "evolved_organism":
+		{"name": "mousummit", 
+		"ability": "dream_drain+",
+		"ability_description": "Dream Drain+: Attacks for 15 HP, and a random monster loses 2 mana after every move for 3 moves."},
+
+  "mana_type": "psychic",
+  "mana_to_activate": 6
 }]
