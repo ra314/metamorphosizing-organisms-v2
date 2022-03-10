@@ -63,7 +63,13 @@ func _ready():
 	players = _root.players_for_level_main
 	$"CanvasLayer/Players/".add_child(players[0])
 	$"CanvasLayer/Players/".add_child(players[1])
-	players[1].position = Vector2(3500, 000)
+	players[0].position = Vector2(150, -200)
+	players[1].position = Vector2(3500, -200)
+	
+	# Flip the sprites of the organisms in Player 2's control
+	for organism in players[1].organisms:
+		organism.flip_sprite()
+
 	curr_player = players[0]
 	next_player = players[1]
 	
@@ -102,6 +108,11 @@ func add_extra_move():
 		curr_moves += 1
 		max_moves += 1
 		update_move_icons()
+		
+func remove_move():
+	if curr_moves > 0:
+		curr_moves -= 1
+		update_move_icons()
 
 # Called when the grid starts processing a move
 func before_process():
@@ -109,8 +120,7 @@ func before_process():
 	timer.stop()
 	
 	# Assuming that level main handles all the moves, player moves will update here
-	curr_moves -= 1;
-	update_move_icons()
+	remove_move()
 
 # Called when the grid is done processing a move
 func after_process():
@@ -126,35 +136,57 @@ func after_process():
 		curr_player.update_ui()
 		change_to_next_player()
 		start_turn()
+		process_actions(player_turn_actions)
 		process_actions(turn_start_actions)
 	else:
 		curr_player.update_ui(false)
 
 func process_actions(actions):
 	for action in actions:
+		# Check if the action has a player value
+		if action[3]:
+			var player = action[3]
+			if player != curr_player:
+				continue
+		
 		var object = action[0]
 		var method = action[1]
 		# num_times = actions[2]
 		if action[2] > 0:
-			object.call(method)
+			# Pass player (action[3]) as the second arg
+			object.call(method, action[3])
 			action[2] -= 1
 
 var turn_end_actions = []
 var turn_start_actions = []
+# Reserved for moves that only activate for the player who casted them
+var player_turn_actions = []
 
-func register_repeated_action(object, method, num_times, siignal):
+# Format for actions
+# [Organism, Ability_Name, Duration, Casting Player]
+func register_repeated_action(object, method, num_times, siignal, caster = null):
 	if siignal == "turn_end":
-		turn_end_actions.append([object, method, num_times])
+		turn_end_actions.append([object, method, num_times, caster])
 	elif siignal == "turn_start":
-		turn_start_actions.append([object, method, num_times])
+		turn_start_actions.append([object, method, num_times, caster])
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
 onready var move_icons = $CanvasLayer/Match_Control/Moves_Control/Moves_Container
 func update_move_icons():
-	move_icons.get_children()[2].visible = (max_moves == absolute_max_moves)
+	# Hide all move icons first
+	for move_icon in move_icons.get_children():
+		move_icon.visible = false
+		
+	# Set a tile visible based on how many max moves I have
+	for i in range(max_moves):
+		move_icons.get_children()[i].visible = true
+	
+	# Set all the icons' textures to used move texture
 	for move_icon in move_icons.get_children():
 		move_icon.texture = move_icon_used
+		
+	# Set a icon's texture to active_move for every move I currently have
 	for i in range(curr_moves):
 		move_icons.get_children()[i].texture = move_icon_active
 
@@ -189,3 +221,9 @@ func is_current_player():
 	if not _root.online_game:
 		return true
 	return players[_root.player_index] == curr_player
+	
+# Given a player object, return the other player object (This is a 2 person game)
+func get_other_player(input_player):
+  var local_players = players.duplicate()
+  local_players.remove(input_player)
+  return local_players[0]

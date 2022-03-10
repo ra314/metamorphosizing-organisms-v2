@@ -11,7 +11,8 @@ var Tile = load("res://Scenes/Levels/Level Components/Tile.tscn")
 var rng = RandomNumberGenerator.new()
 
 func _ready():
-	rng.seed = 10
+	# rng.seed = 10
+	rng.randomize()
 	initialize_grid()
 	# Cascading matches but with no collection of mana or extra moves
 	while np.sum2d(find_matches_in_grid()):
@@ -257,6 +258,8 @@ func add_tile(object):
 	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, original_scale, tile_appear_speed, Tween.TRANS_BOUNCE, Tween.EASE_OUT, tile_appear_speed)
 	$Tween.start()
 	
+	return tile_appear_speed * 2
+	
 
 func delete_tile(tile):
 	tile.queue_free()	
@@ -314,5 +317,14 @@ func convert_tiles(tile_type, num_tiles):
 				var new_tile = Tile.instance().init(y, x, tile_type, self, true)
 				grid[y][x] = new_tile
 				add_child(new_tile)
-				add_tile(new_tile)
+				
+				animation_durations.append(add_tile(new_tile))
 				break
+				
+	yield(animate(), "completed")
+	while np.sum2d(find_matches_in_grid()):
+		var matches_in_grid = find_matches_in_grid()
+		emit_signal("collect_mana", get_matches_array(matches_in_grid))
+		if check_for_extra_move(matches_in_grid):
+			emit_signal("extra_move")
+		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
