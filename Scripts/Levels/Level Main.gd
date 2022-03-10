@@ -121,6 +121,7 @@ func before_process():
 	
 	# Assuming that level main handles all the moves, player moves will update here
 	remove_move()
+	process_actions(move_start_actions)
 
 # Called when the grid is done processing a move
 func after_process():
@@ -129,10 +130,7 @@ func after_process():
 	
 	for organism in curr_player.organisms:
 		organism.do_ability()
-		if organism.mana_blocked_moves > 0:
-			organism.mana_blocked_moves -= 1
 	
-	process_actions(move_start_actions)
 	# Changing turns
 	if curr_moves == 0:
 		process_actions(turn_end_actions)
@@ -143,15 +141,18 @@ func after_process():
 	else:
 		curr_player.update_ui(false)
 
+func compare_actions(action1, action2):
+	return action1['num_times'] > action2['num_times']
+
 func process_actions(actions):
-	for action in actions:
-		var object = action[0]
-		var method = action[1]
-		# num_times = actions[2]
-		if action[2] > 0:
-			# Pass player (action[3]) as the second arg
-			object.call(method, action[3])
-			action[2] -= 1
+	actions.sort_custom(self, "compare_actions")
+	for a in actions:
+		if a['num_times'] > 0:
+			# Check if the action can be executed
+			if a['object'].call(a['action'], a['caster']):
+				a['num_times'] -= 1
+		if a['num_times'] == 0 and ('cleanup' in a):
+			a['object'].call(a['cleanup'], a['caster'])
 
 var turn_end_actions = []
 var turn_start_actions = []
@@ -159,13 +160,15 @@ var move_start_actions = []
 
 # Format for actions
 # [Organism, Ability_Name, Duration, Casting Player]
-func register_repeated_action(object, method, num_times, siignal, caster = null):
-	if siignal == "turn_end":
-		turn_end_actions.append([object, method, num_times, caster])
-	elif siignal == "turn_start":
-		turn_start_actions.append([object, method, num_times, caster])
-	elif siignal == "move_start":
-		move_start_actions.append([object, method, num_times, caster])
+func register_repeated_action(object, method, num_times, action_type, cleanup = null):
+	var subscription = {'num_times': num_times,
+						'action': method,
+						'caster': curr_player,
+						'object': object,
+						'action_type': action_type,
+						'cleanup': method}
+	var actions = get(subscription['action_type']+"_actions")
+	actions.append(subscription)
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")

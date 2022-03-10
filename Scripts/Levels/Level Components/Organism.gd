@@ -7,12 +7,13 @@ var ability_description
 var mana_type
 var mana_enum
 var mana_to_activate
+var extra_mana_to_activate
 var game
 
 var is_evolved = false
 var data = null
 var mana = 0
-var mana_blocked_moves = 0
+var mana_absorption_blocked = false
 
 func save():
 	pass
@@ -76,17 +77,18 @@ func flip_sprite():
 	$Sprite.scale *= Vector2(-1, 1)
 
 func change_mana(delta):
+	# Prevent the absorption of mana if blocked, but allow the draining of mana
+	if mana_absorption_blocked:
+		if delta > 0:
+			# Returning the amount change in mana
+			return 0
+	
 	# Clamping mana
 	var prev_mana = mana
 	mana = clamp(mana + delta, 0, mana_to_activate)
 	update_ui()
 	tween_mana(prev_mana, mana)
 	# Returning the amount change in mana
-	
-	if mana_blocked_moves > 0:
-		mana = prev_mana
-		$Mana_Bar.value = mana
-		
 	return abs(mana - prev_mana)
 
 const animation_mana_speed = 1
@@ -111,11 +113,13 @@ func hide_berry_actions():
 	$Berry_Control.hide()
 
 ####### Abilities
+var damage_to_take_from_activating_ability = 0
 func do_ability():
 	if mana == mana_to_activate:
 		call(ability)
-		mana = 0
-		tween_mana(mana_to_activate, mana)
+		if damage_to_take_from_activating_ability > 0:
+			game.curr_player.change_HP(-damage_to_take_from_activating_ability)
+		change_mana(-mana_to_activate)
 		update_ui()
 
 func sear():
@@ -144,35 +148,45 @@ func awe():
 	for organism in game.next_player.organisms:
 		organism.change_mana(-3)
 
+# NOTE: The return values for the mini abilities indiciate whether or not the ability was activated.
+# For example if the retval is false that means level_main shouldn't decrement the number of time
+# that the mini ability is called.
+
 func perseverance():
-	game.register_repeated_action(self, "perseverance_mini", 3, "turn_end", game.curr_player)
+	game.register_repeated_action(self, "perseverance_mini", 3, "turn_end")
 
 func perseverance_mini(player):
 	player.change_HP(5)
 	game.get_other_player(player).change_HP(-5)
+	return true
 
 func fortitude():
-	game.register_repeated_action(self, "fortitude_mini", 2, "turn_end", game.curr_player)
+	game.register_repeated_action(self, "fortitude_mini", 2, "turn_end")
 
 func fortitude_mini(player):
 	player.change_HP(10)
 	game.get_other_player(player).change_HP(-10)
+	return true
 
 func ovation():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "ovation_mini", 1, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "ovation_mini", 1, "turn_start")
 
 func ovation_mini(player):
 	if game.curr_player == player:
 		game.add_extra_move()
+		return true
+	return false
 
 func encore():
 	game.next_player.change_HP(-15)
-	game.register_repeated_action(self, "encore_mini", 2, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "encore_mini", 2, "turn_start")
 
 func encore_mini(player):
 	if game.curr_player == player:
 		game.add_extra_move()
+		return true
+	return false
 	
 func mobilize():
 	for organism in game.curr_player.organisms:
@@ -186,86 +200,190 @@ func reform():
 
 func headway():
 	game.next_player.change_HP(-35)
-	game.register_repeated_action(self, "headway_mini", 1, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "headway_mini", 1, "turn_start")
 
 func headway_mini(player):
 	if game.curr_player == player:
 		game.remove_move()
+		return true
+	return false
 	
 func breakthrough():
 	game.next_player.change_HP(-45)
-	game.register_repeated_action(self, "breakthrough_mini", 2, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "breakthrough_mini", 2, "turn_start")
 
 func breakthrough_mini(player):
 	if game.curr_player == player:
 		game.remove_move()
-		
+		return true
+	return false
+	
 func A025():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "A025_mini", 2, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "A025_mini", 2, "turn_start")
 
 func A025_mini(player):
 	if game.curr_player == player:
 		player.change_berries(1)
-		
+		return true
+	return false
+	
 func A026():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "A026_mini", 3, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "A026_mini", 3, "turn_start")
 
 func A026_mini(player):
 	if game.curr_player == player:
 		player.change_berries(1)
+		return true
+	return false
 		
 func A027():
 	game.next_player.change_HP(-10)
 	game.force_grid_match(1, 1, 3)
 	# match 3 tiles
-	game.register_repeated_action(self, "A027_mini", 1, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "A027_mini", 1, "turn_start")
 
 func A027_mini(player):
-	if game.get_other_player(player) == player:
+	if game.get_other_player(player) == game.curr_player:
 		game.remove_move()
+		return true
+	return false
 		
 func A028():
 	game.next_player.change_HP(-20)
 	game.force_grid_match(1, 1, 6)
-	game.register_repeated_action(self, "A028_mini", 1, "turn_start", game.curr_player)
+	game.register_repeated_action(self, "A028_mini", 1, "turn_start")
 
 func A028_mini(player):
-	if game.get_other_player(player) == player:
+	if game.get_other_player(player) == game.curr_player:
 		game.remove_move()
-		
+		return true
+	return false
+
 func A029():
 	game.next_player.change_HP(-5)
-	
-	# get the list of organisms of the next player
-	var organisms = game.next_player.organisms.duplicate()
-	var organism = organisms[game.root.rng.randf_range(0, organisms.size())]
-	
-	organism.mana_blocked_moves = 2
-	
+	game.register_repeated_action(self, "A029_mini", 2, "move_start", "A029_cleanup")
+
+func A029_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.mana_absorption_blocked = true
+		return true
+	return false
+
+func A029_cleanup(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.mana_absorption_blocked = false
+
 func A030():
 	game.next_player.change_HP(-15)
-	
-	# get the list of organisms of the next player
-	var organisms = game.next_player.organisms.duplicate()
-	var organism = organisms[game.root.rng.randf_range(0, organisms.size())]
-	
-	organism.mana_blocked_moves = 3
+	game.register_repeated_action(self, "A030_mini", 2, "move_start", "A030_cleanup")
 
-func drdr():
+func A030_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.mana_absorption_blocked = true
+		return true
+	return false
+
+func A030_cleanup(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.mana_absorption_blocked = false
+
+func A031():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "drdr_mini", 3, "move_start", game.curr_player)
+	game.register_repeated_action(self, "A031_mini", 2, "turn_start", "A031_cleanup")
 
-func drdr_mini(player):
-	game._root.select_random(game.get_other_player(player).organisms).change_mana(-1)
+func A031_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.damage_to_take_from_activating_ability = max(10, organism.damage_to_take_from_activating_ability)
+		return true
+	return false
 
-func drdr_plus():
+func A031_cleanup(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.damage_to_take_from_activating_ability = 0
+
+func A032():
 	game.next_player.change_HP(-15)
-	game.register_repeated_action(self, "drdr_plus_mini", 3, "move_start", game.curr_player)
+	game.register_repeated_action(self, "A032_mini", 2, "turn_start", "A032_cleanup")
 
-func drdr_plus_mini(player):
-	game._root.select_random(game.get_other_player(player).organisms).change_mana(-2)
+func A032_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.damage_to_take_from_activating_ability = max(15, organism.damage_to_take_from_activating_ability)
+		return true
+	return false
+
+func A032_cleanup(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.damage_to_take_from_activating_ability = 0
+
+func A033():
+	game.next_player.change_HP(-15)
+	game.register_repeated_action(self, "A033_mini", 2, "turn_start", "A033_cleanup")
+
+func A033_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.extra_mana_to_activate = 3
+			organism.get_node("Mana_Bar").max_value = organism.extra_mana_to_activate + organism.mana_to_activate
+			organism.update_ui()
+		return true
+	return false
+
+func A033_cleanup(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.extra_mana_to_activate = 0
+			organism.get_node("Mana_Bar").max_value = organism.mana_to_activate
+			organism.update_ui()
+
+func A034():
+	game.next_player.change_HP(-30)
+	game.register_repeated_action(self, "A034_mini", 2, "turn_start", "A034_cleanup")
+
+func A034_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.extra_mana_to_activate = 3
+			organism.get_node("Mana_Bar").max_value = organism.extra_mana_to_activate + organism.mana_to_activate
+			organism.update_ui()
+		return true
+	return false
+
+func A034_cleanup(player):
+	if game.get_other_player(player) == game.curr_player:
+		for organism in game.curr_player.organisms:
+			organism.extra_mana_to_activate = 0
+			organism.get_node("Mana_Bar").max_value = organism.mana_to_activate
+			organism.update_ui()
+
+func A035():
+	game.next_player.change_HP(-10)
+	game.register_repeated_action(self, "A035_mini", 3, "move_start")
+
+func A035_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		game._root.select_random(game.get_other_player(player).organisms).change_mana(-1)
+		return true
+	return false
+
+func A036():
+	game.next_player.change_HP(-15)
+	game.register_repeated_action(self, "A036_mini", 3, "move_start")
+
+func A036_mini(player):
+	if game.get_other_player(player) == game.curr_player:
+		game._root.select_random(game.get_other_player(player).organisms).change_mana(-2)
+		return true
+	return false
 
 ####### Abilities
 
