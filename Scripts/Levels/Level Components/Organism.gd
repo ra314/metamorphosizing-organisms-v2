@@ -194,6 +194,20 @@ func breakthrough_mini(player):
 	if game.curr_player == player:
 		game.remove_move()
 
+func drdr():
+	game.next_player.change_HP(-10)
+	game.register_repeated_action(self, "drdr_mini", 3, "move_start", game.curr_player)
+
+func drdr_mini(player):
+	game._root.select_random(game.get_other_player(player).organisms).change_mana(-1)
+
+func drdr_plus():
+	game.next_player.change_HP(-15)
+	game.register_repeated_action(self, "drdr_plus_mini", 3, "move_start", game.curr_player)
+
+func drdr_plus_mini(player):
+	game._root.select_random(game.get_other_player(player).organisms).change_mana(-2)
+
 ####### Abilities
 
 # The organisms are to be stored in a list

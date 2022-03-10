@@ -130,13 +130,13 @@ func after_process():
 	for organism in curr_player.organisms:
 		organism.do_ability()
 	
+	process_actions(move_start_actions)
 	# Changing turns
 	if curr_moves == 0:
 		process_actions(turn_end_actions)
 		curr_player.update_ui()
 		change_to_next_player()
 		start_turn()
-		process_actions(player_turn_actions)
 		process_actions(turn_start_actions)
 	else:
 		curr_player.update_ui(false)
@@ -159,8 +159,7 @@ func process_actions(actions):
 
 var turn_end_actions = []
 var turn_start_actions = []
-# Reserved for moves that only activate for the player who casted them
-var player_turn_actions = []
+var move_start_actions = []
 
 # Format for actions
 # [Organism, Ability_Name, Duration, Casting Player]
@@ -169,6 +168,8 @@ func register_repeated_action(object, method, num_times, siignal, caster = null)
 		turn_end_actions.append([object, method, num_times, caster])
 	elif siignal == "turn_start":
 		turn_start_actions.append([object, method, num_times, caster])
+	elif siignal == "move_start":
+		move_start_actions.append([object, method, num_times, caster])
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
