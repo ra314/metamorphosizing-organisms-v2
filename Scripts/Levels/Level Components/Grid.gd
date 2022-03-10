@@ -20,6 +20,7 @@ func _ready():
 		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
 
 func ready():
+	print(rng.seed, rng.state)
 	initialize_grid()
 	# Cascading matches but with no collection of mana or extra moves
 	while np.sum2d(find_matches_in_grid()):

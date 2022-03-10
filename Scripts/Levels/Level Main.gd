@@ -89,7 +89,6 @@ func _ready():
 	$Grid.connect("collect_mana", self, "distribute_mana")
 	$Grid.connect("extra_move", self, "add_extra_move")
 	$Grid.rng.seed = _root.rng.seed
-	$Grid.rng.state = 0
 	$Grid.ready()
 	
 	start_turn()
