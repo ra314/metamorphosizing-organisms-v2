@@ -143,6 +143,7 @@ func after_process():
 		change_to_next_player()
 		start_turn()
 		process_actions(turn_start_actions)
+		grid.selected_tile = null
 	else:
 		curr_player.update_ui(false)
 

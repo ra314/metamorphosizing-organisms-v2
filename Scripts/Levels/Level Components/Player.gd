@@ -25,6 +25,7 @@ func consume_all_berries():
 func boost(organism):
 	consume_all_berries()
 	organism.change_mana(max_berries)
+	organism.do_ability()
 
 func change_HP(delta):
 	# Clamping health
