@@ -146,6 +146,10 @@ func after_process():
 	
 	for organism in curr_player.organisms:
 		organism.do_ability()
+		for player in players:
+			if player.curr_HP == 0:
+				end_game(player)
+				return
 	
 	# Changing turns
 	if curr_moves == 0:
@@ -157,6 +161,10 @@ func after_process():
 		grid.selected_tile = null
 	else:
 		curr_player.update_ui(false)
+
+func end_game(loser):
+	$Grid.game_over = true
+	_root.create_notification(loser.pname + " has lost.", 10)
 
 func compare_actions(action1, action2):
 	return action1['num_times'] > action2['num_times']

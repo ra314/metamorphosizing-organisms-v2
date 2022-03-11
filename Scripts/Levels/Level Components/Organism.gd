@@ -362,7 +362,7 @@ func A033_mini(player):
 	return false
 
 func A033_cleanup(player):
-	temp_data['A033'].pop_back().extra_mana_to_activate.change_extra_mana_to_activate(-3)
+	temp_data['A033'].pop_back().change_extra_mana_to_activate(-3)
 
 func A034():
 	game.next_player.change_HP(-30)

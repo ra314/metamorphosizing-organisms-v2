@@ -215,9 +215,12 @@ func print_grid(name, grid):
 	print("End of " + name + " Grid")
 	print("")
 
+var game_over = false
 var selected_tile = null
 var in_middle_of_swap = false
 func select_tile(tile):
+	if game_over:
+		return
 	if not in_middle_of_swap:
 		# Select new tile if no tile is currently selected
 		if selected_tile == null:
