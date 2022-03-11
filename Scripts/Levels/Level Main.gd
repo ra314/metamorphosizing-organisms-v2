@@ -98,9 +98,18 @@ func _ready():
 func distribute_mana(mana_array):
 	var berries_to_give = mana_array[ManaTex.enum("berry")]
 	mana_array[ManaTex.enum("berry")] -= curr_player.change_berries(berries_to_give)
-	for organism in curr_player.organisms:
-		var mana_to_give = mana_array[organism.mana_enum]
-		mana_array[organism.mana_enum] -= organism.change_mana(mana_to_give)
+	# Distribute mana equally if both organisms are the same type
+	if curr_player.organisms[0].mana_type == curr_player.organisms[1].mana_type:
+		var mana_enum = curr_player.organisms[0].mana_enum
+		while mana_array[mana_enum] > 0 and not curr_player.is_full_of_mana():
+			for organism in curr_player.organisms:
+				if mana_array[mana_enum] > 0:
+					mana_array[mana_enum] -= organism.change_mana(1)
+	# Distribution of mana if organisms are of different types
+	else:
+		for organism in curr_player.organisms:
+			var mana_to_give = mana_array[organism.mana_enum]
+			mana_array[organism.mana_enum] -= organism.change_mana(mana_to_give)
 
 func start_turn():
 	curr_moves = 2

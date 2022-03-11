@@ -53,3 +53,6 @@ func update_ui(hide_berries=true):
 	else:
 		for organism in organisms:
 			organism.hide_berry_actions()
+
+func is_full_of_mana():
+	return organisms[0].is_full_of_mana() and organisms[1].is_full_of_mana()

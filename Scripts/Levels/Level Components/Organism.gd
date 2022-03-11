@@ -6,19 +6,20 @@ var ability
 var ability_description
 var mana_type
 var mana_enum
-var mana_to_activate
-
-var extra_mana_to_activate
-func change_extra_mana_to_activate(delta):
-	extra_mana_to_activate += delta
-	$Mana_Bar.max_value = mana_to_activate + extra_mana_to_activate
-	update_ui()
 
 var game
 
 var is_evolved = false
-var data = null
+
 var mana = 0
+var mana_to_activate = 0
+var extra_mana_to_activate = 0
+func change_extra_mana_to_activate(delta):
+	extra_mana_to_activate += delta
+	$Mana_Bar.max_value = mana_to_activate + extra_mana_to_activate
+	update_ui()
+func is_full_of_mana():
+	return mana == mana_to_activate + extra_mana_to_activate
 
 var mana_absorption_blocked = false
 func set_mana_absorption_blocked(boolean):
