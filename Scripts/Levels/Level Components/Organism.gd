@@ -218,8 +218,8 @@ func reform():
 			organism.change_mana(3)
 
 func headway():
-	game.next_player.change_HP(-35)
-	game.register_repeated_action(self, "headway_mini", 1, "turn_start")
+	game.next_player.change_HP(-30)
+	game.register_repeated_action(self, "headway_mini", 2, "turn_start")
 
 func headway_mini(player):
 	if game.curr_player == player:
@@ -228,7 +228,7 @@ func headway_mini(player):
 	return false
 	
 func breakthrough():
-	game.next_player.change_HP(-45)
+	game.next_player.change_HP(-40)
 	game.register_repeated_action(self, "breakthrough_mini", 2, "turn_start")
 
 func breakthrough_mini(player):

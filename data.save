@@ -80,7 +80,7 @@
   "base_organism": 
 		{"name": "matligas", 
 		"ability": "headway",
-		"ability_description": "Headway: Attacks for 35 HP but loses 1 move for the next 1 turn."},
+		"ability_description": "Headway: Attacks for 30 HP but loses 1 move for the next 2 turn."},
 		
   "evolved_organism":
 		{"name": "matligas", 
@@ -101,7 +101,7 @@
 		"ability_description": "026: Attacks for 15 HP and adds 1 berry on your next turn for 3 turns."},
 
   "mana_type": "grass",
-  "mana_to_activate": 9
+  "mana_to_activate": 7
 },{
 	"base_organism": 
 		{"name": "027", 
@@ -137,7 +137,7 @@
   "evolved_organism":
 		{"name": "032", 
 		"ability": "A032",
-		"ability_description": "032: Attacks for 15 HP, and for 2 turns every time your opponent uses a monster skill they receive 16 damage."},
+		"ability_description": "032: Attacks for 15 HP, and for 2 turns every time your opponent uses a monster skill they receive 15 damage."},
 
   "mana_type": "psychic",
   "mana_to_activate": 9
@@ -166,5 +166,5 @@
 		"ability_description": "036: Attacks for 15 HP, and a random monster loses 2 mana after every move for 3 moves."},
 
   "mana_type": "psychic",
-  "mana_to_activate": 6
+  "mana_to_activate": 7
 }]
