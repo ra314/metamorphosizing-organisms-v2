@@ -19,6 +19,8 @@ const LOCAL_HOST = "127.0.0.1"
 # Dictionary mapping player names ("host", "guest") to network ids
 var players = {}
 
+# If player index = 0 and the game is online, then that means the first player
+# object in players_for_level_main belongs is associated with this instance of the game.
 remotesync var player_index
 # Contains the player objects
 var players_for_level_main = [null, null]

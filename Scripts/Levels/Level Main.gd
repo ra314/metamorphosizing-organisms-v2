@@ -160,6 +160,9 @@ func after_process():
 		start_turn()
 		process_actions(turn_start_actions)
 		grid.selected_tile = null
+		# Notify the current player
+		if is_current_player():
+			notify()
 	else:
 		curr_player.update_ui(false)
 
@@ -260,3 +263,6 @@ func get_other_player(input_player):
   var local_players = players.duplicate()
   local_players.remove(local_players.find(input_player))
   return local_players[0]
+
+func notify():
+	$Notification.play()
