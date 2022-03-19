@@ -141,6 +141,7 @@ func before_process():
 
 # Called when the grid is done processing a move
 func after_process():
+	yield(grid.cascading_grid_match_and_distribute(), "completed")
 	restart_timer()
 	update_move_icons()
 	

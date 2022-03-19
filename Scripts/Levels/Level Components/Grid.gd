@@ -19,13 +19,6 @@ func _ready():
 	while np.sum2d(find_matches_in_grid()):
 		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
 
-func ready():
-	print(rng.seed, rng.state)
-	initialize_grid()
-	# Cascading matches but with no collection of mana or extra moves
-	while np.sum2d(find_matches_in_grid()):
-		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
-
 # Create all tiles and randomly pick textures
 func initialize_grid():
 	for y in range(grid_size[0]):
@@ -173,12 +166,7 @@ func force_grid_match(height, width, num_shapes):
 	
 	emit_signal("collect_mana", get_matches_array(matches))
 	yield(remove_matched_tiles_and_fill_grid(matches, true), "completed")
-	while np.sum2d(find_matches_in_grid()):
-		var matches_in_grid = find_matches_in_grid()
-		emit_signal("collect_mana", get_matches_array(matches_in_grid))
-		if check_for_extra_move(matches_in_grid):
-			emit_signal("extra_move")
-		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
+	yield(cascading_grid_match_and_distribute(), "completed")
 
 func generate_random_coordinates():
 		var y = rng.randi() % grid_size[0]
@@ -306,12 +294,7 @@ remotesync func swap(tile1_location, tile2_location):
 	animation_durations.append(tile1.move_tile(y2, x2, true, false))
 	animation_durations.append(tile2.move_tile(y1, x1, true, false))
 	yield(animate(), "completed")
-	while np.sum2d(find_matches_in_grid()):
-		var matches_in_grid = find_matches_in_grid()
-		emit_signal("collect_mana", get_matches_array(matches_in_grid))
-		if check_for_extra_move(matches_in_grid):
-			emit_signal("extra_move")
-		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
+	yield(cascading_grid_match_and_distribute(), "completed")
 	
 	in_middle_of_swap = false
 	emit_signal("swap_end")
@@ -333,6 +316,10 @@ func convert_tiles(tile_type, num_tiles):
 				break
 				
 	yield(animate(), "completed")
+	yield(cascading_grid_match_and_distribute(), "completed")
+
+# Performs a cascading grid match. Also distributes mana and checks for extra moves
+func cascading_grid_match_and_distribute():
 	while np.sum2d(find_matches_in_grid()):
 		var matches_in_grid = find_matches_in_grid()
 		emit_signal("collect_mana", get_matches_array(matches_in_grid))
