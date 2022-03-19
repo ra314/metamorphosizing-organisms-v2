@@ -259,7 +259,7 @@ func A026_mini(player):
 		
 func A027():
 	game.next_player.change_HP(-10)
-	game.force_grid_match(1, 1, 3)
+	game.grid.force_grid_match(1, 1, 3)
 	# match 3 tiles
 	game.register_repeated_action(self, "A027_mini", 1, "turn_start")
 
@@ -271,7 +271,7 @@ func A027_mini(player):
 		
 func A028():
 	game.next_player.change_HP(-20)
-	game.force_grid_match(1, 1, 6)
+	game.grid.force_grid_match(1, 1, 6)
 	game.register_repeated_action(self, "A028_mini", 1, "turn_start")
 
 func A028_mini(player):
