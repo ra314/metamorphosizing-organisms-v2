@@ -86,9 +86,9 @@ func boost1():
 	rpc("boost2")
 remotesync func boost2():
 	emit_signal("boost", self)
-	
+
 func flip_sprite():
-	$Sprite.scale *= Vector2(-1, 1)
+	$Sprite.flip_h = !$Sprite.flip_h
 
 func change_mana(delta):
 	# Prevent the absorption of mana if blocked, but allow the draining of mana

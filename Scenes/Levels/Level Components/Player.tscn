@@ -93,4 +93,4 @@ __meta__ = {
 [node name="Organism1" parent="." instance=ExtResource( 6 )]
 
 [node name="Organism2" parent="." instance=ExtResource( 6 )]
-position = Vector2( -37.755, 868.364 )
+position = Vector2( 0, 868.364 )

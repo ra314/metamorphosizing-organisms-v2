@@ -1,21 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scripts/UI/Mon Select.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Font_50.tres" type="DynamicFont" id=2]
-[ext_resource path="res://Assets/Montserrat-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/back-arrow.svg" type="Texture" id=5]
-
-[sub_resource type="DynamicFont" id=1]
-size = 200
-font_data = ExtResource( 4 )
 
 [node name="Menu1" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 margin_left = 1.7818
@@ -26,35 +18,25 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 85.0
-margin_top = 246.0
-margin_right = 1833.0
-margin_bottom = 833.0
-
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
-margin_right = 1748.0
-margin_bottom = 493.0
-custom_fonts/font = SubResource( 1 )
-text = "Metamorphosing
-Organisms"
-align = 1
+margin_left = 894.0
+margin_top = 495.0
+margin_right = 1024.0
+margin_bottom = 585.0
 
 [node name="GridContainer" type="GridContainer" parent="CenterContainer/VBoxContainer"]
-margin_top = 497.0
-margin_right = 1748.0
-margin_bottom = 497.0
+margin_right = 130.0
 columns = 2
 
 [node name="Selection_Label" type="Label" parent="CenterContainer/VBoxContainer"]
-margin_top = 501.0
-margin_right = 1748.0
-margin_bottom = 515.0
+margin_top = 4.0
+margin_right = 130.0
+margin_bottom = 18.0
 text = "Selected: "
 
 [node name="Next" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 519.0
+margin_top = 22.0
 margin_right = 130.0
-margin_bottom = 587.0
+margin_bottom = 90.0
 size_flags_horizontal = 0
 custom_fonts/font = ExtResource( 2 )
 text = "Next"

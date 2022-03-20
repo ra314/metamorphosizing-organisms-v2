@@ -37,34 +37,20 @@ func create_mons_and_players():
 		_root.players_for_level_main[player_index] = player
 
 # Called when the node enters the scene tree for the first time.
-func _ready():	
-	# Button to start the game, when clicked it removes itself and the reroll button
-	if _root.online_game:
-		get_node("CanvasLayer/Start Game").queue_free()
-	else:
-		get_node("CanvasLayer/Start Game").connect("button_down", self, "remove_reroll_and_start_butttons")
-		
-	# Button to go to help menu
-	get_node("CanvasLayer/Help").connect("button_down", self, "show_help_menu")
-	
-	# Button to resign game
-	get_node("CanvasLayer/Resign").connect("button_down", self, "show_resignation_menu")
-	get_node("CanvasLayer/Confirm Resign/VBoxContainer/CenterContainer/HBoxContainer/No").connect("button_down", self, "confirm_resign", [false])
-	get_node("CanvasLayer/Confirm Resign/VBoxContainer/CenterContainer/HBoxContainer/Yes").connect("button_down", self, "confirm_resign", [true])
-	get_node("CanvasLayer/Restart").connect("button_down", self, "restart")
-	
+func _ready():
+	# Create the player and organism objects and store them
 	create_mons_and_players()
 	players = _root.players_for_level_main
-	$"CanvasLayer/Players/".add_child(players[0])
-	$"CanvasLayer/Players/".add_child(players[1])
 	
 	# Flip the sprites of the organisms in Player 2's control
 	for organism in players[1].organisms:
 		organism.flip_sprite()
-
+	
+	# Setting the current and next players
 	curr_player = players[0]
 	next_player = players[1]
 	
+	# Give the second player 90 HP as opposed to the default of 80HP.
 	next_player.curr_HP = 90
 	next_player.update_ui()
 	
@@ -81,7 +67,6 @@ func _ready():
 			organism.connect("evolving_end", self, "after_process")
 		player.connect("boost_start", self, "before_process")
 		player.connect("boost_end", self, "after_process")
-		
 	
 	# Setting up custom stages
 	world_str = _root.world_str
@@ -101,7 +86,6 @@ func _ready():
 	$Grid.connect("swap_end", self, "after_process")
 	$Grid.connect("collect_mana_from_grid", self, "distribute_mana")
 	$Grid.connect("extra_move", self, "add_extra_move")
-	$Grid.rng.seed = _root.rng.seed
 	$Grid.ready()
 	
 	start_turn()
