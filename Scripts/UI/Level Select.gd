@@ -35,7 +35,7 @@ func _load_scene(scene_str, world_str):
 
 	# Pick the random world if the world_str is empty
 	if world_str == "":
-		world_str = _root.select_random(worlds)
+		world_str = Utils.select_random(worlds)
 	
 	_root.rpc("change_to_select_mon_scene", scene_str, world_str)
 	# Remote Procedure Call if the game is online

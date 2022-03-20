@@ -347,18 +347,9 @@ func shuffle_tiles(tile_type):
 				non_target_tile_locations.append([y, x])
 	
 	while not target_tile_locations.empty():
-		var target_tile_location = select_random_and_remove(target_tile_locations)
-		var non_target_tile_location = select_random_and_remove(non_target_tile_locations)
+		var target_tile_location = Utils.select_random_and_remove(target_tile_locations)
+		var non_target_tile_location = Utils.select_random_and_remove(non_target_tile_locations)
 		raw_swap(target_tile_location, non_target_tile_location)
 	
 	yield(animate(), "completed")
 	yield(cascading_grid_match_and_distribute(), "completed")
-
-func index_random(array):
-	return rng.randi() % len(array)
-
-func select_random_and_remove(array):
-	var index = index_random(array)
-	var selection = array[index]
-	array.remove(index)
-	return selection

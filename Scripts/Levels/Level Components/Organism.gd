@@ -282,7 +282,7 @@ func A028_mini(player):
 
 func A029():
 	game.next_player.change_HP(-5)
-	var random_org = game._root.select_random(game.next_player.organisms)
+	var random_org = Utils.select_random(game.next_player.organisms)
 	random_org.set_mana_absorption_blocked(true)
 	if 'A029' in temp_data:
 		temp_data['A029'].append(random_org)
@@ -300,7 +300,7 @@ func A029_cleanup(player):
 
 func A030():
 	game.next_player.change_HP(-15)
-	var random_org = game._root.select_random(game.next_player.organisms)
+	var random_org = Utils.select_random(game.next_player.organisms)
 	random_org.set_mana_absorption_blocked(true)
 	if 'A030' in temp_data:
 		temp_data['A030'].append(random_org)
@@ -348,7 +348,7 @@ func A032_cleanup(player):
 
 func A033():
 	game.next_player.change_HP(-15)
-	var random_org = game._root.select_random(game.next_player.organisms)
+	var random_org = Utils.select_random(game.next_player.organisms)
 	random_org.change_extra_mana_to_activate(3)
 	if 'A033' in temp_data:
 		temp_data['A033'].append(random_org)
@@ -385,7 +385,7 @@ func A035():
 
 func A035_mini(player):
 	if game.get_other_player(player) == game.curr_player:
-		game._root.select_random(game.get_other_player(player).organisms).change_mana(-1)
+		Utils.select_random(game.get_other_player(player).organisms).change_mana(-1)
 		return true
 	return false
 
@@ -395,7 +395,7 @@ func A036():
 
 func A036_mini(player):
 	if game.get_other_player(player) == game.curr_player:
-		game._root.select_random(game.get_other_player(player).organisms).change_mana(-2)
+		Utils.select_random(game.get_other_player(player).organisms).change_mana(-2)
 		return true
 	return false
 

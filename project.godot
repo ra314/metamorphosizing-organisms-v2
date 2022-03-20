@@ -40,6 +40,7 @@ config/icon="res://icon.png"
 
 Dex="*res://Scripts/Levels/Level Components/Dex.gd"
 ManaTex="*res://Scripts/Levels/Level Components/Mana Textures.gd"
+Utils="*res://Scripts/Utils.gd"
 
 [display]
 

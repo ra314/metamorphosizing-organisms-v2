@@ -50,8 +50,7 @@ func _ready():
 	var scene = scene_manager._load_scene("UI/Local Online")
 	scene_manager._replace_scene(scene)
 	
-	rng.randomize()
-	print(rng.seed)
+	Utils.rng.randomize()
 	Dex.init()
 
 # Register a player to a dictionary that contains player names and player ids
@@ -63,10 +62,10 @@ remote func register_player(_player_name, id):
 	
 	if _player_name == "guest" and player_name == "host":
 		all_players_connected()
-		rpc_id(id, "set_rng_seed", rng.seed)
+		rpc_id(id, "set_rng_seed", Utils.rng.seed)
 
 remote func set_rng_seed(_seed):
-	rng.seed = _seed
+	Utils.rng.seed = _seed
 
 # A function that is trigggered when all players are connected
 func all_players_connected():
@@ -74,7 +73,7 @@ func all_players_connected():
 	scene_manager._replace_scene(scene)
 	
 	if online_game:
-		var first_player = select_random(["host", "guest"])
+		var first_player = Utils.select_random(["host", "guest"])
 		if first_player == "host":
 			create_notification("You are player 1.")
 			rpc_id(players["guest"], "create_notification", "You are player 2.")
@@ -88,20 +87,6 @@ func all_players_connected():
 	else:
 		create_notification("Pick between the two of you who goes first.")
 		player_index = 0
-
-var rng = RandomNumberGenerator.new()
-
-func select_random(array):
-	return array[index_random(array)]
-
-func index_random(array):
-	return rng.randi() % len(array)
-
-func select_random_and_remove(array):
-	var index = index_random(array)
-	var selection = array[index]
-	array.remove(index)
-	return selection
 
 # General purpose notification system
 ####### 
