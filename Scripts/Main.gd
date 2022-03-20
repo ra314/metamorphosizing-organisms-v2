@@ -10,7 +10,7 @@ var network_data = {}
 var stored_IP = ""
 var game_started: bool = false
 var disconnection_container = null
-var world_str = ""
+remotesync var world_str = ""
 
 var peer = null
 const SERVER_PORT = 9658
@@ -21,7 +21,7 @@ var players = {}
 
 # If player index = 0 and the game is online, then that means the first player
 # object in players_for_level_main belongs is associated with this instance of the game.
-remotesync var player_index
+remote var player_index
 # Contains the player objects
 var players_for_level_main = [null, null]
 
@@ -38,7 +38,6 @@ func get_other_player_network_id():
 remotesync func load_level(scene_str, world_str):
 	var scene = scene_manager._load_scene(scene_str)
 	scene._root = self
-	scene.world_str = world_str
 	scene_manager._replace_scene(scene)
 	game_started = true
 
@@ -93,7 +92,16 @@ func all_players_connected():
 var rng = RandomNumberGenerator.new()
 
 func select_random(array):
-	return array[rng.randi() % len(array)]
+	return array[index_random(array)]
+
+func index_random(array):
+	return rng.randi() % len(array)
+
+func select_random_and_remove(array):
+	var index = index_random(array)
+	var selection = array[index]
+	array.remove(index)
+	return selection
 
 # General purpose notification system
 ####### 

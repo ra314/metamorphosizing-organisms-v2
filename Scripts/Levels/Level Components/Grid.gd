@@ -165,7 +165,7 @@ func force_grid_match(height, width, num_shapes):
 			for x in range(coords[1], coords[1] + width):
 				matches[y][x] = grid[y][x].value
 	
-	emit_signal("collect_mana", get_matches_array(matches))
+	emit_signal("collect_mana_from_grid", get_matches_array(matches))
 	yield(remove_matched_tiles_and_fill_grid(matches, true), "completed")
 	yield(cascading_grid_match_and_distribute(), "completed")
 
@@ -275,13 +275,21 @@ func get_matches_array(matches):
 
 signal swap_start
 signal swap_end
-signal collect_mana
+signal collect_mana_from_grid
 signal extra_move
 remotesync func swap(tile1_location, tile2_location):
-	
 	emit_signal("swap_start")
 	in_middle_of_swap = true
 	
+	raw_swap(tile1_location, tile2_location)
+	
+	yield(animate(), "completed")
+	yield(cascading_grid_match_and_distribute(), "completed")
+	
+	in_middle_of_swap = false
+	emit_signal("swap_end")
+
+func raw_swap(tile1_location, tile2_location):
 	var y1 = tile1_location[0]
 	var x1 = tile1_location[1]
 	var tile1 = grid[y1][x1]
@@ -294,11 +302,6 @@ remotesync func swap(tile1_location, tile2_location):
 	
 	animation_durations.append(tile1.move_tile(y2, x2, true, false))
 	animation_durations.append(tile2.move_tile(y1, x1, true, false))
-	yield(animate(), "completed")
-	yield(cascading_grid_match_and_distribute(), "completed")
-	
-	in_middle_of_swap = false
-	emit_signal("swap_end")
 
 func convert_tiles(tile_type, num_tiles):
 	for i in range(num_tiles):
@@ -323,8 +326,39 @@ func convert_tiles(tile_type, num_tiles):
 func cascading_grid_match_and_distribute():
 	while np.sum2d(find_matches_in_grid()):
 		var matches_in_grid = find_matches_in_grid()
-		emit_signal("collect_mana", get_matches_array(matches_in_grid))
+		emit_signal("collect_mana_from_grid", get_matches_array(matches_in_grid))
 		if check_for_extra_move(matches_in_grid):
 			emit_signal("extra_move")
 		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
 	yield(get_tree().create_timer(0), "timeout")
+
+# The function assumes that no more than half of the tiles in the grid are of
+# the provided tile_type. This is reasonable to make in a rectangular 2d grid,
+# since if more than half were of the same type, a match would be triggered.
+# It shuffles all tiles of tile_type to another location that is not of tile_type.
+func shuffle_tiles(tile_type):
+	var target_tile_locations = []
+	var non_target_tile_locations = []
+	for y in range(grid_size[0]):
+		for x in range(grid_size[1]):
+			if grid[y][x].value == tile_type:
+				target_tile_locations.append([y, x])
+			else:
+				non_target_tile_locations.append([y, x])
+	
+	while not target_tile_locations.empty():
+		var target_tile_location = select_random_and_remove(target_tile_locations)
+		var non_target_tile_location = select_random_and_remove(non_target_tile_locations)
+		raw_swap(target_tile_location, non_target_tile_location)
+	
+	yield(animate(), "completed")
+	yield(cascading_grid_match_and_distribute(), "completed")
+
+func index_random(array):
+	return rng.randi() % len(array)
+
+func select_random_and_remove(array):
+	var index = index_random(array)
+	var selection = array[index]
+	array.remove(index)
+	return selection

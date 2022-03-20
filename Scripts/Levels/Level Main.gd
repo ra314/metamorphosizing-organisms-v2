@@ -23,12 +23,6 @@ const absolute_max_moves = 3
 var curr_time = 0
 const time_per_move = 30
 
-func init(_world_str):
-	world_str = _world_str
-	return self
-
-onready var grid = $Grid
-
 func create_mons_and_players():
 	for i in range(len(_root.players_for_level_main)):
 		var info = _root.players_for_level_main[i]
@@ -63,8 +57,6 @@ func _ready():
 	players = _root.players_for_level_main
 	$"CanvasLayer/Players/".add_child(players[0])
 	$"CanvasLayer/Players/".add_child(players[1])
-	players[0].position = Vector2(150, -200)
-	players[1].position = Vector2(3500, -200)
 	
 	# Flip the sprites of the organisms in Player 2's control
 	for organism in players[1].organisms:
@@ -80,22 +72,46 @@ func _ready():
 	for player in players:
 		for organism in player.organisms:
 			organism.game = self
+		player.game = self
+	
+	# Connecting boost and evolution signals from the players organisms to the player
+	for player in players:
+		for organism in player.organisms:
 			organism.connect("evolving_start", self, "before_process")
 			organism.connect("evolving_end", self, "after_process")
 		player.connect("boost_start", self, "before_process")
 		player.connect("boost_end", self, "after_process")
-		player.game = self
+		
+	
+	# Setting up custom stages
+	world_str = _root.world_str
+	if world_str == "Forest Valley":
+		for player in players:
+			player.max_berries = 3
+	elif world_str == "Abandoned Town":
+		for player in players:
+			for organism in player.organisms:
+				organism.connect("evolving_end", player, "change_HP", 10)
+	elif world_str == "Tranquil Falls":
+		connect("turn_starting", $Grid, "shuffle_tiles", [ManaTex.enum("water")])
+	elif world_str == "Lava Caverns":
+		$Grid.connect("collect_mana_from_grid", self, "lava_damage_player")
 	
 	$Grid.connect("swap_start", self, "before_process")
 	$Grid.connect("swap_end", self, "after_process")
-	$Grid.connect("collect_mana", self, "distribute_mana")
+	$Grid.connect("collect_mana_from_grid", self, "distribute_mana")
 	$Grid.connect("extra_move", self, "add_extra_move")
 	$Grid.rng.seed = _root.rng.seed
 	$Grid.ready()
 	
 	start_turn()
 
+func lava_damage_player(mana_array):
+	if mana_array[ManaTex.enum("fire")]:
+		next_player.change_HP(-5)
+
 func distribute_mana(mana_array):
+	mana_array = mana_array.duplicate()
 	var berries_to_give = mana_array[ManaTex.enum("berry")]
 	mana_array[ManaTex.enum("berry")] -= curr_player.change_berries(berries_to_give)
 	# Distribute mana equally if both organisms are the same type
@@ -111,6 +127,7 @@ func distribute_mana(mana_array):
 			var mana_to_give = mana_array[organism.mana_enum]
 			mana_array[organism.mana_enum] -= organism.change_mana(mana_to_give)
 
+signal turn_starting
 func start_turn():
 	curr_moves = 2
 	max_moves = 2
@@ -118,6 +135,7 @@ func start_turn():
 	update_move_icons()
 	update_turn_icons()
 	curr_player.update_ui(false)
+	emit_signal("turn_starting")
 
 func add_extra_move():
 	if max_moves != absolute_max_moves:
@@ -141,7 +159,7 @@ func before_process():
 
 # Called when the grid is done processing a move
 func after_process():
-	yield(grid.cascading_grid_match_and_distribute(), "completed")
+	yield($Grid.cascading_grid_match_and_distribute(), "completed")
 	restart_timer()
 	update_move_icons()
 	
@@ -159,7 +177,7 @@ func after_process():
 		change_to_next_player()
 		start_turn()
 		process_actions(turn_start_actions)
-		grid.selected_tile = null
+		$Grid.selected_tile = null
 		# Notify the current player
 		if is_current_player():
 			notify()

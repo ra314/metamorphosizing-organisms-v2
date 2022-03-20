@@ -144,9 +144,10 @@ __meta__ = {
 }
 
 [node name="Player1" parent="CanvasLayer/Players" instance=ExtResource( 3 )]
+position = Vector2( 150, -200 )
 
 [node name="Player2" parent="CanvasLayer/Players" instance=ExtResource( 3 )]
-position = Vector2( 3642.88, 16.5089 )
+position = Vector2( 3500, -200 )
 
 [node name="Help" type="Button" parent="CanvasLayer"]
 margin_left = 1787.81
