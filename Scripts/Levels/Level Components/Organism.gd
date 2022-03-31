@@ -185,12 +185,12 @@ func crash():
 	game.grid.convert_tiles(ManaTex.enum("water"), 3)
 
 func shock():
-	game.next_player.change_HP(-15)
+	game.next_player.change_HP(-10)
 	for organism in game.next_player.organisms:
 		organism.change_mana(-2)
 
 func awe():
-	game.next_player.change_HP(-20)
+	game.next_player.change_HP(-15)
 	for organism in game.next_player.organisms:
 		organism.change_mana(-3)
 
@@ -277,7 +277,7 @@ func A025_mini(player):
 	return false
 	
 func A026():
-	game.next_player.change_HP(-10)
+	game.next_player.change_HP(-20)
 	game.register_repeated_action(self, "A026_mini", 3, "turn_start")
 
 func A026_mini(player):
@@ -394,7 +394,7 @@ func A033_cleanup(player):
 	temp_data['A033'].pop_back().change_extra_mana_to_activate(-3)
 
 func A034():
-	game.next_player.change_HP(-30)
+	game.next_player.change_HP(-25)
 	game.register_repeated_action(self, "A034_mini", 3, "turn_start", "A034_cleanup")
 
 func A034_mini(player):
