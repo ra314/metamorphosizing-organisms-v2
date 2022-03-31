@@ -206,6 +206,8 @@ var game_over = false
 var selected_tile = null
 var in_middle_of_swap = false
 func select_tile(tile):
+	if not is_current_player():
+		return
 	if game_over:
 		return
 	if not in_middle_of_swap:
@@ -214,7 +216,7 @@ func select_tile(tile):
 			selected_tile = tile
 			selected_tile.rect_scale *= 1.2
 		# Swap if the prev selected tile and curr selected tile are adjacent
-		elif tile.can_swap(selected_tile) and is_current_player():
+		elif tile.can_swap(selected_tile):
 			selected_tile.rect_scale *= 0.8
 			rpc("swap", tile.location, selected_tile.location)
 			selected_tile = null
