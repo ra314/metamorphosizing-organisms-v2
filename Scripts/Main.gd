@@ -63,10 +63,11 @@ remote func register_player(_player_name, id):
 	
 	if _player_name == "guest" and player_name == "host":
 		all_players_connected()
-		rpc_id(id, "set_rng_seed", Utils.rng.seed)
+		rpc_id(id, "set_rng_seed", Utils.rng.seed, Utils.rng.state)
 
-remote func set_rng_seed(_seed):
+remote func set_rng_seed(_seed, _state):
 	Utils.rng.seed = _seed
+	Utils.rng.state = _state
 
 # A function that is trigggered when all players are connected
 func all_players_connected():
