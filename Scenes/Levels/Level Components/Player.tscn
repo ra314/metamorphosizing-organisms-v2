@@ -71,9 +71,6 @@ margin_left = 144.928
 margin_right = 184.928
 margin_bottom = 40.0
 rect_scale = Vector2( 1.03201, 1.03201 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Text" type="RichTextLabel" parent="Berry_Control/Berry"]
 margin_left = -374.956
@@ -86,11 +83,44 @@ custom_colors/default_color = Color( 1, 1, 1, 1 )
 custom_fonts/normal_font = ExtResource( 5 )
 tab_size = 0
 text = "0/4"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Organism1" parent="." instance=ExtResource( 6 )]
 
 [node name="Organism2" parent="." instance=ExtResource( 6 )]
 position = Vector2( 0, 868.364 )
+
+[node name="Indicator" type="Control" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 165.177
+margin_top = -541.944
+margin_right = 205.177
+margin_bottom = -501.944
+rect_scale = Vector2( 1.01512, 1.01512 )
+
+[node name="Number" type="RichTextLabel" parent="Indicator"]
+margin_left = -554.284
+margin_top = -66.707
+margin_right = -215.284
+margin_bottom = 175.292
+rect_scale = Vector2( 0.947225, 0.947225 )
+rect_clip_content = false
+custom_colors/default_color = Color( 0, 1, 0.109804, 1 )
+custom_fonts/normal_font = ExtResource( 5 )
+tab_size = 0
+text = "+10"
+scroll_active = false
+
+[node name="Type" type="RichTextLabel" parent="Indicator"]
+margin_left = -223.734
+margin_top = -64.4941
+margin_right = 329.723
+margin_bottom = 177.505
+rect_scale = Vector2( 0.947225, 0.947225 )
+rect_clip_content = false
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = ExtResource( 5 )
+tab_size = 0
+text = "Heal"
+scroll_active = false
+
+[node name="Tween" type="Tween" parent="."]

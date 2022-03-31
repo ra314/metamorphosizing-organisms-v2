@@ -212,17 +212,23 @@ func select_tile(tile):
 		# Select new tile if no tile is currently selected
 		if selected_tile == null:
 			selected_tile = tile
+			selected_tile.rect_scale *= 1.2
 		# Swap if the prev selected tile and curr selected tile are adjacent
 		elif tile.can_swap(selected_tile) and is_current_player():
+			selected_tile.rect_scale *= 0.8
 			rpc("swap", tile.location, selected_tile.location)
 			selected_tile = null
 		# Deselection if you click the same tile twice
 		elif selected_tile == tile:
+			selected_tile.rect_scale *= 0.8
 			selected_tile = null
 		# Select a different tile if the tile you just clicked was too far 
 		# from the tile you previously clicked
 		else:
+			# reset the scale of the old tile first
+			selected_tile.rect_scale *= 0.8
 			selected_tile = tile
+			selected_tile.rect_scale *= 1.2
 
 func is_current_player():
 	if get_parent()!=null:

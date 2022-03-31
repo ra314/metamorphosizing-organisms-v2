@@ -100,6 +100,17 @@ func change_mana(delta):
 	# Clamping mana
 	var prev_mana = mana
 	mana = clamp(mana + delta, 0, mana_to_activate)
+	
+	# Animation for the mana icon
+	
+	if delta > 0:
+		$Tween.interpolate_property($Mana_Icon, "scale", $Mana_Icon.scale * 1.5, $Mana_Icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+		$Tween.interpolate_property($Mana_Icon, "modulate", Color.green, $Mana_Icon.modulate, 1, Tween.TRANS_BACK, Tween.EASE_OUT)
+	elif delta < 0:
+		$Tween.interpolate_property($Mana_Icon, "scale", $Mana_Icon.scale * 0.5, $Mana_Icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+		$Tween.interpolate_property($Mana_Icon, "modulate", Color.red, $Mana_Icon.modulate, 1, Tween.TRANS_BACK, Tween.EASE_OUT)
+	$Tween.start()
+	
 	update_ui()
 	tween_mana(prev_mana, mana)
 	# Returning the amount change in mana
