@@ -206,11 +206,11 @@ var game_over = false
 var selected_tile = null
 var in_middle_of_swap = false
 func select_tile(tile):
+	if not is_current_player():
+		return
 	if game_over:
 		return
 	if not in_middle_of_swap:
-		if not is_current_player():
-			return
 		# Select new tile if no tile is currently selected
 		if selected_tile == null:
 			selected_tile = tile
