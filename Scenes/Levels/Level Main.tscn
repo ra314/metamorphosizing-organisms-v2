@@ -139,9 +139,6 @@ margin_top = 621.672
 margin_right = 253.088
 margin_bottom = 661.672
 rect_scale = Vector2( 0.407958, 0.407958 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Player1" parent="CanvasLayer/Players" instance=ExtResource( 3 )]
 position = Vector2( 150, -200 )

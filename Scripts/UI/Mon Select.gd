@@ -2,15 +2,20 @@ extends Control
 var selected_mons = []
 const selection_text = "Selected: "
 onready var _root: Main = get_tree().get_root().get_node("Main")
+onready var Organism = load("res://Scenes/Levels/Level Components/Organism.tscn")
+var UIgrid = load("res://Scripts/UI_Grid.gd").new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	UIgrid.init(512*0.5,512*0.5,6,Vector2(256, 256)*0.5+Vector2(200, 200))
 	# Adding buttons to select organism
-	for mon in Dex.data:
-		var button = Button.new()
-		button.text = mon["base_organism"]["name"]
-		button.connect("button_down", self, "add_selection", [button.text])
-		$CenterContainer/VBoxContainer/GridContainer.add_child(button)
+	for mon_data in Dex.data:
+		var mon = Organism.instance().create_base_mon(mon_data["base_organism"]["name"])
+		mon.scale = Vector2(0.408,0.408)
+		mon.get_node("Sprite").texture_hover = load("res://Assets/Organism/Organism_Game_Field_Placeholder_Mask.png")
+		UIgrid.add_object(mon)
+		mon.get_node("Sprite").connect("button_down", self, "add_selection", [mon.oname])
+		add_child(mon)
 	
 	# Label to display selected organisms
 	$CenterContainer/VBoxContainer/Selection_Label.text = selection_text

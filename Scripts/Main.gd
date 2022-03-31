@@ -92,21 +92,35 @@ func all_players_connected():
 ####### 
 var notifications = []
 
-remote func create_notification(notification_str, duration=3):
+remote func create_notification(notification_str, duration=3, alignment=Label.ALIGN_LEFT):
 	var notification = Label.new()
 	notification.anchor_left = 0
 	notification.anchor_right = 1
 	notification.autowrap = true
 	notification.rect_size = Vector2(1920,1080)
 	notification.text = notification_str
+	notification.align = alignment
 	notification.add_font_override("font", load("res://Assets/Fonts/Font_50.tres"))
-	$CL/VBox.add_child(notification)
+	if alignment == Label.ALIGN_LEFT:
+		$CL/HBox/VBoxLeft.add_child(notification)
+	elif alignment == Label.ALIGN_RIGHT:
+		$CL/HBox/VBoxRight.add_child(notification)
+	else:
+		printerr("Invalid alignment received")
+		assert(false)
 	notifications.append(notification)
 	get_tree().create_timer(duration).connect("timeout", self, "delete_last_notification")
 
 func delete_last_notification():
+	return
 	var notification = notifications.pop_front()
-	$CL/VBox.remove_child(notification)
+	if notification.align == Label.ALIGN_LEFT:
+		$CL/HBox/VBoxLeft.remove_child(notification)
+	elif notification.align == Label.ALIGN_RIGHT:
+		$CL/HBox/VBoxRight.remove_child(notification)
+	else:
+		printerr("Invalid alignment received")
+		assert(false)
 	notification.queue_free()
 #######
 

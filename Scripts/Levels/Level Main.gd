@@ -15,6 +15,7 @@ func change_to_next_player():
 
 var game_started = false
 var world_str = ""
+var grid = null
 
 var curr_moves = 2
 var max_moves = 2
@@ -41,6 +42,7 @@ func _ready():
 	# Create the player and organism objects and store them
 	create_mons_and_players()
 	players = _root.players_for_level_main
+	grid = $Grid
 	
 	# Flip the sprites of the organisms in Player 2's control
 	for organism in players[1].organisms:
@@ -65,8 +67,12 @@ func _ready():
 		for organism in player.organisms:
 			organism.connect("evolving_start", self, "before_process")
 			organism.connect("evolving_end", self, "after_process")
+			organism.connect("evolving_start", _root, "create_notification",
+				[organism.oname + " is evolving.", 3, 
+				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
 		player.connect("boost_start", self, "before_process")
 		player.connect("boost_end", self, "after_process")
+	
 	
 	# Setting up custom stages
 	world_str = _root.world_str
@@ -78,15 +84,15 @@ func _ready():
 			for organism in player.organisms:
 				organism.connect("evolving_end", player, "change_HP", 10)
 	elif world_str == "Tranquil Falls":
-		connect("turn_starting", $Grid, "shuffle_tiles", [ManaTex.enum("water")])
+		connect("turn_starting", grid, "shuffle_tiles", [ManaTex.enum("water")])
 	elif world_str == "Lava Caverns":
-		$Grid.connect("collect_mana_from_grid", self, "lava_damage_player")
+		grid.connect("collect_mana_from_grid", self, "lava_damage_player")
 	
-	$Grid.connect("swap_start", self, "before_process")
-	$Grid.connect("swap_end", self, "after_process")
-	$Grid.connect("collect_mana_from_grid", self, "distribute_mana")
-	$Grid.connect("extra_move", self, "add_extra_move")
-	$Grid.ready()
+	grid.connect("swap_start", self, "before_process")
+	grid.connect("swap_end", self, "after_process")
+	grid.connect("collect_mana_from_grid", self, "distribute_mana")
+	grid.connect("extra_move", self, "add_extra_move")
+	grid.ready()
 	
 	start_turn()
 
@@ -143,7 +149,7 @@ func before_process():
 
 # Called when the grid is done processing a move
 func after_process():
-	yield($Grid.cascading_grid_match_and_distribute(), "completed")
+	yield(grid.cascading_grid_match_and_distribute(), "completed")
 	restart_timer()
 	update_move_icons()
 	
@@ -161,7 +167,7 @@ func after_process():
 		change_to_next_player()
 		start_turn()
 		process_actions(turn_start_actions)
-		$Grid.selected_tile = null
+		grid.selected_tile = null
 		# Notify the current player
 		if is_current_player():
 			notify()
@@ -169,7 +175,7 @@ func after_process():
 		curr_player.update_ui(false)
 
 func end_game(loser):
-	$Grid.game_over = true
+	grid.game_over = true
 	_root.create_notification(loser.pname + " has lost.", 10)
 
 func compare_actions(action1, action2):

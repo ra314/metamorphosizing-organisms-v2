@@ -8,13 +8,11 @@ var grid = []
 
 onready var np = $Numpy
 var Tile = load("res://Scenes/Levels/Level Components/Tile.tscn")
-var rng = RandomNumberGenerator.new()
 
 func _ready():
 	pass
 
 func ready():
-	print(rng.seed, rng.state)
 	initialize_grid()
 	# Cascading matches but with no collection of mana or extra moves
 	while np.sum2d(find_matches_in_grid()):
@@ -25,7 +23,7 @@ func initialize_grid():
 	for y in range(grid_size[0]):
 		var row = []
 		for x in range(grid_size[1]):
-			row.append(Tile.instance().init(y, x, rng.randi(), self))
+			row.append(Tile.instance().init(y, x, Utils.rng.randi(), self))
 			add_child(row[-1])
 		grid.append(row)
 
@@ -125,7 +123,7 @@ func remove_matched_tiles_and_fill_grid(matches, animate=true):
 				# Create a new tile
 				if unmatched_tile_coordinate == null:
 					num_new_tiles_in_columns += 1
-					grid[y][x] = Tile.instance().init(-num_new_tiles_in_columns, x, rng.randi(), self)
+					grid[y][x] = Tile.instance().init(-num_new_tiles_in_columns, x, Utils.rng.randi(), self)
 					add_child(grid[y][x])
 				# Shift down existing tile
 				else:
@@ -170,8 +168,8 @@ func force_grid_match(height, width, num_shapes):
 	yield(cascading_grid_match_and_distribute(), "completed")
 
 func generate_random_coordinates():
-		var y = rng.randi() % grid_size[0]
-		var x = rng.randi() % grid_size[1]
+		var y = Utils.rng.randi() % grid_size[0]
+		var x = Utils.rng.randi() % grid_size[1]
 		return [y, x]
 
 # Given a shape and coordinates will tell you if the shape is in the grid
