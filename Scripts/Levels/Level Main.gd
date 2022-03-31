@@ -70,6 +70,9 @@ func _ready():
 			organism.connect("evolving_start", _root, "create_notification",
 				[organism.oname + " is evolving.", 3, 
 				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
+			organism.connect("boost", _root, "create_notification",
+				[organism.oname + " is boosting.", 3, 
+				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
 		player.connect("boost_start", self, "before_process")
 		player.connect("boost_end", self, "after_process")
 	

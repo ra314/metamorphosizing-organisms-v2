@@ -94,13 +94,11 @@ var notifications = []
 
 remote func create_notification(notification_str, duration=3, alignment=Label.ALIGN_LEFT):
 	var notification = Label.new()
-	notification.anchor_left = 0
-	notification.anchor_right = 1
 	notification.autowrap = true
-	notification.rect_size = Vector2(1920,1080)
 	notification.text = notification_str
 	notification.align = alignment
 	notification.add_font_override("font", load("res://Assets/Fonts/Font_50.tres"))
+	notification.add_stylebox_override("normal", load("res://Assets/label_background.tres"))
 	if alignment == Label.ALIGN_LEFT:
 		$CL/HBox/VBoxLeft.add_child(notification)
 	elif alignment == Label.ALIGN_RIGHT:
