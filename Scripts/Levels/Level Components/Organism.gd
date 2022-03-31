@@ -61,9 +61,26 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 	$Mana_Bar.value = 0
 	return self
 
+var button_down_timestamp
+func record_button_down():
+	button_down_timestamp = OS.get_ticks_msec()
+
+signal long_press
+signal short_press
+func is_button_up_long_press():
+	var curr_time = OS.get_ticks_msec()
+	print(curr_time)
+	print(button_down_timestamp)
+	if curr_time - button_down_timestamp > 500:
+		emit_signal("long_press")
+	else:
+		emit_signal("short_press")
+
 func _ready():
 	$Berry_Control/Evolve_Text.connect("button_down", self, "evolve1")
 	$Berry_Control/Boost_Text.connect("button_down", self, "boost1")
+	$Sprite.connect("button_down", self, "record_button_down")
+	$Sprite.connect("button_up", self, "is_button_up_long_press")
 
 signal evolving_start
 signal evolving_end
@@ -128,10 +145,11 @@ func hide_berry_actions():
 
 ####### Abilities
 var damage_to_take_from_activating_ability = 0
+signal doing_ability
 func do_ability():
 	if mana == mana_to_activate:
 		change_mana(-mana_to_activate)
-		game._root.create_notification(ability_description, 10)
+		emit_signal("doing_ability")
 		call(ability)
 		if damage_to_take_from_activating_ability > 0:
 			game.curr_player.change_HP(-damage_to_take_from_activating_ability)

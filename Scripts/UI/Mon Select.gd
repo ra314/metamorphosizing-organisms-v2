@@ -13,13 +13,15 @@ func _ready():
 		var mon = Organism.instance().create_base_mon(mon_data["base_organism"]["name"])
 		mon.scale = Vector2(0.408,0.408)
 		mon.get_node("Sprite").texture_hover = load("res://Assets/Organism/Organism_Game_Field_Placeholder_Mask.png")
+		mon.connect("short_press", self, "add_selection", [mon.oname])
+		mon.connect("long_press", _root, "open_popup", 
+			[mon.oname, mon.ability_description])
 		UIgrid.add_object(mon)
-		mon.get_node("Sprite").connect("button_down", self, "add_selection", [mon.oname])
 		add_child(mon)
 	
 	# Label to display selected organisms
-	$CenterContainer/VBoxContainer/Selection_Label.text = selection_text
-	$CenterContainer/VBoxContainer/Next.connect("button_down", self, "next")
+	$Selection_Label.text = selection_text
+	$Next.connect("button_down", self, "next")
 	
 	$TextureButton.connect("button_down", self, "back")
 
@@ -36,7 +38,8 @@ func add_selection(mon):
 		final_text = selection_text + selected_mons[0]
 	if len(selected_mons) == 2:
 		final_text = selection_text + selected_mons[0] + ", " + selected_mons[1]
-	$CenterContainer/VBoxContainer/Selection_Label.text = final_text
+	$Selection_Label.text = final_text
+	$Selection_Label.text = final_text
 
 func next():
 	rpc("create_player", selected_mons[0], selected_mons[1], _root.player_index)
@@ -45,7 +48,7 @@ func next():
 			_load_scene("UI/Waiting")
 		else:
 			_root.player_index = 1
-			$CenterContainer/VBoxContainer/Selection_Label.text = selection_text
+			$Selection_Label.text = selection_text
 			selected_mons = []
 	else:
 		_root.rpc("load_level", "Levels/Level Main", _root.world_str)

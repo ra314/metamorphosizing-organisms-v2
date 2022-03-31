@@ -46,6 +46,7 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
+	$CL/Popup/CloseButton.connect("button_down", self, "close_popup")
 	
 	var scene = scene_manager._load_scene("UI/Local Online")
 	scene_manager._replace_scene(scene)
@@ -110,7 +111,6 @@ remote func create_notification(notification_str, duration=3, alignment=Label.AL
 	get_tree().create_timer(duration).connect("timeout", self, "delete_last_notification")
 
 func delete_last_notification():
-	return
 	var notification = notifications.pop_front()
 	if notification.align == Label.ALIGN_LEFT:
 		$CL/HBox/VBoxLeft.remove_child(notification)
@@ -121,6 +121,18 @@ func delete_last_notification():
 		assert(false)
 	notification.queue_free()
 #######
+
+# Popup system
+####### 
+func open_popup(title, details):
+	$CL/Popup.visible = true
+	print(title)
+	$CL/Popup/Title.text = title
+	$CL/Popup/Details.text = details
+
+func close_popup():
+	$CL/Popup.visible = false
+####### 
 
 # Create a server and set the network peer to the peer you created
 func host():

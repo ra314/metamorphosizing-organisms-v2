@@ -62,20 +62,32 @@ func _ready():
 			organism.game = self
 		player.game = self
 	
-	# Connecting boost and evolution signals from the players organisms to the player
+	# Creating notifications for evolution, boosting and triggering of abilities
 	for player in players:
 		for organism in player.organisms:
-			organism.connect("evolving_start", self, "before_process")
-			organism.connect("evolving_end", self, "after_process")
 			organism.connect("evolving_start", _root, "create_notification",
 				[organism.oname + " is evolving.", 3, 
 				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
 			organism.connect("boost", _root, "create_notification",
 				[organism.oname + " is boosting.", 3, 
 				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
+			organism.connect("doing_ability", _root, "create_notification",
+				[organism.ability_description, 10, 
+				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
+	
+	# Triggering turn end stuff for evolution and boosting
+	for player in players:
+		for organism in player.organisms:
+			organism.connect("evolving_start", self, "before_process")
+			organism.connect("evolving_end", self, "after_process")
 		player.connect("boost_start", self, "before_process")
 		player.connect("boost_end", self, "after_process")
 	
+	# Popup of information when clicking on organisms
+	for player in players:
+		for organism in player.organisms:
+			organism.connect("long_press", _root, "open_popup", 
+				[organism.oname, organism.ability_description])
 	
 	# Setting up custom stages
 	world_str = _root.world_str
