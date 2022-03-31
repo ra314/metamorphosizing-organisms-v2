@@ -72,7 +72,7 @@ func is_button_up_long_press():
 	print(curr_time)
 	print(button_down_timestamp)
 	if curr_time - button_down_timestamp > 500:
-		emit_signal("long_press")
+		emit_signal("long_press", self)
 	else:
 		emit_signal("short_press")
 

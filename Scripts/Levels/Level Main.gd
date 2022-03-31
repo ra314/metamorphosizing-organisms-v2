@@ -86,8 +86,7 @@ func _ready():
 	# Popup of information when clicking on organisms
 	for player in players:
 		for organism in player.organisms:
-			organism.connect("long_press", _root, "open_popup", 
-				[organism.oname, organism.ability_description])
+			organism.connect("long_press", self, "popup_organism")
 	
 	# Setting up custom stages
 	world_str = _root.world_str
@@ -110,6 +109,9 @@ func _ready():
 	grid.ready()
 	
 	start_turn()
+
+func popup_organism(organism):
+	_root.open_popup(organism.oname, organism.ability_description)
 
 func lava_damage_player(mana_array):
 	if mana_array[ManaTex.enum("fire")]:
