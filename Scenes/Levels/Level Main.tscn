@@ -13,115 +13,11 @@
 [ext_resource path="res://Assets/restart.svg" type="Texture" id=12]
 
 [node name="Level 1" type="Node2D"]
-position = Vector2( 0.347961, 1 )
 script = ExtResource( 2 )
 
+[node name="Tween" type="Tween" parent="."]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Match_Control" type="Control" parent="CanvasLayer"]
-margin_left = 973.507
-margin_top = 66.3202
-margin_right = 1013.51
-margin_bottom = 106.32
-rect_scale = Vector2( 0.890607, 0.890607 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Time_Control" type="Control" parent="CanvasLayer/Match_Control"]
-margin_right = 39.9999
-margin_bottom = 40.0
-rect_scale = Vector2( 0.366092, 0.366092 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Time_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
-margin_left = -348.009
-margin_top = -149.762
-margin_right = 375.991
-margin_bottom = 92.2376
-rect_scale = Vector2( 0.947225, 0.947225 )
-rect_clip_content = false
-custom_colors/default_color = Color( 1, 1, 1, 1 )
-custom_fonts/normal_font = ExtResource( 9 )
-tab_size = 0
-text = "Time"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Time_Text" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
-margin_left = -326.93
-margin_top = 78.9552
-margin_right = 397.07
-margin_bottom = 320.955
-rect_scale = Vector2( 2.14925, 2.14925 )
-rect_clip_content = false
-custom_colors/default_color = Color( 0.99, 0.8316, 0.0396, 1 )
-custom_fonts/normal_font = ExtResource( 9 )
-tab_size = 0
-text = "13"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Timer" type="Timer" parent="CanvasLayer/Match_Control/Time_Control/Time_Text"]
-
-[node name="Moves_Control" type="Control" parent="CanvasLayer/Match_Control"]
-margin_left = 3.36475
-margin_top = 231.443
-margin_right = 43.3647
-margin_bottom = 271.443
-rect_scale = Vector2( 0.366092, 0.366092 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Moves_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Moves_Control"]
-margin_left = -434.29
-margin_top = -126.577
-margin_right = 289.71
-margin_bottom = 115.423
-rect_scale = Vector2( 0.947225, 0.947225 )
-rect_clip_content = false
-custom_colors/default_color = Color( 1, 1, 1, 1 )
-custom_fonts/normal_font = ExtResource( 9 )
-tab_size = 0
-text = "Moves"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Moves_Container" type="HBoxContainer" parent="CanvasLayer/Match_Control/Moves_Control"]
-margin_left = -680.336
-margin_top = 81.4068
-margin_right = 863.664
-margin_bottom = 542.407
-rect_scale = Vector2( 0.698945, 0.698945 )
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Move_Icon_1" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
-margin_left = 258.0
-margin_right = 770.0
-margin_bottom = 461.0
-texture = ExtResource( 5 )
-
-[node name="Move_Icon_2" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
-margin_left = 774.0
-margin_right = 1286.0
-margin_bottom = 461.0
-texture = ExtResource( 5 )
-
-[node name="Move_Icon_3" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
-visible = false
-margin_left = 1032.0
-margin_right = 1544.0
-margin_bottom = 461.0
-texture = ExtResource( 5 )
 
 [node name="Player1_Turn" type="Sprite" parent="CanvasLayer"]
 position = Vector2( 600, 225.641 )
@@ -245,6 +141,118 @@ texture_normal = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Match_Control" type="Control" parent="CanvasLayer"]
+margin_left = 973.507
+margin_top = 66.3202
+margin_right = 1013.51
+margin_bottom = 106.32
+rect_scale = Vector2( 0.890607, 0.890607 )
+
+[node name="Extra_Move" type="RichTextLabel" parent="CanvasLayer/Match_Control"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -727.03
+margin_top = 491.752
+margin_right = 475.97
+margin_bottom = 733.752
+rect_scale = Vector2( 0.447766, 0.447766 )
+rect_clip_content = false
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = ExtResource( 9 )
+tab_size = 0
+text = "Extra Move"
+
+[node name="Time_Control" type="Control" parent="CanvasLayer/Match_Control"]
+margin_right = 39.9999
+margin_bottom = 40.0
+rect_scale = Vector2( 0.366092, 0.366092 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
+margin_left = -348.009
+margin_top = -149.762
+margin_right = 375.991
+margin_bottom = 92.2376
+rect_scale = Vector2( 0.947225, 0.947225 )
+rect_clip_content = false
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = ExtResource( 9 )
+tab_size = 0
+text = "Time"
+
+[node name="Time_Text" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
+margin_left = -326.93
+margin_top = 78.9552
+margin_right = 397.07
+margin_bottom = 320.955
+rect_scale = Vector2( 2.14925, 2.14925 )
+rect_clip_content = false
+custom_colors/default_color = Color( 0.99, 0.8316, 0.0396, 1 )
+custom_fonts/normal_font = ExtResource( 9 )
+tab_size = 0
+text = "13"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="CanvasLayer/Match_Control/Time_Control/Time_Text"]
+
+[node name="Moves_Control" type="Control" parent="CanvasLayer/Match_Control"]
+margin_left = 3.36475
+margin_top = 231.443
+margin_right = 43.3647
+margin_bottom = 271.443
+rect_scale = Vector2( 0.366092, 0.366092 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Moves_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Moves_Control"]
+margin_left = -434.29
+margin_top = -126.577
+margin_right = 289.71
+margin_bottom = 115.423
+rect_scale = Vector2( 0.947225, 0.947225 )
+rect_clip_content = false
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = ExtResource( 9 )
+tab_size = 0
+text = "Moves"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Moves_Container" type="HBoxContainer" parent="CanvasLayer/Match_Control/Moves_Control"]
+margin_left = -680.336
+margin_top = 81.4068
+margin_right = 863.664
+margin_bottom = 542.407
+rect_scale = Vector2( 0.698945, 0.698945 )
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Move_Icon_1" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+margin_left = 258.0
+margin_right = 770.0
+margin_bottom = 461.0
+texture = ExtResource( 5 )
+
+[node name="Move_Icon_2" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+margin_left = 774.0
+margin_right = 1286.0
+margin_bottom = 461.0
+texture = ExtResource( 5 )
+
+[node name="Move_Icon_3" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+visible = false
+margin_left = 1032.0
+margin_right = 1544.0
+margin_bottom = 461.0
+texture = ExtResource( 5 )
 
 [node name="Grid" parent="." instance=ExtResource( 10 )]
 position = Vector2( 275.516, 230 )

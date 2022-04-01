@@ -108,6 +108,7 @@ remote func create_notification(notification_str, duration=3, alignment=Label.AL
 	else:
 		printerr("Invalid alignment received")
 		assert(false)
+	
 	notifications.append(notification)
 	get_tree().create_timer(duration).connect("timeout", self, "delete_last_notification")
 
