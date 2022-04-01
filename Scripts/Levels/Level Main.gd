@@ -145,9 +145,10 @@ func start_turn():
 
 func add_extra_move(extra_moves):
 	if max_moves != absolute_max_moves:
-		# Get all the tiles that were part of the extra move and flash them
-		for tile_pos in extra_moves:
-			grid.flash_tile(tile_pos)
+		if extra_moves != null:
+			# Get all the tiles that were part of the extra move and flash them
+			for tile_pos in extra_moves:
+				grid.flash_tile(tile_pos)
 			
 		# Get the center of those matches so that we can move the text there	
 		var center_pos = extra_moves[int(extra_moves.size() / 2)]

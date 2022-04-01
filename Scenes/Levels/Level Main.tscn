@@ -150,7 +150,7 @@ margin_bottom = 106.32
 rect_scale = Vector2( 0.890607, 0.890607 )
 
 [node name="Extra_Move" type="RichTextLabel" parent="CanvasLayer/Match_Control"]
-visible = false
+modulate = Color( 1, 1, 1, 0 )
 margin_left = -727.03
 margin_top = 491.752
 margin_right = 475.97

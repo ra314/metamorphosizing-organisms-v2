@@ -222,7 +222,7 @@ func ovation():
 
 func ovation_mini(player):
 	if game.curr_player == player:
-		game.add_extra_move()
+		game.add_extra_move(null)
 		return true
 	return false
 
@@ -232,7 +232,7 @@ func encore():
 
 func encore_mini(player):
 	if game.curr_player == player:
-		game.add_extra_move()
+		game.add_extra_move(null)
 		return true
 	return false
 	
