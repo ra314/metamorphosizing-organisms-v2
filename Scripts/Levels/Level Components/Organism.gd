@@ -58,7 +58,9 @@ func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_acti
 	$Mana_Icon.texture = ManaTex.dict[_mana_type]
 	$Mana_Bar.max_value = _mana_to_activate
 	update_ui()
+	
 	$Mana_Bar.value = 0
+	$Mana_Bar.tint_progress = ManaTex.colors[mana_type]
 	return self
 
 var button_down_timestamp
@@ -69,10 +71,10 @@ signal long_press
 signal short_press
 func is_button_up_long_press():
 	var curr_time = OS.get_ticks_msec()
-	print(curr_time)
-	print(button_down_timestamp)
+	# print(curr_time)
+	# print(button_down_timestamp)
 	if curr_time - button_down_timestamp > 500:
-		emit_signal("long_press", self)
+		emit_signal("long_press")
 	else:
 		emit_signal("short_press")
 

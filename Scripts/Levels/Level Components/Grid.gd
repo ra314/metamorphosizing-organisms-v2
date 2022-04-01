@@ -60,12 +60,14 @@ func inside_grid(y,x):
 # 122
 # 451
 # For example if flood fill was performed at the center of the image above, the
-# returned value is 3. Since 3 2's are connected by adjacency.
+# returned value is [3, [[1,0], [1,1], [2,1]]]. Since 3 2's are connected by adjacency.
 func flood_fill(y, x, matrix):
+	# The first tile is a flood fill should always be present
 	var curr_tile = matrix[y][x]
 	var queue = [[y,x]]
 	var match_size = 1
 	var processed_tiles = [str(y) + "," + str(x)]
+	var tile_positions = [[y, x]]
 	
 	while queue != []:
 		var curr = queue.pop_back()
@@ -81,17 +83,22 @@ func flood_fill(y, x, matrix):
 						match_size += 1
 						queue.append([y+dy, x+dx])
 						processed_tiles.append(str_dxdy)
+						tile_positions.append([y+dy, x+dx])
 	
-	return match_size
+	return [match_size, tile_positions]
 
 # Returns true if there is a continuous region of matches tiles bigger than 3
 func check_for_extra_move(matches):
 	for y in range(grid_size[0]):
 		for x in range(grid_size[1]):
 			if matches[y][x] != 0:
-				if flood_fill(y, x, matches) > 3:
-					return true
-	return false
+				var result = flood_fill(y, x, matches)
+				
+				# [0] returns the size of the matches
+				if result[0] > 3:
+					# [1] returns the tiles that were matches
+					return result[1]
+	return null
 
 func remove_matched_tiles_and_fill_grid(matches, animate=true):
 	matches = matches.duplicate()
@@ -237,6 +244,12 @@ func is_current_player():
 		var game = get_parent()
 		return game.is_current_player()
 	return true
+	
+func earned_extra_moves():
+	if get_parent()!=null:
+		var game = get_parent()
+		return game.max_moves != game.absolute_max_moves
+	return true
 
 # Stores the durations of all of the tile animations
 var animation_durations = [0]
@@ -266,9 +279,18 @@ func add_tile(object):
 	
 	return tile_appear_speed * 2
 	
-
 func delete_tile(tile):
 	tile.queue_free()	
+
+# Called when an extra move is made and the tile was one of them
+const tile_flash_speed = 1.5
+func flash_tile(tile_pos):
+	var x = tile_pos[1]
+	var y = tile_pos[0]
+	var tile = grid[y][x]
+	
+	$Tween.interpolate_property(tile, "rect_scale", tile.rect_scale * 1.5, tile.rect_scale, tile_flash_speed, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+	$Tween.start()
 
 # Returns an array where each index contains the number of tiles matches of that type
 # Eg: [0,0,3,0,0,0,0] = 3 water tiles
@@ -333,8 +355,11 @@ func cascading_grid_match_and_distribute():
 	while np.sum2d(find_matches_in_grid()):
 		var matches_in_grid = find_matches_in_grid()
 		emit_signal("collect_mana_from_grid", get_matches_array(matches_in_grid))
-		if check_for_extra_move(matches_in_grid):
-			emit_signal("extra_move")
+		var extra_moves = check_for_extra_move(matches_in_grid)
+		if extra_moves != null:
+			if earned_extra_moves():
+				emit_signal("extra_move", extra_moves)
+				yield(get_tree().create_timer(2), "timeout")
 		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
 	yield(get_tree().create_timer(0), "timeout")
 

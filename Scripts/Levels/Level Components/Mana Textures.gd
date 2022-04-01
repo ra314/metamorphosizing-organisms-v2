@@ -8,6 +8,18 @@ const dict = {
 	"grass": preload("res://Assets/UI/Tiles/Tile_Grass.png"),
 	"psychic": preload("res://Assets/UI/Tiles/Tile_Psychic.png"),
 	"berry": preload("res://Assets/UI/Tiles/Tile_Berry.png")}
+
+# Used in the color for the Mana Bars
+# Will use for other assets too
+
+const colors = {
+	"null": null,
+	"fire": Color.red,
+	"water": Color.cyan,
+	"electric": Color.yellow,
+	"grass": Color.green,
+	"psychic": Color.purple,}
+
 var values = dict.values()
 var keys = dict.keys()
 
