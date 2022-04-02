@@ -80,3 +80,9 @@ func move_tile(y, x, animate, falling = true):
 # Takes in grid position, returns pixel position
 func get_tile_position(y, x):
 	return Vector2(x, y) * sprite_size * tile_scale_factor
+
+# Called when an extra move is made and the tile was one of them
+const flash_speed = 1.5
+func flash():	
+	$Tween.interpolate_property(self, "rect_scale", rect_scale * 1.5, rect_scale, flash_speed, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+	$Tween.start()

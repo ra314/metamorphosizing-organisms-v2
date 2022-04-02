@@ -85,19 +85,22 @@ func flood_fill(y, x, matrix):
 						processed_tiles.append(str_dxdy)
 						tile_positions.append([y+dy, x+dx])
 	
-	return [match_size, tile_positions]
+	return tile_positions
 
-# Returns true if there is a continuous region of matches tiles bigger than 3
+# Returns a list of tiles if there is a continuous region of matched tiles bigger than 3
 func check_for_extra_move(matches):
 	for y in range(grid_size[0]):
 		for x in range(grid_size[1]):
 			if matches[y][x] != 0:
-				var result = flood_fill(y, x, matches)
-				
-				# [0] returns the size of the matches
-				if result[0] > 3:
-					# [1] returns the tiles that were matches
-					return result[1]
+				var tile_positions = flood_fill(y, x, matches)
+				if len(tile_positions) > 3:
+					# Convert the tile positions to tiles
+					var tiles = []
+					for tile_position in tile_positions:
+						y = tile_position[0]
+						x = tile_position[1]
+						tiles.append(grid[y][x])
+					return tiles
 	return null
 
 func remove_matched_tiles_and_fill_grid(matches, animate=true):
@@ -244,12 +247,6 @@ func is_current_player():
 		var game = get_parent()
 		return game.is_current_player()
 	return true
-	
-func earned_extra_moves():
-	if get_parent()!=null:
-		var game = get_parent()
-		return game.max_moves != game.absolute_max_moves
-	return true
 
 # Stores the durations of all of the tile animations
 var animation_durations = [0]
@@ -280,17 +277,7 @@ func add_tile(object):
 	return tile_appear_speed * 2
 	
 func delete_tile(tile):
-	tile.queue_free()	
-
-# Called when an extra move is made and the tile was one of them
-const tile_flash_speed = 1.5
-func flash_tile(tile_pos):
-	var x = tile_pos[1]
-	var y = tile_pos[0]
-	var tile = grid[y][x]
-	
-	$Tween.interpolate_property(tile, "rect_scale", tile.rect_scale * 1.5, tile.rect_scale, tile_flash_speed, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
-	$Tween.start()
+	tile.queue_free()
 
 # Returns an array where each index contains the number of tiles matches of that type
 # Eg: [0,0,3,0,0,0,0] = 3 water tiles
@@ -357,9 +344,8 @@ func cascading_grid_match_and_distribute():
 		emit_signal("collect_mana_from_grid", get_matches_array(matches_in_grid))
 		var extra_moves = check_for_extra_move(matches_in_grid)
 		if extra_moves != null:
-			if earned_extra_moves():
-				emit_signal("extra_move", extra_moves)
-				yield(get_tree().create_timer(2), "timeout")
+			emit_signal("extra_move", extra_moves)
+			yield(get_tree().create_timer(2), "timeout")
 		yield(remove_matched_tiles_and_fill_grid(matches_in_grid, true), "completed")
 	yield(get_tree().create_timer(0), "timeout")
 
@@ -384,3 +370,18 @@ func shuffle_tiles(tile_type):
 	
 	yield(animate(), "completed")
 	yield(cascading_grid_match_and_distribute(), "completed")
+
+# Given a list of tiles, return the tile that is most centrally located.
+# IE the tile with the lowest average distance to all other provided tiles
+func get_most_central_tile(tiles):
+	var lowest_average_distance = INF
+	var most_central_tile = null
+	for tile1 in tiles:
+		var average_distance = 0
+		for tile2 in tiles:
+			average_distance += (tile1.location.distance_to(tile2.location))
+		average_distance /= len(tiles)
+		if average_distance < lowest_average_distance:
+			lowest_average_distance = average_distance
+			most_central_tile = tile1
+	return most_central_tile

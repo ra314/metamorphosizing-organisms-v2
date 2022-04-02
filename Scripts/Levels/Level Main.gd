@@ -142,33 +142,37 @@ func start_turn():
 	curr_player.update_ui(false)
 	emit_signal("turn_starting")
 
-func add_extra_move(extra_moves):
-	if max_moves != absolute_max_moves:
-		if extra_moves != null:
-			# Get all the tiles that were part of the extra move and flash them
-			for tile_pos in extra_moves:
-				grid.flash_tile(tile_pos)
-			
-		# Get the center of those matches so that we can move the text there	
-		var center_pos = extra_moves[int(extra_moves.size() / 2)]
-		var center_tile = grid.grid[center_pos[0]][center_pos[1]]
-		
-		var extra_move_text = get_node("Match_Control/Extra_Move")
-		var initial_pos = Vector2(-720, 490)
-		extra_move_text.rect_position = initial_pos + center_tile.rect_position
-		
-		# Makes the text fade in for 2 seconds then fade out for 1 second
-		$Tween.interpolate_property(extra_move_text, "modulate", Color.transparent, Color.white, 2, Tween.TRANS_BACK, Tween.EASE_OUT)
-		$Tween.interpolate_property(extra_move_text, "modulate", Color.white, Color.transparent, 1, Tween.TRANS_BACK, Tween.EASE_OUT, 2)
-		$Tween.start()
-		
-		curr_moves += 1
-		max_moves += 1
-		update_move_icons()
-		
-		# Waiting for 2 seconds so that the animation is clear
-		yield(get_tree().create_timer(2), "timeout")
-		
+# extra_move_tiles: The tiles that were matched to produce the extra move
+func add_extra_move(extra_move_tiles):
+	if max_moves == absolute_max_moves:
+		return
+	
+	if extra_move_tiles:
+		# Get all the tiles that were part of the extra move and flash them
+		for tile in extra_move_tiles:
+			tile.flash()
+	
+	var center_tile = grid.get_most_central_tile(extra_move_tiles)
+	var extra_move_text = get_node("Match_Control/Extra_Move")
+	extra_move_text.rect_global_position = center_tile.rect_global_position
+	# Move the text box to the right to account for the size of the tile
+	extra_move_text.rect_global_position[0] += (center_tile.rect_size[0]/2 * center_tile.rect_scale[0])
+	# Move the text box to the left to account for the size of the textbox itself
+	# This is necessary because the text bos does not have a center property
+	extra_move_text.rect_position[0] -= (extra_move_text.rect_size[0]/2 * extra_move_text.rect_scale[0])
+	
+	# Makes the text fade in for 2 seconds then fade out for 1 second
+	$Tween.interpolate_property(extra_move_text, "modulate", Color.transparent, Color.white, 2, Tween.TRANS_BACK, Tween.EASE_OUT)
+	$Tween.interpolate_property(extra_move_text, "modulate", Color.white, Color.transparent, 1, Tween.TRANS_BACK, Tween.EASE_OUT, 2)
+	$Tween.start()
+	
+	curr_moves += 1
+	max_moves += 1
+	update_move_icons()
+	
+	# Waiting for 2 seconds so that the animation is clear
+	yield(get_tree().create_timer(2), "timeout")
+
 func remove_move():
 	if curr_moves > 0:
 		curr_moves -= 1
