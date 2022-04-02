@@ -32,7 +32,7 @@ func create_mons_and_players():
 		var mon2_name = info[1]
 		var player_index = i
 		
-		var player = get_node("CanvasLayer/Players/Player" + str(player_index+1))
+		var player = get_node("Players/Player" + str(player_index+1))
 		player.get_node("Organism1").create_base_mon(mon1_name)
 		player.get_node("Organism2").create_base_mon(mon2_name)
 		player.init("P"+str(player_index+1))
@@ -87,7 +87,7 @@ func _ready():
 	# Popup of information when clicking on organisms
 	for player in players:
 		for organism in player.organisms:
-			organism.connect("long_press", self, "popup_organism")
+			organism.connect("long_press", _root, "popup_organism")
 	
 	# Setting up custom stages
 	world_str = _root.world_str
@@ -110,9 +110,6 @@ func _ready():
 	grid.ready()
 	
 	start_turn()
-
-func popup_organism(organism):
-	_root.open_popup(organism.oname, organism.ability_description)
 
 func lava_damage_player(mana_array):
 	if mana_array[ManaTex.enum("fire")]:
@@ -156,7 +153,7 @@ func add_extra_move(extra_moves):
 		var center_pos = extra_moves[int(extra_moves.size() / 2)]
 		var center_tile = grid.grid[center_pos[0]][center_pos[1]]
 		
-		var extra_move_text = get_node("CanvasLayer/Match_Control/Extra_Move")
+		var extra_move_text = get_node("Match_Control/Extra_Move")
 		var initial_pos = Vector2(-720, 490)
 		extra_move_text.rect_position = initial_pos + center_tile.rect_position
 		
@@ -179,7 +176,7 @@ func remove_move():
 
 # Called when the grid starts processing a move
 func before_process():
-	var timer = $CanvasLayer/Match_Control/Time_Control/Time_Text/Timer
+	var timer = $Match_Control/Time_Control/Time_Text/Timer
 	timer.stop()
 	
 	# Assuming that level main handles all the moves, player moves will update here
@@ -255,7 +252,7 @@ func register_repeated_action(object, method, num_times, action_type, cleanup = 
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")
-onready var move_icons = $CanvasLayer/Match_Control/Moves_Control/Moves_Container
+onready var move_icons = $Match_Control/Moves_Control/Moves_Container
 func update_move_icons():
 	# Hide all move icons first
 	for move_icon in move_icons.get_children():
@@ -279,18 +276,18 @@ func update_turn_icons():
 	
 	# If the current player is Player #1, darken the Player 2 Icon
 	if curr_player == players[0]:
-		$CanvasLayer/Player2_Turn.modulate = dark
-		$CanvasLayer/Player1_Turn.modulate = light
+		$Player2_Turn.modulate = dark
+		$Player1_Turn.modulate = light
 	else:
-		$CanvasLayer/Player1_Turn.modulate = dark
-		$CanvasLayer/Player2_Turn.modulate = light
+		$Player1_Turn.modulate = dark
+		$Player2_Turn.modulate = light
 
 # Restart the move timer
 func restart_timer():
 	curr_time = time_per_move
-	$CanvasLayer/Match_Control/Time_Control/Time_Text.text = str(curr_time)
+	$Match_Control/Time_Control/Time_Text.text = str(curr_time)
 	
-	var timer = $CanvasLayer/Match_Control/Time_Control/Time_Text/Timer
+	var timer = $Match_Control/Time_Control/Time_Text/Timer
 	
 	timer.start()
 	timer.connect("timeout", self, "on_timer_timeout") 
@@ -298,7 +295,7 @@ func restart_timer():
 # The timer waits every second but don't update the text. We do it here.
 func on_timer_timeout():
 	curr_time -= 1
-	$CanvasLayer/Match_Control/Time_Control/Time_Text.text = str(curr_time)
+	$Match_Control/Time_Control/Time_Text.text = str(curr_time)
 
 func is_current_player():
 	if not _root.online_game:

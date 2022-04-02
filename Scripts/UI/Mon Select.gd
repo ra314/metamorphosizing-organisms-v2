@@ -14,8 +14,7 @@ func _ready():
 		mon.scale = Vector2(0.408,0.408)
 		mon.get_node("Sprite").texture_hover = load("res://Assets/Organism/Organism_Game_Field_Placeholder_Mask.png")
 		mon.connect("short_press", self, "add_selection", [mon.oname])
-		mon.connect("long_press", _root, "open_popup", 
-			[mon.oname, mon.ability_description])
+		mon.connect("long_press", _root, "popup_organism")
 		UIgrid.add_object(mon)
 		add_child(mon)
 	

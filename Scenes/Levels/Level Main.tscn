@@ -19,29 +19,6 @@ script = ExtResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Player1_Turn" type="Sprite" parent="CanvasLayer"]
-position = Vector2( 600, 225.641 )
-scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 4 )
-
-[node name="Player2_Turn" type="Sprite" parent="CanvasLayer"]
-position = Vector2( 1320, 225.641 )
-scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 7 )
-
-[node name="Players" type="Control" parent="CanvasLayer"]
-margin_left = 213.088
-margin_top = 621.672
-margin_right = 253.088
-margin_bottom = 661.672
-rect_scale = Vector2( 0.407958, 0.407958 )
-
-[node name="Player1" parent="CanvasLayer/Players" instance=ExtResource( 3 )]
-position = Vector2( 150, -200 )
-
-[node name="Player2" parent="CanvasLayer/Players" instance=ExtResource( 3 )]
-position = Vector2( 3500, -200 )
-
 [node name="Help" type="Button" parent="CanvasLayer"]
 margin_left = 1787.81
 margin_top = 1022.48
@@ -49,9 +26,6 @@ margin_right = 1917.81
 margin_bottom = 1090.48
 custom_fonts/font = ExtResource( 8 )
 text = "Help"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Resign" type="Button" parent="CanvasLayer"]
 visible = false
@@ -68,18 +42,6 @@ __meta__ = {
 
 [node name="Organism" parent="CanvasLayer/Resign" instance=ExtResource( 1 )]
 position = Vector2( -1479.27, 611.255 )
-
-[node name="Start Game" type="Button" parent="CanvasLayer"]
-visible = false
-margin_left = 0.0701532
-margin_top = 1012.03
-margin_right = 298.07
-margin_bottom = 1080.03
-custom_fonts/font = ExtResource( 8 )
-text = "Start Game"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Confirm Resign" type="CenterContainer" parent="CanvasLayer"]
 visible = false
@@ -142,14 +104,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Match_Control" type="Control" parent="CanvasLayer"]
+[node name="Grid" parent="." instance=ExtResource( 10 )]
+position = Vector2( 275.516, 230 )
+
+[node name="Notification" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+
+[node name="Player1_Turn" type="Sprite" parent="."]
+position = Vector2( 600, 225.641 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
+
+[node name="Player2_Turn" type="Sprite" parent="."]
+position = Vector2( 1320, 225.641 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 7 )
+
+[node name="Players" type="Control" parent="."]
+margin_left = 213.088
+margin_top = 621.672
+margin_right = 253.088
+margin_bottom = 661.672
+rect_scale = Vector2( 0.407958, 0.407958 )
+
+[node name="Player1" parent="Players" instance=ExtResource( 3 )]
+position = Vector2( 150, -200 )
+
+[node name="Player2" parent="Players" instance=ExtResource( 3 )]
+position = Vector2( 3500, -200 )
+
+[node name="Match_Control" type="Control" parent="."]
 margin_left = 973.507
 margin_top = 66.3202
 margin_right = 1013.51
 margin_bottom = 106.32
 rect_scale = Vector2( 0.890607, 0.890607 )
 
-[node name="Extra_Move" type="RichTextLabel" parent="CanvasLayer/Match_Control"]
+[node name="Extra_Move" type="RichTextLabel" parent="Match_Control"]
 modulate = Color( 1, 1, 1, 0 )
 margin_left = -727.03
 margin_top = 491.752
@@ -162,7 +153,7 @@ custom_fonts/normal_font = ExtResource( 9 )
 tab_size = 0
 text = "Extra Move"
 
-[node name="Time_Control" type="Control" parent="CanvasLayer/Match_Control"]
+[node name="Time_Control" type="Control" parent="Match_Control"]
 margin_right = 39.9999
 margin_bottom = 40.0
 rect_scale = Vector2( 0.366092, 0.366092 )
@@ -170,7 +161,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Time_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
+[node name="Time_Title" type="RichTextLabel" parent="Match_Control/Time_Control"]
 margin_left = -348.009
 margin_top = -149.762
 margin_right = 375.991
@@ -182,7 +173,7 @@ custom_fonts/normal_font = ExtResource( 9 )
 tab_size = 0
 text = "Time"
 
-[node name="Time_Text" type="RichTextLabel" parent="CanvasLayer/Match_Control/Time_Control"]
+[node name="Time_Text" type="RichTextLabel" parent="Match_Control/Time_Control"]
 margin_left = -326.93
 margin_top = 78.9552
 margin_right = 397.07
@@ -197,9 +188,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Timer" type="Timer" parent="CanvasLayer/Match_Control/Time_Control/Time_Text"]
+[node name="Timer" type="Timer" parent="Match_Control/Time_Control/Time_Text"]
 
-[node name="Moves_Control" type="Control" parent="CanvasLayer/Match_Control"]
+[node name="Moves_Control" type="Control" parent="Match_Control"]
 margin_left = 3.36475
 margin_top = 231.443
 margin_right = 43.3647
@@ -209,7 +200,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Moves_Title" type="RichTextLabel" parent="CanvasLayer/Match_Control/Moves_Control"]
+[node name="Moves_Title" type="RichTextLabel" parent="Match_Control/Moves_Control"]
 margin_left = -434.29
 margin_top = -126.577
 margin_right = 289.71
@@ -224,7 +215,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Moves_Container" type="HBoxContainer" parent="CanvasLayer/Match_Control/Moves_Control"]
+[node name="Moves_Container" type="HBoxContainer" parent="Match_Control/Moves_Control"]
 margin_left = -680.336
 margin_top = 81.4068
 margin_right = 863.664
@@ -235,27 +226,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Move_Icon_1" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+[node name="Move_Icon_1" type="TextureRect" parent="Match_Control/Moves_Control/Moves_Container"]
 margin_left = 258.0
 margin_right = 770.0
 margin_bottom = 461.0
 texture = ExtResource( 5 )
 
-[node name="Move_Icon_2" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+[node name="Move_Icon_2" type="TextureRect" parent="Match_Control/Moves_Control/Moves_Container"]
 margin_left = 774.0
 margin_right = 1286.0
 margin_bottom = 461.0
 texture = ExtResource( 5 )
 
-[node name="Move_Icon_3" type="TextureRect" parent="CanvasLayer/Match_Control/Moves_Control/Moves_Container"]
+[node name="Move_Icon_3" type="TextureRect" parent="Match_Control/Moves_Control/Moves_Container"]
 visible = false
 margin_left = 1032.0
 margin_right = 1544.0
 margin_bottom = 461.0
 texture = ExtResource( 5 )
-
-[node name="Grid" parent="." instance=ExtResource( 10 )]
-position = Vector2( 275.516, 230 )
-
-[node name="Notification" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource( 6 )
