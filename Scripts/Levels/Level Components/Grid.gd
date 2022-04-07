@@ -60,7 +60,7 @@ func inside_grid(y,x):
 # 122
 # 451
 # For example if flood fill was performed at the center of the image above, the
-# returned value is [3, [[1,0], [1,1], [2,1]]]. Since 3 2's are connected by adjacency.
+# returned value is [[1,0], [1,1], [2,1]]. Since 3 2's are connected by adjacency.
 func flood_fill(y, x, matrix):
 	# The first tile is a flood fill should always be present
 	var curr_tile = matrix[y][x]
@@ -371,17 +371,10 @@ func shuffle_tiles(tile_type):
 	yield(animate(), "completed")
 	yield(cascading_grid_match_and_distribute(), "completed")
 
-# Given a list of tiles, return the tile that is most centrally located.
-# IE the tile with the lowest average distance to all other provided tiles
-func get_most_central_tile(tiles):
-	var lowest_average_distance = INF
-	var most_central_tile = null
-	for tile1 in tiles:
-		var average_distance = 0
-		for tile2 in tiles:
-			average_distance += (tile1.location.distance_to(tile2.location))
-		average_distance /= len(tiles)
-		if average_distance < lowest_average_distance:
-			lowest_average_distance = average_distance
-			most_central_tile = tile1
-	return most_central_tile
+# Given a list of tiles, average global position of all tiles
+func get_central_location(tiles):
+	var average_location = Vector2()
+	for tile in tiles:
+		average_location += tile.rect_global_position
+	average_location /= len(tiles)
+	return average_location

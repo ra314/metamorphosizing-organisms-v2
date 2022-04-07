@@ -152,14 +152,8 @@ func add_extra_move(extra_move_tiles):
 		for tile in extra_move_tiles:
 			tile.flash()
 	
-	var center_tile = grid.get_most_central_tile(extra_move_tiles)
 	var extra_move_text = get_node("Match_Control/Extra_Move")
-	extra_move_text.rect_global_position = center_tile.rect_global_position
-	# Move the text box to the right to account for the size of the tile
-	extra_move_text.rect_global_position[0] += (center_tile.rect_size[0]/2 * center_tile.rect_scale[0])
-	# Move the text box to the left to account for the size of the textbox itself
-	# This is necessary because the text bos does not have a center property
-	extra_move_text.rect_position[0] -= (extra_move_text.rect_size[0]/2 * extra_move_text.rect_scale[0])
+	extra_move_text.rect_global_position = grid.get_central_location(extra_move_tiles)
 	
 	# Makes the text fade in for 2 seconds then fade out for 1 second
 	$Tween.interpolate_property(extra_move_text, "modulate", Color.transparent, Color.white, 2, Tween.TRANS_BACK, Tween.EASE_OUT)
