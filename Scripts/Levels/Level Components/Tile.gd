@@ -86,3 +86,10 @@ const flash_speed = 1.5
 func flash():	
 	$Tween.interpolate_property(self, "rect_scale", rect_scale * 1.5, rect_scale, flash_speed, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
 	$Tween.start()
+
+# Changing the shape of the tile
+func enlarge():
+	rect_scale = Vector2(1, 1) * tile_scale_factor * 1.2
+
+func shrink():
+	rect_scale = Vector2(1, 1) * tile_scale_factor
