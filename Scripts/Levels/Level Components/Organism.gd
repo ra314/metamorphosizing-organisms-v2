@@ -47,6 +47,11 @@ func create_base_mon(mon_name):
 	return init(_id, mon_name, mon_data["ability"], mon_data["ability_description"], \
 		Dex.data[_id]["mana_type"], Dex.data[_id]["mana_to_activate"])
 
+func get_combined_ability_description():
+	var mon_data = Dex.data[id]
+	return  "(L1) " + mon_data["base_organism"]["ability_description"] + "\n" + \
+			"(L2) " + mon_data["evolved_organism"]["ability_description"]
+
 func init(_id, _oname, _ability, _ability_description, _mana_type, _mana_to_activate):
 	self.id = _id
 	self.oname = _oname
@@ -94,6 +99,7 @@ remotesync func evolve2():
 	oname = Dex.data[id]['evolved_organism']['name']
 	ability = Dex.data[id]['evolved_organism']['ability']
 	ability_description = Dex.data[id]['evolved_organism']['ability_description']
+	$Evolution_Stage.text = "L2"
 	is_evolved = true
 	
 	emit_signal("evolving_end")

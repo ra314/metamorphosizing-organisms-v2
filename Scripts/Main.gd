@@ -127,7 +127,7 @@ func delete_last_notification():
 # Popup system
 #######
 func popup_organism(organism):
-	open_popup(organism.oname, organism.ability_description)
+	open_popup(organism.oname, organism.get_combined_ability_description())
 
 func open_popup(title, details):
 	$CL/Popup.visible = true

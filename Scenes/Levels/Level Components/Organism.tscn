@@ -88,3 +88,11 @@ flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Evolution_Stage" type="Label" parent="."]
+margin_left = -282.061
+margin_top = -228.047
+margin_right = -90.0609
+margin_bottom = -48.0474
+custom_fonts/font = ExtResource( 6 )
+text = "L1"
