@@ -133,6 +133,7 @@ func distribute_mana(mana_array):
 		for organism in curr_player.organisms:
 			var mana_to_give = mana_array[organism.mana_enum]
 			mana_array[organism.mana_enum] -= organism.change_mana(mana_to_give)
+	curr_player.update_ui(true)
 
 signal turn_starting
 func start_turn():
@@ -141,7 +142,7 @@ func start_turn():
 	restart_timer()
 	update_move_icons()
 	update_turn_icons()
-	curr_player.update_ui(false)
+	curr_player.update_ui(true)
 	emit_signal("turn_starting")
 
 # extra_move_tiles: The tiles that were matched to produce the extra move
@@ -212,7 +213,7 @@ func after_process():
 		if is_current_player():
 			notify()
 	else:
-		curr_player.update_ui(false)
+		curr_player.update_ui(true)
 
 func end_game(loser):
 	grid.game_over = true

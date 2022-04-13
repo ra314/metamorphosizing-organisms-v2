@@ -96,10 +96,10 @@ func change_berries(delta):
 	# Returning the amount change in berries
 	return abs(berries - prev_berries)
 	
-func update_ui(hide_berries=true):
+func update_ui(show_berries=false):
 	$Health_Control/Health/Text.text = str(curr_HP)
 	$Berry_Control/Berry/Text.text = str(berries) + "/" + str(max_berries)
-	if berries == max_berries and not hide_berries and game.is_current_player():
+	if berries == max_berries and show_berries and game.is_current_player():
 		for organism in organisms:
 			organism.show_berry_actions()
 	else:
