@@ -72,9 +72,8 @@ func _ready():
 			organism.connect("boost", _root, "create_notification",
 				[organism.oname + " is boosting.", 3, 
 				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
-			organism.connect("doing_ability", _root, "create_notification",
-				[organism.ability_description, 10, 
-				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
+			organism.connect("doing_ability", self, "create_organism_ability_notification",
+				[organism, 10, Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
 	
 	# Triggering turn end stuff for evolution and boosting
 	for player in players:
@@ -110,6 +109,9 @@ func _ready():
 	grid.ready()
 	
 	start_turn()
+
+func create_organism_ability_notification(organism, duration, alignment):
+	_root.create_notification(organism.ability_description, duration, alignment)
 
 func lava_damage_player(mana_array):
 	if mana_array[ManaTex.enum("fire")]:
