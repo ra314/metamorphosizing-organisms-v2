@@ -104,6 +104,7 @@ func _ready():
 	
 	grid.connect("swap_start", self, "before_process")
 	grid.connect("swap_end", self, "after_process")
+	grid.connect("after_level", self, "after_process")
 	grid.connect("collect_mana_from_grid", self, "distribute_mana")
 	grid.connect("extra_move", self, "add_extra_move")
 	grid.ready()
