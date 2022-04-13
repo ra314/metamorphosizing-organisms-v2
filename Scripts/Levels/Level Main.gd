@@ -15,6 +15,7 @@ func change_to_next_player():
 
 var game_started = false
 var world_str = ""
+var world_details = ""
 var grid = null
 
 var curr_moves = 2
@@ -90,13 +91,14 @@ func _ready():
 	
 	# Setting up custom stages
 	world_str = _root.world_str
+	world_details = _root.world_details
 	if world_str == "Forest Valley":
 		for player in players:
 			player.max_berries = 3
 	elif world_str == "Abandoned Town":
 		for player in players:
 			for organism in player.organisms:
-				organism.connect("evolving_end", player, "change_HP", 10)
+				organism.connect("evolving_end", player, "change_HP", [10])
 	elif world_str == "Tranquil Falls":
 		connect("turn_starting", grid, "shuffle_tiles", [ManaTex.enum("water")])
 	elif world_str == "Lava Caverns":
@@ -108,6 +110,8 @@ func _ready():
 	grid.connect("collect_mana_from_grid", self, "distribute_mana")
 	grid.connect("extra_move", self, "add_extra_move")
 	grid.ready()
+	
+	$CanvasLayer/Help.connect("button_down", _root, "open_popup", [world_str, world_details])
 	
 	start_turn()
 

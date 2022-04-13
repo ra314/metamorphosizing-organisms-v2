@@ -68,7 +68,7 @@ margin_right = 400.0
 margin_bottom = 134.0
 rect_min_size = Vector2( 400, 0 )
 
-[node name="Stadium" type="Button" parent="CenterContainer/VBoxContainer/C3/H1/V1"]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/C3/H1/V1"]
 margin_right = 400.0
 margin_bottom = 68.0
 custom_fonts/font = ExtResource( 3 )
@@ -91,7 +91,7 @@ margin_left = 404.0
 margin_right = 905.0
 margin_bottom = 134.0
 
-[node name="Forest Valley" type="Button" parent="CenterContainer/VBoxContainer/C3/H1/V2"]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/C3/H1/V2"]
 margin_right = 501.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 300, 0 )
@@ -114,7 +114,7 @@ margin_left = 909.0
 margin_right = 1406.0
 margin_bottom = 134.0
 
-[node name="Abandoned Town" type="Button" parent="CenterContainer/VBoxContainer/C3/H1/V3"]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/C3/H1/V3"]
 margin_right = 497.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 300, 0 )
@@ -148,7 +148,7 @@ margin_right = 700.0
 margin_bottom = 199.0
 rect_min_size = Vector2( 700, 0 )
 
-[node name="Tranquil Falls" type="Button" parent="CenterContainer/VBoxContainer/C4/H1/V1"]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/C4/H1/V1"]
 margin_right = 700.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 300, 0 )
@@ -173,7 +173,7 @@ margin_right = 1404.0
 margin_bottom = 199.0
 rect_min_size = Vector2( 700, 0 )
 
-[node name="Lava Caverns" type="Button" parent="CenterContainer/VBoxContainer/C4/H1/V2"]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/C4/H1/V2"]
 margin_right = 700.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 300, 0 )
@@ -192,7 +192,7 @@ text = "Matching Fire tiles does 5 damage to your opponent."
 align = 1
 autowrap = true
 
-[node name="Random" type="Button" parent="CenterContainer/VBoxContainer/C4/H1"]
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/C4/H1"]
 margin_left = 1408.0
 margin_right = 1664.0
 margin_bottom = 199.0

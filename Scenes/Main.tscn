@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Main.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Font_50.tres" type="DynamicFont" id=2]
-[ext_resource path="res://Assets/Fonts/Frick_Regular.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Assets/Fonts/Frick0.3-Regular.otf" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/cross.svg" type="Texture" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 120
+outline_size = 20
+outline_color = Color( 0.231373, 0.231373, 0.231373, 1 )
+font_data = ExtResource( 3 )
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -39,7 +45,7 @@ margin_left = 14.3182
 margin_top = 22.0
 margin_right = 1279.32
 margin_bottom = 115.0
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = SubResource( 1 )
 text = "Spelunky"
 align = 1
 valign = 1

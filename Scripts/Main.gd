@@ -11,6 +11,7 @@ var stored_IP = ""
 var game_started: bool = false
 var disconnection_container = null
 remotesync var world_str = ""
+remotesync var world_details = ""
 
 var peer = null
 const SERVER_PORT = 9658
@@ -25,8 +26,9 @@ remote var player_index
 # Contains the player objects
 var players_for_level_main = [null, null]
 
-remotesync func change_to_select_mon_scene(scene_str, _world_str):
+remotesync func change_to_select_mon_scene(scene_str, _world_str, _world_details):
 	rset("world_str", _world_str)
+	rset("world_details", _world_details)
 	var scene = scene_manager._load_scene(scene_str)
 	scene_manager._replace_scene(scene)
 
