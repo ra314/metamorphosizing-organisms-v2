@@ -150,6 +150,7 @@ func host():
 		register_player(player_name, get_tree().get_network_unique_id())
 
 func guest(server_IP):
+	save_used_IP(server_IP)
 	# Default of 127.0.0.1
 	if not server_IP:
 		server_IP = LOCAL_HOST
@@ -226,4 +227,22 @@ func hard_reboot():
 	remove_child(disconnection_container)
 	disconnection_container.queue_free()
 	disconnection_container = null
+#######
+
+# IP Saving
+#######
+# Loading the previously used IP address
+func get_last_used_IP():
+	var file = File.new()
+	file.open("user://last_ip.dat", File.READ)
+	var text = file.get_as_text()
+	file.close()
+	return text
+
+# Store the entered IP address
+func save_used_IP(server_IP):
+	var file = File.new()
+	file.open("user://last_ip.dat", File.WRITE)
+	file.store_string(server_IP)
+	file.close()
 #######

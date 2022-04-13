@@ -8,6 +8,8 @@ func _ready():
 	container.get_node("Connect/Button").connect("button_down", self, "_load_scene", ["UI/Waiting"])
 	
 	$TextureButton.connect("button_down", self, "back")
+	
+	$CenterContainer/VBoxContainer/HBoxContainer/TextEdit.text = _root.get_last_used_IP()
 
 func back():
 	# Removing the current scene from history
