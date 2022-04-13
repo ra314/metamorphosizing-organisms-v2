@@ -358,6 +358,7 @@ func cascading_grid_match_and_distribute():
 # the provided tile_type. This is reasonable to make in a rectangular 2d grid,
 # since if more than half were of the same type, a match would be triggered.
 # It shuffles all tiles of tile_type to another location that is not of tile_type.
+signal shuffle_tiles_end
 func shuffle_tiles(tile_type):
 	var target_tile_locations = []
 	var non_target_tile_locations = []
@@ -375,6 +376,7 @@ func shuffle_tiles(tile_type):
 	
 	yield(animate(), "completed")
 	yield(cascading_grid_match_and_distribute(), "completed")
+	emit_signal("shuffle_tiles_end")
 
 # Given a list of tiles, average global position of all tiles
 func get_central_location(tiles):
