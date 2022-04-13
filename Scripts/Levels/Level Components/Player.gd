@@ -55,6 +55,8 @@ func tween_HP(delta):
 	else:
 		num.add_color_override("default_color", Color.red)
 		type.text = "DMG"
+		
+	indicator.rect_scale = Vector2(1, 1)
 	
 	$Tween.interpolate_property(indicator, "rect_scale", indicator.rect_scale * 2, indicator.rect_scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
 	$Tween.interpolate_property(indicator, "modulate", indicator.modulate, Color.transparent, 2, Tween.TRANS_BACK, Tween.EASE_OUT, 2)
@@ -63,6 +65,8 @@ func tween_HP(delta):
 	
 	var health_icon = get_node("Health_Control/Health_Icon")
 	var health_text = get_node("Health_Control/Health/Text")
+	
+	health_icon.scale = Vector2(1, 1)
 	
 	$Tween.interpolate_property(health_icon, "scale", health_icon.scale * 2, health_icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
 	
