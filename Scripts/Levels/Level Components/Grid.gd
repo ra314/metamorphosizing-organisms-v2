@@ -15,8 +15,9 @@ func _ready():
 func ready():
 	initialize_grid()
 	# Cascading matches but with no collection of mana or extra moves
+	# This doesn't animate
 	while np.sum2d(find_matches_in_grid()):
-		yield(remove_matched_tiles_and_fill_grid(find_matches_in_grid(), true), "completed")
+		remove_matched_tiles_and_fill_grid(find_matches_in_grid(), false);
 
 # Create all tiles and randomly pick textures
 func initialize_grid():
@@ -111,7 +112,7 @@ func remove_matched_tiles_and_fill_grid(matches, animate=true):
 		for x in range(grid_size[1]):
 			if matches[y][x] != 0:
 				# Tile will have a disappear animation but the place it occupied will be null
-				remove_tile(grid[y][x])
+				remove_tile(grid[y][x], animate)
 				grid[y][x] = null
 	
 	# We want to iterate from the bottom row up
@@ -261,7 +262,10 @@ func move_tile(object, destination, duration, curr_position, delay):
 	$Tween.interpolate_property(object, "rect_position", curr_position, destination, duration, Tween.TRANS_BOUNCE, Tween.EASE_OUT, delay)
 
 const tile_disappear_speed = 1
-func remove_tile(object):
+func remove_tile(object, animate = true):
+	if not animate:
+		return
+		
 	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, Vector2(0, 0), tile_disappear_speed, Tween.TRANS_SINE, Tween.EASE_OUT)
 	$Tween.interpolate_callback(self, tile_disappear_speed, "delete_tile", object)
 	$Tween.start()
