@@ -150,11 +150,17 @@ func add_extra_move(extra_move_tiles):
 		return
 	
 	if extra_move_tiles:
-		# Get all the tiles that were part of the extra move and flash them
-		for tile in extra_move_tiles:
-			tile.flash()
+		yield(show_extra_move_text(extra_move_tiles), "completed")
 	
+	curr_moves += 1
+	max_moves += 1
+	update_move_icons()
+
+func show_extra_move_text(extra_move_tiles):
 	var extra_move_text = get_node("Match_Control/Extra_Move")
+	# Get all the tiles that were part of the extra move and flash them
+	for tile in extra_move_tiles:
+		tile.flash()
 	extra_move_text.rect_global_position = grid.get_central_location(extra_move_tiles)
 	
 	# Makes the text fade in for 2 seconds then fade out for 1 second
@@ -162,12 +168,10 @@ func add_extra_move(extra_move_tiles):
 	$Tween.interpolate_property(extra_move_text, "modulate", Color.white, Color.transparent, 1, Tween.TRANS_BACK, Tween.EASE_OUT, 2)
 	$Tween.start()
 	
-	curr_moves += 1
-	max_moves += 1
-	update_move_icons()
-	
 	# Waiting for 2 seconds so that the animation is clear
 	yield(get_tree().create_timer(2), "timeout")
+	
+	return null
 
 func remove_move():
 	if curr_moves > 0:

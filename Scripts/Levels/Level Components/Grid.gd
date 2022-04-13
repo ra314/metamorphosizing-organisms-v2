@@ -264,12 +264,13 @@ func move_tile(object, destination, duration, curr_position, delay):
 const tile_disappear_speed = 1
 func remove_tile(object, animate = true):
 	if not animate:
+		delete_tile(object)
 		return
 		
 	$Tween.interpolate_property(object, "rect_scale", object.rect_scale, Vector2(0, 0), tile_disappear_speed, Tween.TRANS_SINE, Tween.EASE_OUT)
 	$Tween.interpolate_callback(self, tile_disappear_speed, "delete_tile", object)
 	$Tween.start()
-	
+
 # Called when certain abilities convert or add tiles to the grid
 const tile_appear_speed = 0.5
 func add_tile(object):
