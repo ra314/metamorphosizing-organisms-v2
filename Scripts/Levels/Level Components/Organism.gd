@@ -113,6 +113,7 @@ remotesync func boost2():
 func flip_sprite():
 	$Sprite.flip_h = !$Sprite.flip_h
 
+const MANA_ICON_SCALE = Vector2(1,1)*0.483
 func change_mana(delta):
 	# Prevent the absorption of mana if blocked, but allow the draining of mana
 	if mana_absorption_blocked:
@@ -125,7 +126,7 @@ func change_mana(delta):
 	mana = clamp(mana + delta, 0, mana_to_activate)
 	
 	# Animation for the mana icon
-	$Mana_Icon.scale = Vector2(1, 1)
+	$Mana_Icon.scale = MANA_ICON_SCALE
 	
 	if delta > 0:
 		$Tween.interpolate_property($Mana_Icon, "scale", $Mana_Icon.scale * 1.5, $Mana_Icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
