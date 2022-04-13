@@ -150,12 +150,12 @@ func add_extra_move(extra_move_tiles):
 	if max_moves == absolute_max_moves:
 		return
 	
-	if extra_move_tiles:
-		yield(show_extra_move_text(extra_move_tiles), "completed")
-	
 	curr_moves += 1
 	max_moves += 1
 	update_move_icons()
+	
+	if extra_move_tiles:
+		yield(show_extra_move_text(extra_move_tiles), "completed")
 
 func show_extra_move_text(extra_move_tiles):
 	var extra_move_text = get_node("Match_Control/Extra_Move")
