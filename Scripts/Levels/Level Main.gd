@@ -107,6 +107,7 @@ func _ready():
 	grid.connect("swap_start", self, "before_process")
 	grid.connect("swap_end", self, "after_process")
 	grid.connect("shuffle_tiles_end", self, "after_process")
+	grid.connect("shuffle_tiles_end", self, "update_curr_player_ui_and_show_berries")
 	grid.connect("collect_mana_from_grid", self, "distribute_mana")
 	grid.connect("extra_move", self, "add_extra_move")
 	grid.ready()
@@ -114,6 +115,9 @@ func _ready():
 	$CanvasLayer/Help.connect("button_down", _root, "open_popup", [world_str, world_details])
 	
 	start_turn()
+
+func update_curr_player_ui_and_show_berries():
+	curr_player.update_ui(true)
 
 func create_organism_ability_notification(organism, duration, alignment):
 	_root.create_notification(organism.ability_description, duration, alignment)
@@ -138,7 +142,6 @@ func distribute_mana(mana_array):
 		for organism in curr_player.organisms:
 			var mana_to_give = mana_array[organism.mana_enum]
 			mana_array[organism.mana_enum] -= organism.change_mana(mana_to_give)
-	curr_player.update_ui(true)
 
 signal turn_starting
 func start_turn():
