@@ -127,6 +127,7 @@ func change_mana(delta):
 	
 	# Animation for the mana icon
 	$Mana_Icon.scale = MANA_ICON_SCALE
+	$Mana_Icon.modulate = Color.white
 	
 	if delta > 0:
 		$Tween.interpolate_property($Mana_Icon, "scale", $Mana_Icon.scale * 1.5, $Mana_Icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
