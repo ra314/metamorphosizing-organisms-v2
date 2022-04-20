@@ -113,6 +113,7 @@ func _ready():
 	grid.ready()
 	
 	$CanvasLayer/Help.connect("button_down", _root, "open_popup", [world_str, world_details])
+	$CanvasLayer/Clear.connect("button_down", _root, "clear_all_notifications")
 	
 	start_turn()
 

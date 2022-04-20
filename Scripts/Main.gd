@@ -115,6 +115,8 @@ remote func create_notification(notification_str, duration=3, alignment=Label.AL
 	get_tree().create_timer(duration).connect("timeout", self, "delete_last_notification")
 
 func delete_last_notification():
+	if not notifications:
+		return
 	var notification = notifications.pop_front()
 	if notification.align == Label.ALIGN_LEFT:
 		$CL/HBox/VBoxLeft.remove_child(notification)
@@ -124,6 +126,10 @@ func delete_last_notification():
 		printerr("Invalid alignment received")
 		assert(false)
 	notification.queue_free()
+
+func clear_all_notifications():
+	while notifications:
+		delete_last_notification()
 #######
 
 # Popup system
