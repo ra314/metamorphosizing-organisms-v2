@@ -67,14 +67,20 @@ func _ready():
 	# Creating notifications for evolution, boosting and triggering of abilities
 	for player in players:
 		for organism in player.organisms:
+			organism.alignment = Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT
+	for player in players:
+		for organism in player.organisms:
 			organism.connect("evolving_start", _root, "create_notification",
-				[organism.oname + " is evolving.", 3, 
-				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
+				[organism.oname + " is evolving.", 3, organism.alignment])
 			organism.connect("boost", _root, "create_notification",
-				[organism.oname + " is boosting.", 3, 
-				Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
+				[organism.oname + " is boosting.", 3, organism.alignment])
+			# Theres a reason this one signal needs create_organism_ability_notification
+			# Connections are set at initialization, so when an organism evoles
+			# and it's ability description changes, this isn't reflected in the notification
 			organism.connect("doing_ability", self, "create_organism_ability_notification",
-				[organism, 10, Label.ALIGN_LEFT if player.pname == "P1" else Label.ALIGN_RIGHT])
+				[organism, 10])
+			organism.connect("doing_mini_ability", self, "create_organism_mini_ability_notification",
+				[organism, 10])
 	
 	# Triggering turn end stuff for evolution and boosting
 	for player in players:
@@ -120,8 +126,12 @@ func _ready():
 func update_curr_player_ui_and_show_berries():
 	curr_player.update_ui(true)
 
-func create_organism_ability_notification(organism, duration, alignment):
-	_root.create_notification(organism.ability_description, duration, alignment)
+func create_organism_ability_notification(organism, duration):
+	_root.create_notification(organism.ability_description, duration, organism.alignment)
+
+func create_organism_mini_ability_notification(organism, duration, alignment):
+	var message = organism.oname + "'s " + organism.ability + " was triggered."
+	_root.create_notification(message, duration, organism.alignment)
 
 func lava_damage_player(mana_array):
 	if mana_array[ManaTex.enum("fire")]:
@@ -234,16 +244,17 @@ func compare_actions(action1, action2):
 func process_actions(actions):
 	# Why sort the actions?
 	# Consider the ability that prevent an organism from absorbing mana
-	# It could be on that in the list of actions there's to instances of this ability
-	# We don't want the blocking to be set to false if there's still an ability that can set it to true
-	# But it could be that the ability that set's it to true get's processed after the one that set's it to false
+	# It could be on that in the list of actions there's 2 instances of this ability
+	# We don't want the blocking mana to be set to true in the cleanup
+	# if there's still another blocking mana ability with a longer duration that can set it to false
 	# We sort to get around this
 	actions.sort_custom(self, "compare_actions")
 	for a in actions:
 		if a['num_times'] > 0:
-			# Check if the action can be executed
+			# Check if the action can be executed and execute it
 			if a['object'].call(a['action'], a['caster']):
 				a['num_times'] -= 1
+				
 		if a['num_times'] == 0 and (a['cleanup'] != null):
 			a['object'].call(a['cleanup'], a['caster'])
 			a['num_times'] -= 1

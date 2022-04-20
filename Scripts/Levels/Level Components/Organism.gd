@@ -8,6 +8,7 @@ var mana_type
 var mana_enum
 
 var game
+var alignment
 
 var is_evolved = false
 
@@ -18,6 +19,7 @@ func change_extra_mana_to_activate(delta):
 	extra_mana_to_activate += delta
 	$Mana_Bar.max_value = mana_to_activate + extra_mana_to_activate
 	update_ui()
+
 func is_full_of_mana():
 	return mana == mana_to_activate + extra_mana_to_activate
 
@@ -148,8 +150,8 @@ func tween_mana(prev_mana, mana):
 	$Tween.start()
 	
 func update_ui():
-	# $Mana_Bar.value = mana
-	$Mana_Text.text = str(mana) + "/" + str(mana_to_activate)
+	$Mana_Bar.value = mana
+	$Mana_Text.text = str(mana) + "/" + str(mana_to_activate + extra_mana_to_activate)
 	
 func show_berry_actions():
 	$Berry_Control.show()
@@ -166,6 +168,7 @@ func hide_berry_actions():
 ####### Abilities
 var damage_to_take_from_activating_ability = 0
 signal doing_ability
+signal doing_mini_ability
 func do_ability():
 	if mana == mana_to_activate:
 		change_mana(-mana_to_activate)
@@ -174,8 +177,6 @@ func do_ability():
 		if damage_to_take_from_activating_ability > 0:
 			game.curr_player.change_HP(-damage_to_take_from_activating_ability)
 		update_ui()
-
-var temp_data = {}
 
 func sear():
 	game.next_player.change_HP(-20)
@@ -211,6 +212,7 @@ func perseverance():
 	game.register_repeated_action(self, "perseverance_mini", 3, "turn_end")
 
 func perseverance_mini(player):
+	emit_signal("doing_mini_ability")
 	player.change_HP(5)
 	game.get_other_player(player).change_HP(-5)
 	return true
@@ -219,6 +221,7 @@ func fortitude():
 	game.register_repeated_action(self, "fortitude_mini", 2, "turn_end")
 
 func fortitude_mini(player):
+	emit_signal("doing_mini_ability")
 	player.change_HP(10)
 	game.get_other_player(player).change_HP(-10)
 	return true
@@ -229,6 +232,7 @@ func ovation():
 
 func ovation_mini(player):
 	if game.curr_player == player:
+		emit_signal("doing_mini_ability")
 		game.add_extra_move(null)
 		return true
 	return false
@@ -239,6 +243,7 @@ func encore():
 
 func encore_mini(player):
 	if game.curr_player == player:
+		emit_signal("doing_mini_ability")
 		game.add_extra_move(null)
 		return true
 	return false
@@ -261,6 +266,7 @@ func headway():
 
 func headway_mini(player):
 	if game.curr_player == player:
+		emit_signal("doing_mini_ability")
 		game.remove_move()
 		return true
 	return false
@@ -271,6 +277,7 @@ func breakthrough():
 
 func breakthrough_mini(player):
 	if game.curr_player == player:
+		emit_signal("doing_mini_ability")
 		game.remove_move()
 		return true
 	return false
@@ -281,6 +288,7 @@ func A025():
 
 func A025_mini(player):
 	if game.curr_player == player:
+		emit_signal("doing_mini_ability")
 		player.change_berries(1)
 		return true
 	return false
@@ -291,6 +299,7 @@ func A026():
 
 func A026_mini(player):
 	if game.curr_player == player:
+		emit_signal("doing_mini_ability")
 		player.change_berries(1)
 		return true
 	return false
@@ -303,6 +312,7 @@ func A027():
 
 func A027_mini(player):
 	if game.get_other_player(player) == game.curr_player:
+		emit_signal("doing_mini_ability")
 		game.remove_move()
 		return true
 	return false
@@ -314,18 +324,22 @@ func A028():
 
 func A028_mini(player):
 	if game.get_other_player(player) == game.curr_player:
+		emit_signal("doing_mini_ability")
 		game.remove_move()
 		return true
 	return false
 
+var A29or30 = []
 func A029():
 	game.next_player.change_HP(-5)
-	var random_org = Utils.select_random(game.next_player.organisms)
-	random_org.set_mana_absorption_blocked(true)
-	if 'A029' in temp_data:
-		temp_data['A029'].append(random_org)
-	else:
-		temp_data['A029'] = [random_org]
+	var target_org = Utils.select_random_or_remaining(A29or30, game.next_player.organisms)
+	if target_org == null:
+		var message = "No targets were found for A029."
+		game._root.create_notification(message, 10, alignment)
+	target_org.set_mana_absorption_blocked(true)
+	A29or30.append(target_org)
+	var message = target_org.oname + " was afflicted with A029"
+	game._root.create_notification(message, 10, target_org.alignment)
 	game.register_repeated_action(self, "A029_mini", 2, "move_start", "A029_cleanup")
 
 func A029_mini(player):
@@ -334,16 +348,21 @@ func A029_mini(player):
 	return false
 
 func A029_cleanup(player):
-	temp_data['A029'].pop_back().set_mana_absorption_blocked(false)
+	var target_org = A29or30.pop_front()
+	target_org.set_mana_absorption_blocked(false)
+	var message = target_org.oname + " was cured of A029"
+	game._root.create_notification(message, 10, target_org.alignment)
 
 func A030():
 	game.next_player.change_HP(-15)
-	var random_org = Utils.select_random(game.next_player.organisms)
-	random_org.set_mana_absorption_blocked(true)
-	if 'A030' in temp_data:
-		temp_data['A030'].append(random_org)
-	else:
-		temp_data['A030'] = [random_org]
+	var target_org = Utils.select_random_or_remaining(A29or30, game.next_player.organisms)
+	if target_org == null:
+		var message = "No targets were found for A030."
+		game._root.create_notification(message, 10, alignment)
+	target_org.set_mana_absorption_blocked(true)
+	A29or30.append(target_org)
+	var message = target_org.oname + " was afflicted with A030"
+	game._root.create_notification(message, 10, alignment)
 	game.register_repeated_action(self, "A030_mini", 2, "move_start", "A030_cleanup")
 
 func A030_mini(player):
@@ -352,7 +371,10 @@ func A030_mini(player):
 	return false
 
 func A030_cleanup(player):
-	temp_data['A030'].pop_back().set_mana_absorption_blocked(false)
+	var target_org = A29or30.pop_front()
+	target_org.set_mana_absorption_blocked(false)
+	var message = target_org.oname + " was cured of A030"
+	game._root.create_notification(message, 10, target_org.alignment)
 
 func A031():
 	game.next_player.change_HP(-10)
@@ -360,8 +382,12 @@ func A031():
 
 func A031_mini(player):
 	if game.get_other_player(player) == game.curr_player:
+		emit_signal("doing_mini_ability")
 		for organism in game.curr_player.organisms:
-			organism.damage_to_take_from_activating_ability = max(10, organism.damage_to_take_from_activating_ability)
+			# Max is used here since it is possible that A032_mini is active and
+			# damage_to_take_from_activating_ability is > 10
+			organism.damage_to_take_from_activating_ability = \
+				max(10, organism.damage_to_take_from_activating_ability)
 		return true
 	return false
 
@@ -375,8 +401,9 @@ func A032():
 
 func A032_mini(player):
 	if game.get_other_player(player) == game.curr_player:
+		emit_signal("doing_mini_ability")
 		for organism in game.curr_player.organisms:
-			organism.damage_to_take_from_activating_ability = max(15, organism.damage_to_take_from_activating_ability)
+			organism.damage_to_take_from_activating_ability = 15
 		return true
 	return false
 
@@ -384,14 +411,17 @@ func A032_cleanup(player):
 	for organism in game.curr_player.organisms:
 		organism.damage_to_take_from_activating_ability = 0
 
+var A33or34 = []
 func A033():
 	game.next_player.change_HP(-15)
-	var random_org = Utils.select_random(game.next_player.organisms)
-	random_org.change_extra_mana_to_activate(3)
-	if 'A033' in temp_data:
-		temp_data['A033'].append(random_org)
-	else:
-		temp_data['A033'] = [random_org]
+	var target_org = Utils.select_random_or_remaining(A33or34, game.next_player.organisms)
+	if target_org == null:
+		var message = "No targets were found for A033."
+		game._root.create_notification(message, 10, alignment)
+	target_org.change_extra_mana_to_activate(3)
+	A33or34.append(target_org)
+	var message = target_org.oname + " was afflicted with A033"
+	game._root.create_notification(message, 10, target_org.alignment)
 	game.register_repeated_action(self, "A033_mini", 2, "turn_start", "A033_cleanup")
 
 func A033_mini(player):
@@ -400,22 +430,33 @@ func A033_mini(player):
 	return false
 
 func A033_cleanup(player):
-	temp_data['A033'].pop_back().change_extra_mana_to_activate(-3)
+	var target_org = A33or34.pop_front()
+	target_org.change_extra_mana_to_activate(-3)
+	var message = target_org.oname + " was cured of A033"
+	game._root.create_notification(message, 10, target_org.alignment)
 
 func A034():
 	game.next_player.change_HP(-25)
+	var target_org = Utils.select_random_or_remaining(A33or34, game.next_player.organisms)
+	if target_org == null:
+		var message = "No targets were found for A034."
+		game._root.create_notification(message, 10, alignment)
+	target_org.change_extra_mana_to_activate(3)
+	A33or34.append(target_org)
+	var message = target_org.oname + " was afflicted with A034"
+	game._root.create_notification(message, 10, alignment)
 	game.register_repeated_action(self, "A034_mini", 3, "turn_start", "A034_cleanup")
 
 func A034_mini(player):
 	if game.get_other_player(player) == game.curr_player:
-		for organism in game.curr_player.organisms:
-			organism.change_extra_mana_to_activate(3)
 		return true
 	return false
 
 func A034_cleanup(player):
-	for organism in game.curr_player.organisms:
-		organism.change_extra_mana_to_activate(-3)
+	var target_org = A33or34.pop_front()
+	target_org.change_extra_mana_to_activate(-3)
+	var message = target_org.oname + " was cured of A034"
+	game._root.create_notification(message, 10, target_org.alignment)
 
 func A035():
 	game.next_player.change_HP(-10)
@@ -423,6 +464,7 @@ func A035():
 
 func A035_mini(player):
 	if game.get_other_player(player) == game.curr_player:
+		emit_signal("doing_mini_ability")
 		Utils.select_random(game.get_other_player(player).organisms).change_mana(-1)
 		return true
 	return false
@@ -433,6 +475,7 @@ func A036():
 
 func A036_mini(player):
 	if game.get_other_player(player) == game.curr_player:
+		emit_signal("doing_mini_ability")
 		Utils.select_random(game.get_other_player(player).organisms).change_mana(-2)
 		return true
 	return false

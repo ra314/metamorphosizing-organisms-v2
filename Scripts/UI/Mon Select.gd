@@ -4,7 +4,7 @@ const selection_text = "Selected: "
 onready var _root: Main = get_tree().get_root().get_node("Main")
 onready var Organism = load("res://Scenes/Levels/Level Components/Organism.tscn")
 var UIgrid = load("res://Scripts/UI_Grid.gd").new()
-
+"res://Level Components/Organism.tscn"
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	UIgrid.init(512*0.5,512*0.5,6,Vector2(256, 256)*0.5+Vector2(200, 200))
