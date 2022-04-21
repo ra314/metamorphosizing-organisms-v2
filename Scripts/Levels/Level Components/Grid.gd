@@ -1,5 +1,22 @@
 extends Node2D
 
+const test_mode = true
+# Values for easy readability
+# 1 = Fire
+# 2 = Water
+# 3 = Electric
+# 4 = Grass
+# 5 = Psychic
+# 6 = Berry
+const grid_tests = {
+	"A029": [[1, 4, 2, 5, 4, 6, 1],
+			 [2, 4, 3, 6, 1, 6, 1],
+			 [5, 3, 3, 2, 3, 1, 2],
+			 [2, 4, 6, 1, 5, 2, 1],
+			 [6, 2, 1, 4, 5, 6, 3]]
+}
+const grid_test = "A029"
+
 # [num rows, num cols]
 const grid_size = [5,7]
 
@@ -13,19 +30,35 @@ func _ready():
 	pass
 
 func ready():
-	initialize_grid()
+	var test_grid = null
+	if test_mode:
+		test_grid = grid_tests[grid_test]
+		
+	initialize_grid(test_grid)
 	# Cascading matches but with no collection of mana or extra moves
 	# This doesn't animate
 	while np.sum2d(find_matches_in_grid()):
 		remove_matched_tiles_and_fill_grid(find_matches_in_grid(), false);
 
 # Create all tiles and randomly pick textures
-func initialize_grid():
+func initialize_grid(test_grid = null):
 	for y in range(grid_size[0]):
 		var row = []
 		for x in range(grid_size[1]):
-			row.append(Tile.instance().init(y, x, Utils.rng.randi(), self))
+			
+			var tile = null
+			
+			# If we are forcing a grid in the initialize function
+			# Use the value from that grid
+			if test_grid:
+				var tile_type = test_grid[y][x]
+				tile = Tile.instance().init(y, x, tile_type, self, true)
+			else:
+				tile = Tile.instance().init(y, x, Utils.rng.randi(), self)
+				
+			row.append(tile)
 			add_child(row[-1])
+			
 		grid.append(row)
 
 # Returns a 2d array where tiles that aren't part of a match are 0.
