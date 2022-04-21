@@ -393,6 +393,8 @@ func A031_mini(player):
 
 func A031_cleanup(player):
 	for organism in game.curr_player.organisms:
+		var message = organism.oname + " was cured of A031"
+		game._root.create_notification(message, 10, organism.alignment)
 		organism.damage_to_take_from_activating_ability = 0
 
 func A032():
@@ -409,6 +411,8 @@ func A032_mini(player):
 
 func A032_cleanup(player):
 	for organism in game.curr_player.organisms:
+		var message = organism.oname + " was cured of A032"
+		game._root.create_notification(message, 10, organism.alignment)
 		organism.damage_to_take_from_activating_ability = 0
 
 var A33or34 = []
