@@ -209,7 +209,9 @@ func awe():
 # that the mini ability is called.
 
 func perseverance():
-	game.register_repeated_action(self, "perseverance_mini", 3, "turn_end")
+	var args = {'object': self, 'action': 'perseverance_mini',
+				'num_times': 3, 'action_type': 'turn_end'}
+	game.register_repeated_action(args)
 
 func perseverance_mini(player):
 	emit_signal("doing_mini_ability")
@@ -218,7 +220,9 @@ func perseverance_mini(player):
 	return true
 
 func fortitude():
-	game.register_repeated_action(self, "fortitude_mini", 2, "turn_end")
+	var args = {'object': self, 'action': 'fortitude_mini',
+				'num_times': 2, 'action_type': 'turn_end'}
+	game.register_repeated_action(args)
 
 func fortitude_mini(player):
 	emit_signal("doing_mini_ability")
@@ -228,7 +232,9 @@ func fortitude_mini(player):
 
 func ovation():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "ovation_mini", 1, "turn_start")
+	var args = {'object': self, 'action': 'ovation_mini',
+				'num_times': 1, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func ovation_mini(player):
 	if game.curr_player == player:
@@ -239,7 +245,9 @@ func ovation_mini(player):
 
 func encore():
 	game.next_player.change_HP(-15)
-	game.register_repeated_action(self, "encore_mini", 2, "turn_start")
+	var args = {'object': self, 'action': 'encore_mini',
+				'num_times': 2, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func encore_mini(player):
 	if game.curr_player == player:
@@ -262,7 +270,9 @@ func reform():
 
 func headway():
 	game.next_player.change_HP(-30)
-	game.register_repeated_action(self, "headway_mini", 2, "turn_start")
+	var args = {'object': self, 'action': 'headway_mini',
+				'num_times': 2, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func headway_mini(player):
 	if game.curr_player == player:
@@ -273,7 +283,9 @@ func headway_mini(player):
 	
 func breakthrough():
 	game.next_player.change_HP(-40)
-	game.register_repeated_action(self, "breakthrough_mini", 2, "turn_start")
+	var args = {'object': self, 'action': 'breakthrough_mini',
+				'num_times': 2, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func breakthrough_mini(player):
 	if game.curr_player == player:
@@ -284,7 +296,9 @@ func breakthrough_mini(player):
 	
 func A025():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "A025_mini", 2, "turn_start")
+	var args = {'object': self, 'action': 'A025_mini',
+				'num_times': 2, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func A025_mini(player):
 	if game.curr_player == player:
@@ -295,7 +309,9 @@ func A025_mini(player):
 	
 func A026():
 	game.next_player.change_HP(-20)
-	game.register_repeated_action(self, "A026_mini", 3, "turn_start")
+	var args = {'object': self, 'action': 'A026_mini',
+				'num_times': 3, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func A026_mini(player):
 	if game.curr_player == player:
@@ -308,7 +324,9 @@ func A027():
 	game.next_player.change_HP(-10)
 	game.grid.force_grid_match(1, 1, 3)
 	# match 3 tiles
-	game.register_repeated_action(self, "A027_mini", 1, "turn_start")
+	var args = {'object': self, 'action': 'A027_mini',
+				'num_times': 1, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func A027_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -320,7 +338,9 @@ func A027_mini(player):
 func A028():
 	game.next_player.change_HP(-20)
 	game.grid.force_grid_match(1, 1, 6)
-	game.register_repeated_action(self, "A028_mini", 1, "turn_start")
+	var args = {'object': self, 'action': 'A028_mini',
+				'num_times': 1, 'action_type': 'turn_start'}
+	game.register_repeated_action(args)
 
 func A028_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -336,11 +356,15 @@ func A029():
 	if target_org == null:
 		var message = "No targets were found for A029."
 		game._root.create_notification(message, 10, alignment)
+	
 	target_org.set_mana_absorption_blocked(true)
 	A29or30.append(target_org)
 	var message = target_org.oname + " was afflicted with A029"
 	game._root.create_notification(message, 10, target_org.alignment)
-	game.register_repeated_action(self, "A029_mini", 2, "move_start", "A029_cleanup")
+	
+	var args = {'object': self, 'action': 'A029_mini',
+				'num_times': 2, 'action_type': 'move_start', 'cleanup': 'A029_cleanup'}
+	game.register_repeated_action(args)
 
 func A029_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -359,11 +383,15 @@ func A030():
 	if target_org == null:
 		var message = "No targets were found for A030."
 		game._root.create_notification(message, 10, alignment)
+	
 	target_org.set_mana_absorption_blocked(true)
 	A29or30.append(target_org)
 	var message = target_org.oname + " was afflicted with A030"
 	game._root.create_notification(message, 10, alignment)
-	game.register_repeated_action(self, "A030_mini", 2, "move_start", "A030_cleanup")
+	
+	var args = {'object': self, 'action': 'A030_mini',
+				'num_times': 2, 'action_type': 'move_start', 'cleanup': 'A030_cleanup'}
+	game.register_repeated_action(args)
 
 func A030_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -378,7 +406,9 @@ func A030_cleanup(player):
 
 func A031():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "A031_mini", 2, "turn_start", "A031_cleanup")
+	var args = {'object': self, 'action': 'A031_mini',
+				'num_times': 2, 'action_type': 'turn_start', 'cleanup': 'A031_cleanup'}
+	game.register_repeated_action(args)
 
 func A031_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -399,7 +429,9 @@ func A031_cleanup(player):
 
 func A032():
 	game.next_player.change_HP(-15)
-	game.register_repeated_action(self, "A032_mini", 2, "turn_start", "A032_cleanup")
+	var args = {'object': self, 'action': 'A032_mini',
+				'num_times': 2, 'action_type': 'turn_start', 'cleanup': 'A032_cleanup'}
+	game.register_repeated_action(args)
 
 func A032_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -422,11 +454,15 @@ func A033():
 	if target_org == null:
 		var message = "No targets were found for A033."
 		game._root.create_notification(message, 10, alignment)
+	
 	target_org.change_extra_mana_to_activate(3)
 	A33or34.append(target_org)
 	var message = target_org.oname + " was afflicted with A033"
 	game._root.create_notification(message, 10, target_org.alignment)
-	game.register_repeated_action(self, "A033_mini", 2, "turn_start", "A033_cleanup")
+	
+	var args = {'object': self, 'action': 'A033_mini',
+				'num_times': 2, 'action_type': 'turn_start', 'cleanup': 'A033_cleanup'}
+	game.register_repeated_action(args)
 
 func A033_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -445,11 +481,15 @@ func A034():
 	if target_org == null:
 		var message = "No targets were found for A034."
 		game._root.create_notification(message, 10, alignment)
+	
 	target_org.change_extra_mana_to_activate(3)
 	A33or34.append(target_org)
 	var message = target_org.oname + " was afflicted with A034"
 	game._root.create_notification(message, 10, alignment)
-	game.register_repeated_action(self, "A034_mini", 3, "turn_start", "A034_cleanup")
+	
+	var args = {'object': self, 'action': 'A034_mini',
+				'num_times': 3, 'action_type': 'turn_start', 'cleanup': 'A034_cleanup'}
+	game.register_repeated_action(args)
 
 func A034_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -464,7 +504,9 @@ func A034_cleanup(player):
 
 func A035():
 	game.next_player.change_HP(-10)
-	game.register_repeated_action(self, "A035_mini", 3, "move_start")
+	var args = {'object': self, 'action': 'A035_mini',
+				'num_times': 3, 'action_type': 'move_start'}
+	game.register_repeated_action(args)
 
 func A035_mini(player):
 	if game.get_other_player(player) == game.curr_player:
@@ -475,7 +517,9 @@ func A035_mini(player):
 
 func A036():
 	game.next_player.change_HP(-15)
-	game.register_repeated_action(self, "A036_mini", 3, "move_start")
+	var args = {'object': self, 'action': 'A036_mini',
+				'num_times': 3, 'action_type': 'move_start'}
+	game.register_repeated_action(args)
 
 func A036_mini(player):
 	if game.get_other_player(player) == game.curr_player:

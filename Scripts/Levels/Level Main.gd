@@ -205,7 +205,7 @@ func before_process():
 	
 	# Assuming that level main handles all the moves, player moves will update here
 	remove_move()
-	process_actions(move_start_actions)
+	process_actions(actions['move_start'])
 
 # Called when the grid is done processing a move
 func after_process():
@@ -222,11 +222,11 @@ func after_process():
 	
 	# Changing turns
 	if curr_moves == 0:
-		process_actions(turn_end_actions)
+		process_actions(actions['turn_end'])
 		curr_player.update_ui()
 		change_to_next_player()
 		start_turn()
-		process_actions(turn_start_actions)
+		process_actions(actions['turn_start'])
 		grid.selected_tile = null
 		# Notify the current player
 		if is_current_player():
@@ -241,39 +241,37 @@ func end_game(loser):
 func compare_actions(action1, action2):
 	return action1['num_times'] > action2['num_times']
 
-func process_actions(actions):
+func process_actions(curr_actions):
 	# Why sort the actions?
 	# Consider the ability that prevent an organism from absorbing mana
 	# It could be on that in the list of actions there's 2 instances of this ability
 	# We don't want the blocking mana to be set to true in the cleanup
 	# if there's still another blocking mana ability with a longer duration that can set it to false
 	# We sort to get around this
-	actions.sort_custom(self, "compare_actions")
-	for a in actions:
+	curr_actions.sort_custom(self, "compare_actions")
+	for a in curr_actions:
 		if a['num_times'] > 0:
 			# Check if the action can be executed and execute it
 			if a['object'].call(a['action'], a['caster']):
 				a['num_times'] -= 1
 				
 		if a['num_times'] == 0 and (a['cleanup'] != null):
-			a['object'].call(a['cleanup'], a['caster'])
+			# Call cleanup at end of turn
+			if a['action_type'] == 'turn_end':
+				a['object'].call(a['cleanup'], a['caster'])
+			else:
+				var args = {'num_times': 1, 'action': a['cleanup'], 
+							'caster': a['caster'], 'object': a['object'],
+							'action_type': 'turn_end'}
+				actions['turn_end'].append(args)
 			a['num_times'] -= 1
 
-var turn_end_actions = []
-var turn_start_actions = []
-var move_start_actions = []
-
-# Format for actions
-# [Organism, Ability_Name, Duration, Casting Player]
-func register_repeated_action(object, method, num_times, action_type, cleanup = null):
-	var subscription = {'num_times': num_times,
-						'action': method,
-						'caster': curr_player,
-						'object': object,
-						'action_type': action_type,
-						'cleanup': cleanup}
-	var actions = get(subscription['action_type']+"_actions")
-	actions.append(subscription)
+const actions = {'turn_end': [], 'turn_start': [], 'move_start': []}
+const register_repeated_action_args = {'num_times': 0, 'action': 0, 'caster': 0, 
+	'object': 0, 'action_type': 0, 'cleanup': 0, 'cleanup_type': 0}
+func register_repeated_action(args: Dictionary):
+	args['caster'] = curr_player
+	actions[args['action_type']].append(args)
 
 var move_icon_active = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Active.png")
 var move_icon_used = load("res://Assets/UI/Player/Game_Player_Moves_Icon_Used.png")

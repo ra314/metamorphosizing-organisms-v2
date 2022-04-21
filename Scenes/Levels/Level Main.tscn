@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://Assets/remove-all.svg" type="Texture" id=1]
+[ext_resource path="res://Assets/Bell.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Levels/Level Main.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/Levels/Level Components/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/UI/Player/Game_Player_Turn_Icon_1.png" type="Texture" id=4]
@@ -102,10 +102,10 @@ __meta__ = {
 }
 
 [node name="Clear" type="TextureButton" parent="CanvasLayer"]
-margin_left = 1791.17
-margin_top = 905.831
-margin_right = 2303.17
-margin_bottom = 1314.83
+margin_left = 1790.17
+margin_top = 880.831
+margin_right = 2302.17
+margin_bottom = 1392.83
 rect_scale = Vector2( 0.25, 0.25 )
 texture_normal = ExtResource( 1 )
 

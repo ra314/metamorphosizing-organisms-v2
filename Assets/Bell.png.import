@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/remove-all.svg-2a416beafe0021c4fbf1fa9dd05b1984.stex"
+path="res://.import/Bell.png-ec80d9f20dc5a091805abc70cdd91635.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/remove-all.svg"
-dest_files=[ "res://.import/remove-all.svg-2a416beafe0021c4fbf1fa9dd05b1984.stex" ]
+source_file="res://Assets/Bell.png"
+dest_files=[ "res://.import/Bell.png-ec80d9f20dc5a091805abc70cdd91635.stex" ]
 
 [params]
 
