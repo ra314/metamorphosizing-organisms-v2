@@ -26,6 +26,3 @@ var keys = dict.keys()
 # Returns the index of the provided mana_type
 func enum(mana_type):
 	return keys.find(mana_type)
-	
-func enum_value(mana_index):
-	return keys[mana_index]

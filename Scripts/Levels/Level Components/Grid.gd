@@ -30,11 +30,11 @@ func _ready():
 	pass
 
 func ready():
-	var test_grid = null
 	if test_mode:
-		test_grid = grid_tests[grid_test]
-		
-	initialize_grid(test_grid)
+		initialize_grid(grid_tests[grid_test])
+	else:
+		initialize_grid()
+	
 	# Cascading matches but with no collection of mana or extra moves
 	# This doesn't animate
 	while np.sum2d(find_matches_in_grid()):
@@ -52,7 +52,7 @@ func initialize_grid(test_grid = null):
 			# Use the value from that grid
 			if test_grid:
 				var tile_type = test_grid[y][x]
-				tile = Tile.instance().init(y, x, tile_type, self, true)
+				tile = Tile.instance().init(y, x, tile_type, self)
 			else:
 				tile = Tile.instance().init(y, x, Utils.rng.randi(), self)
 				
@@ -365,7 +365,7 @@ func convert_tiles(tile_type, num_tiles):
 			var x = coords[1]
 			if grid[y][x].value != tile_type:
 				remove_tile(grid[y][x])
-				var new_tile = Tile.instance().init(y, x, tile_type, self, true)
+				var new_tile = Tile.instance().init(y, x, tile_type, self)
 				grid[y][x] = new_tile
 				add_child(new_tile)
 				
