@@ -210,6 +210,7 @@ func before_process():
 # Called when the grid is done processing a move
 func after_process():
 	yield(grid.cascading_grid_match_and_distribute(), "completed")
+	process_actions(actions['move_end'])
 	restart_timer()
 	update_move_icons()
 	
@@ -255,18 +256,18 @@ func process_actions(curr_actions):
 			if a['object'].call(a['action'], a['caster']):
 				a['num_times'] -= 1
 				
-		if a['num_times'] == 0 and (a['cleanup'] != null):
+		if a['num_times'] == 0 and ('cleanup' in a):
 			# Call cleanup at end of turn
 			if a['action_type'] == 'turn_end':
 				a['object'].call(a['cleanup'], a['caster'])
 			else:
 				var args = {'num_times': 1, 'action': a['cleanup'], 
 							'caster': a['caster'], 'object': a['object'],
-							'action_type': 'turn_end'}
-				actions['turn_end'].append(args)
+							'action_type': 'move_end'}
+				actions['move_end'].append(args)
 			a['num_times'] -= 1
 
-const actions = {'turn_end': [], 'turn_start': [], 'move_start': []}
+const actions = {'turn_end': [], 'turn_start': [], 'move_start': [], 'move_end': []}
 const register_repeated_action_args = {'num_times': 0, 'action': 0, 'caster': 0, 
 	'object': 0, 'action_type': 0, 'cleanup': 0, 'cleanup_type': 0}
 func register_repeated_action(args: Dictionary):

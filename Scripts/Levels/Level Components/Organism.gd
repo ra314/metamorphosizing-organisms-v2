@@ -376,6 +376,7 @@ func A029_cleanup(player):
 	target_org.set_mana_absorption_blocked(false)
 	var message = target_org.oname + " was cured of A029"
 	game._root.create_notification(message, 10, target_org.alignment)
+	return true
 
 func A030():
 	game.next_player.change_HP(-15)
@@ -403,6 +404,7 @@ func A030_cleanup(player):
 	target_org.set_mana_absorption_blocked(false)
 	var message = target_org.oname + " was cured of A030"
 	game._root.create_notification(message, 10, target_org.alignment)
+	return true
 
 func A031():
 	game.next_player.change_HP(-10)
@@ -426,6 +428,7 @@ func A031_cleanup(player):
 		var message = organism.oname + " was cured of A031"
 		game._root.create_notification(message, 10, organism.alignment)
 		organism.damage_to_take_from_activating_ability = 0
+	return true
 
 func A032():
 	game.next_player.change_HP(-15)
@@ -446,6 +449,7 @@ func A032_cleanup(player):
 		var message = organism.oname + " was cured of A032"
 		game._root.create_notification(message, 10, organism.alignment)
 		organism.damage_to_take_from_activating_ability = 0
+	return true
 
 var A33or34 = []
 func A033():
@@ -474,6 +478,7 @@ func A033_cleanup(player):
 	target_org.change_extra_mana_to_activate(-3)
 	var message = target_org.oname + " was cured of A033"
 	game._root.create_notification(message, 10, target_org.alignment)
+	return true
 
 func A034():
 	game.next_player.change_HP(-25)
@@ -501,6 +506,7 @@ func A034_cleanup(player):
 	target_org.change_extra_mana_to_activate(-3)
 	var message = target_org.oname + " was cured of A034"
 	game._root.create_notification(message, 10, target_org.alignment)
+	return true
 
 func A035():
 	game.next_player.change_HP(-10)
