@@ -57,6 +57,7 @@ func _ready():
 	# Give the second player 90 HP as opposed to the default of 80HP.
 	next_player.curr_HP = 90
 	next_player.update_ui()
+	next_player.flip_ui()
 	
 	# Giving the organisms and players a reference to the game
 	for player in players:
