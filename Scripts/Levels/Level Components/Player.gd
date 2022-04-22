@@ -19,6 +19,36 @@ func init(_pname):
 	update_ui()
 	return self
 
+# Called by Level Main if this player is Player 2
+func flip_ui():	
+	var health_control := $Health_Control as Control
+	var berry_control := $Berry_Control as Control
+	
+	# Flip the controls horizontally
+	health_control.rect_scale *= Vector2(-1, 1)
+	berry_control.rect_scale *= Vector2(-1, 1)
+	
+	var health_bar := $Health_Control/Health_Bar as Sprite
+	var health_icon := $Health_Control/Health_Icon as Sprite
+	
+	health_bar.scale *= Vector2(-1, 1)
+	health_icon.scale *= Vector2(-1, 1)
+	
+	var berry_bar := $Berry_Control/Berry_Bar as Sprite
+	var berry_icon := $Berry_Control/Berry_Icon as Sprite
+	
+	berry_bar.scale *= Vector2(-1, 1)
+	berry_icon.scale *= Vector2(-1, 1)
+	
+	var health_text := $Health_Control/Health/Text as RichTextLabel
+	var berry_text := $Berry_Control/Berry/Text as RichTextLabel
+	
+	health_text.rect_scale *= Vector2(-1, 1)
+	berry_text.rect_scale *= Vector2(-1, 1)
+	
+	HEALTH_ICON_SCALE *= Vector2(-1, 1)
+	BERRY_ICON_SCALE *= Vector2(-1, 1)
+	
 func consume_all_berries():
 	change_berries(-berries)
 
@@ -39,14 +69,14 @@ func change_HP(delta):
 	tween_HP(delta)
 	update_ui()
 
-const HEALTH_ICON_SCALE = Vector2(1,1) * 0.52
+var HEALTH_ICON_SCALE = Vector2(1,1) * 0.52
 const INDICATOR_ICON_SCALE = Vector2(1,1) * 1.015
 func tween_HP(delta):
 	$Tween.reset_all()
 	# Animation for the damage indicator
-	var indicator = get_node("Indicator")
-	var num = get_node("Indicator/Number")
-	var type = get_node("Indicator/Type")
+	var indicator := get_node("Indicator") as Control
+	var num := get_node("Indicator/Number") as RichTextLabel
+	var type := get_node("Indicator/Type") as RichTextLabel
 	
 	num.text = str(delta)
 	
@@ -66,11 +96,9 @@ func tween_HP(delta):
 	
 	# Animation for the health icon to pulse a bit
 	
-	var health_icon = get_node("Health_Control/Health_Icon")
-	var health_text = get_node("Health_Control/Health/Text")
-	
-	# Resets the values before the animation
-	health_icon.scale = HEALTH_ICON_SCALE
+	var health_icon := get_node("Health_Control/Health_Icon") as Sprite
+	var health_text := get_node("Health_Control/Health/Text") as RichTextLabel
+		
 	health_text.modulate = Color.white
 	
 	$Tween.interpolate_property(health_icon, "scale", health_icon.scale * 2, health_icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
@@ -82,6 +110,7 @@ func tween_HP(delta):
 		
 	$Tween.start()
 	
+var BERRY_ICON_SCALE = Vector2(1,1) * 0.52
 func change_berries(delta):
 	# Clamping berries
 	var prev_berries = berries
@@ -90,8 +119,8 @@ func change_berries(delta):
 	if delta != 0:
 		# Animation for the berry icon to pulse a bit
 		
-		var berry_icon = get_node("Berry_Control/Berry_Icon")
-		var berry_text = get_node("Berry_Control/Berry/Text")
+		var berry_icon := get_node("Berry_Control/Berry_Icon") as Sprite
+		var berry_text := get_node("Berry_Control/Berry/Text") as RichTextLabel
 		
 		$Tween.interpolate_property(berry_icon, "scale", berry_icon.scale * 2, berry_icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
 		$Tween.start()

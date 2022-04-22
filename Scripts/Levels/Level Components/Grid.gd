@@ -1,6 +1,6 @@
 extends Node2D
 
-const test_mode = true
+const test_mode = false
 # Values for easy readability
 # 1 = Fire
 # 2 = Water

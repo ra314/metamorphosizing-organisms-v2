@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Levels/Level Components/Player.gd" type="Script" id=1]
-[ext_resource path="res://Assets/UI/Player/Game_Player_Resource_Bar.png" type="Texture" id=2]
+[ext_resource path="res://Assets/UI/Player/Game_Player_UI_Bar.png" type="Texture" id=2]
 [ext_resource path="res://Assets/UI/Player/Game_Player_Resource_Heart.png" type="Texture" id=3]
 [ext_resource path="res://Assets/UI/Player/Game_Player_Resource_Berry.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Fonts/Frick_Regular.tres" type="DynamicFont" id=5]
@@ -14,70 +14,64 @@ script = ExtResource( 1 )
 margin_top = -1149.05
 margin_right = 40.0
 margin_bottom = -1109.05
-rect_rotation = 10.4
 
 [node name="Health_Bar" type="Sprite" parent="Health_Control"]
+position = Vector2( -1.92963, 14.8812 )
 texture = ExtResource( 2 )
 
 [node name="Health_Icon" type="Sprite" parent="Health_Control"]
-position = Vector2( 240.064, 9.32355 )
+position = Vector2( 160.369, 9.32355 )
 scale = Vector2( 0.52, 0.52 )
 texture = ExtResource( 3 )
 
 [node name="Health" type="Control" parent="Health_Control"]
-margin_left = 172.279
-margin_right = 212.279
+margin_left = 92.5842
+margin_right = 132.584
 margin_bottom = 40.0
 rect_scale = Vector2( 1.33409, 1.33409 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Text" type="RichTextLabel" parent="Health_Control/Health"]
-margin_left = -294.73
+margin_left = -310.775
 margin_top = -52.7563
-margin_right = 44.2704
+margin_right = 28.2253
 margin_bottom = 189.243
 rect_scale = Vector2( 0.947225, 0.947225 )
+rect_pivot_offset = Vector2( 113, 0 )
 rect_clip_content = false
 custom_colors/default_color = Color( 1, 1, 1, 1 )
 custom_fonts/normal_font = ExtResource( 5 )
 tab_size = 0
 text = "75"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Berry_Control" type="Control" parent="."]
 margin_left = -3.56763
 margin_top = -894.558
 margin_right = 36.4324
 margin_bottom = -854.558
-rect_rotation = 10.4
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Berry_Bar" type="Sprite" parent="Berry_Control"]
+position = Vector2( 0, 16.0459 )
+scale = Vector2( 0.847, 0.847 )
 texture = ExtResource( 2 )
 
 [node name="Berry_Icon" type="Sprite" parent="Berry_Control"]
-position = Vector2( 240.064, 9.32355 )
+position = Vector2( 168.249, 9.32355 )
 scale = Vector2( 0.52, 0.52 )
 texture = ExtResource( 4 )
 
 [node name="Berry" type="Control" parent="Berry_Control"]
-margin_left = 144.928
-margin_right = 184.928
+margin_left = 73.1125
+margin_right = 113.113
 margin_bottom = 40.0
 rect_scale = Vector2( 1.03201, 1.03201 )
 
 [node name="Text" type="RichTextLabel" parent="Berry_Control/Berry"]
-margin_left = -374.956
+margin_left = -395.698
 margin_top = -52.7563
-margin_right = -35.9557
+margin_right = -56.6974
 margin_bottom = 189.243
 rect_scale = Vector2( 0.947225, 0.947225 )
+rect_pivot_offset = Vector2( 169, 0 )
 rect_clip_content = false
 custom_colors/default_color = Color( 1, 1, 1, 1 )
 custom_fonts/normal_font = ExtResource( 5 )
