@@ -282,7 +282,7 @@ func headway_mini(player):
 	return false
 	
 func breakthrough():
-	game.next_player.change_HP(-40)
+	game.next_player.change_HP(-45)
 	var args = {'object': self, 'action': 'breakthrough_mini',
 				'num_times': 2, 'action_type': 'turn_start'}
 	game.register_repeated_action(args)
