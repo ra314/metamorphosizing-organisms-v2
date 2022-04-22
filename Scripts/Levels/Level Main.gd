@@ -4,8 +4,8 @@ onready var _root: Main = get_tree().get_root().get_node("Main")
 
 var game_over = false
 
-var curr_player
-var next_player
+var curr_player : Player
+var next_player : Player
 const num_players = 2
 var players = []
 func change_to_next_player():
@@ -218,25 +218,38 @@ func after_process():
 	for organism in curr_player.organisms:
 		organism.do_ability()
 		for player in players:
-			if player.curr_HP == 0:
-				end_game(player)
+			if is_game_over(curr_player):
+				end_game(curr_player)
 				return
 	
 	# Changing turns
 	if curr_moves == 0:
 		process_actions(actions['turn_end'])
 		curr_player.update_ui()
+		
+		if is_game_over(curr_player):
+			end_game(curr_player)
+			return
+			
 		change_to_next_player()
 		start_turn()
 		process_actions(actions['turn_start'])
+		
+		if is_game_over(curr_player):
+			end_game(curr_player)
+			return
+		
 		grid.selected_tile = null
 		# Notify the current player
 		if is_current_player():
 			notify()
 	else:
 		curr_player.update_ui(true)
+		
+func is_game_over(loser : Player):
+	return loser.curr_HP == 0
 
-func end_game(loser):
+func end_game(loser : Player):
 	grid.game_over = true
 	_root.create_notification(loser.pname + " has lost.", 10)
 
