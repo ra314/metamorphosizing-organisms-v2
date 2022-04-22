@@ -102,6 +102,7 @@ func _ready():
 	if world_str == "Forest Valley":
 		for player in players:
 			player.max_berries = 3
+			player.update_ui()
 	elif world_str == "Abandoned Town":
 		for player in players:
 			for organism in player.organisms:
