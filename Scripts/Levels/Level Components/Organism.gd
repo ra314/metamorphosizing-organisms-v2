@@ -356,6 +356,7 @@ func A029():
 	if target_org == null:
 		var message = "No targets were found for A029."
 		game._root.create_notification(message, 10, alignment)
+		return
 	
 	target_org.set_mana_absorption_blocked(true)
 	A29or30.append(target_org)
@@ -384,6 +385,7 @@ func A030():
 	if target_org == null:
 		var message = "No targets were found for A030."
 		game._root.create_notification(message, 10, alignment)
+		return
 	
 	target_org.set_mana_absorption_blocked(true)
 	A29or30.append(target_org)
@@ -391,7 +393,7 @@ func A030():
 	game._root.create_notification(message, 10, alignment)
 	
 	var args = {'object': self, 'action': 'A030_mini',
-				'num_times': 2, 'action_type': 'move_start', 'cleanup': 'A030_cleanup'}
+				'num_times': 3, 'action_type': 'move_start', 'cleanup': 'A030_cleanup'}
 	game.register_repeated_action(args)
 
 func A030_mini(player):
@@ -458,6 +460,7 @@ func A033():
 	if target_org == null:
 		var message = "No targets were found for A033."
 		game._root.create_notification(message, 10, alignment)
+		return
 	
 	target_org.change_extra_mana_to_activate(3)
 	A33or34.append(target_org)
@@ -486,6 +489,7 @@ func A034():
 	if target_org == null:
 		var message = "No targets were found for A034."
 		game._root.create_notification(message, 10, alignment)
+		return
 	
 	target_org.change_extra_mana_to_activate(3)
 	A33or34.append(target_org)
