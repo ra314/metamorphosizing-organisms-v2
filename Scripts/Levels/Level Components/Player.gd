@@ -1,4 +1,5 @@
 extends Node2D
+class_name Player
 
 var organisms
 var pname
