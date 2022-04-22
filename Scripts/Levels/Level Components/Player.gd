@@ -99,6 +99,7 @@ func tween_HP(delta):
 	var health_icon := get_node("Health_Control/Health_Icon") as Sprite
 	var health_text := get_node("Health_Control/Health/Text") as RichTextLabel
 		
+	health_icon.scale = HEALTH_ICON_SCALE
 	health_text.modulate = Color.white
 	
 	$Tween.interpolate_property(health_icon, "scale", health_icon.scale * 2, health_icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
@@ -121,6 +122,8 @@ func change_berries(delta):
 		
 		var berry_icon := get_node("Berry_Control/Berry_Icon") as Sprite
 		var berry_text := get_node("Berry_Control/Berry/Text") as RichTextLabel
+		
+		berry_icon.scale = BERRY_ICON_SCALE
 		
 		$Tween.interpolate_property(berry_icon, "scale", berry_icon.scale * 2, berry_icon.scale, 1, Tween.TRANS_BOUNCE, Tween.EASE_OUT)
 		$Tween.start()

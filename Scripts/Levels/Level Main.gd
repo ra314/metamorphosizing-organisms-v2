@@ -226,9 +226,19 @@ func after_process():
 	if curr_moves == 0:
 		process_actions(actions['turn_end'])
 		curr_player.update_ui()
+		
+		if curr_player.curr_HP == 0:
+			end_game(curr_player)
+			return
+			
 		change_to_next_player()
 		start_turn()
 		process_actions(actions['turn_start'])
+		
+		if curr_player.curr_HP == 0:
+			end_game(curr_player)
+			return
+		
 		grid.selected_tile = null
 		# Notify the current player
 		if is_current_player():
