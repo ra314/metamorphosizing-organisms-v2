@@ -31,4 +31,4 @@ func select_random_or_remaining(used_array, unused_array):
 			unused_array.erase(item)
 	if len(unused_array) == 0:
 		return null
-	return Utils.select_random(unused_array)
+	return select_random(unused_array)

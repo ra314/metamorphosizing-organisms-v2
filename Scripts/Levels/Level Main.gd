@@ -45,6 +45,7 @@ func _ready():
 	create_mons_and_players()
 	players = _root.players_for_level_main
 	grid = $Grid
+	grid.online_game = _root.online_game
 	
 	# Flip the sprites of the organisms in Player 2's control
 	for organism in players[1].organisms:

@@ -51,11 +51,10 @@ func _load_scene(scene_str, world_str):
 		world_str = Utils.select_random(worlds)
 	var world_details = stage_name_to_node[world_str].get_node("Label").text
 	
-	_root.sync_rng_seed()
-	_root.rpc("change_to_select_mon_scene", scene_str, world_str, world_details)
 	# Remote Procedure Call if the game is online
-#	if _root.online_game:
-#		_root.rpc("change_to_select_mon_scene", scene_str, world_str)
-#	# Regular function call for offline game
-#	else:
-#		_root.change_to_select_mon_scene(scene_str, world_str)
+	if _root.online_game:
+		_root.sync_rng_seed()
+		_root.rpc("change_to_select_mon_scene", scene_str, world_str, world_details)
+	# Regular function call for offline game
+	else:
+		_root.change_to_select_mon_scene(scene_str, world_str, world_details)

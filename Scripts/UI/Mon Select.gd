@@ -41,7 +41,10 @@ func add_selection(mon):
 	$Selection_Label.text = final_text
 
 func next():
-	rpc("create_player", selected_mons[0], selected_mons[1], _root.player_index)
+	if _root.online_game:
+		rpc("create_player", selected_mons[0], selected_mons[1], _root.player_index)
+	else:
+		create_player(selected_mons[0], selected_mons[1], _root.player_index)
 	if null in _root.players_for_level_main:
 		if _root.online_game:
 			_load_scene("UI/Waiting")
@@ -50,7 +53,10 @@ func next():
 			$Selection_Label.text = selection_text
 			selected_mons = []
 	else:
-		_root.rpc("load_level", "Levels/Level Main", _root.world_str)
+		if _root.online_game:
+			_root.rpc("load_level", "Levels/Level Main", _root.world_str)
+		else:
+			_root.load_level("Levels/Level Main", _root.world_str)
 
 # Here we just store the inputs, we create the players and mons in level main
 remotesync func create_player(mon1_name, mon2_name, player_index):

@@ -25,6 +25,7 @@ var grid = []
 
 onready var np = $Numpy
 var Tile = load("res://Scenes/Levels/Level Components/Tile.tscn")
+var online_game: bool
 
 func _ready():
 	pass
@@ -262,7 +263,10 @@ func select_tile(tile):
 		# Swap if the prev selected tile and curr selected tile are adjacent
 		elif tile.can_swap(selected_tile):
 			selected_tile.shrink()
-			rpc("swap", tile.location, selected_tile.location)
+			if online_game:
+				rpc("swap", tile.location, selected_tile.location)
+			else:
+				swap(tile.location, selected_tile.location)
 			selected_tile = null
 		# Deselection if you click the same tile twice
 		elif selected_tile == tile:
