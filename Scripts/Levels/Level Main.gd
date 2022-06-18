@@ -196,7 +196,7 @@ func show_extra_move_text(extra_move_tiles):
 	
 	return null
 
-func remove_move():
+remotesync func remove_move():
 	if curr_moves > 0:
 		curr_moves -= 1
 		update_move_icons()
@@ -330,10 +330,31 @@ func restart_timer():
 	var timer = $Match_Control/Time_Control/Time_Text/Timer
 	
 	timer.start()
-	timer.connect("timeout", self, "on_timer_timeout") 
+	timer.connect("timeout", self, "on_timer_timeout")
 
+# so that it doesn't mess with the normal restart_timer func
+remotesync func rpc_restart_timer():
+	restart_timer()
+	
+# Called when the timer runs out of tiem
+func timeout():
+	# It only removes the move if the client is the current player
+	# Otherwise, if the client missed 'move' packets, it'll be desync from the
+	# current player
+	
+	# print(is_current_player())
+	var swapping = grid.in_middle_of_swap
+	
+	if (!swapping and curr_time == 0 and is_current_player()):
+		rpc("remove_move")
+		rpc("rpc_restart_timer")
+	
 # The timer waits every second but don't update the text. We do it here.
 func on_timer_timeout():
+	if (curr_time == 0):
+		timeout()
+		return
+		
 	curr_time -= 1
 	$Match_Control/Time_Control/Time_Text.text = str(curr_time)
 
