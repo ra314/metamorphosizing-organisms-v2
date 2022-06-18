@@ -195,13 +195,15 @@ func _player_connected(id):
 	# Registering the new player that connected
 	rpc_id(id, "register_player", player_name, get_tree().get_network_unique_id())
 
+const disconnection_message = "The guest has disconnected.\nStart a new game."
+
 # Callback from SceneTree, only for clients (not server).
 func _server_disconnected():
-	disconnection_routine("The guest has disconnected.\nStart a new game.\nOr start a new game and load the last save.")
+	disconnection_routine(disconnection_message)
 
 # Callback from SceneTree.
 func _player_disconnected(id):
-	disconnection_routine("The host has disconnected.\nStart a new game.\nOr start a new game and load the last save.")
+	disconnection_routine(disconnection_message)
 
 func disconnection_routine(message_str):
 	var notification = Label.new()
@@ -237,6 +239,7 @@ func hard_reboot():
 	remove_child(disconnection_container)
 	disconnection_container.queue_free()
 	disconnection_container = null
+	get_tree().reload_current_scene()
 #######
 
 # IP Saving

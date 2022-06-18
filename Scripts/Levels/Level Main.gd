@@ -2,8 +2,6 @@ extends Node2D
 
 onready var _root: Main = get_tree().get_root().get_node("Main")
 
-var game_over = false
-
 var curr_player : Player
 var next_player : Player
 const num_players = 2
@@ -220,8 +218,8 @@ func after_process():
 	for organism in curr_player.organisms:
 		organism.do_ability()
 		for player in players:
-			if is_game_over(curr_player):
-				end_game(curr_player)
+			if is_game_over(player):
+				declare_loser_and_stop_game(player)
 				return
 	
 	# Changing turns
@@ -230,7 +228,7 @@ func after_process():
 		curr_player.update_ui()
 		
 		if is_game_over(curr_player):
-			end_game(curr_player)
+			declare_loser_and_stop_game(curr_player)
 			return
 			
 		change_to_next_player()
@@ -238,7 +236,7 @@ func after_process():
 		process_actions(actions['turn_start'])
 		
 		if is_game_over(curr_player):
-			end_game(curr_player)
+			declare_loser_and_stop_game(curr_player)
 			return
 		
 		grid.selected_tile = null
@@ -251,9 +249,14 @@ func after_process():
 func is_game_over(loser : Player):
 	return loser.curr_HP == 0
 
-func end_game(loser : Player):
-	grid.game_over = true
+func declare_loser_and_stop_game(loser : Player):
 	_root.create_notification(loser.pname + " has lost.", 10)
+	_root.disconnection_routine("Game over.\nStart a new game.")
+
+func stop_game():
+	var timer = $Match_Control/Time_Control/Time_Text/Timer
+	timer.stop()
+	grid.game_over = true
 
 func compare_actions(action1, action2):
 	return action1['num_times'] > action2['num_times']
@@ -283,8 +286,8 @@ func process_actions(curr_actions):
 				actions['move_end'].append(args)
 			a['num_times'] -= 1
 
-const actions = {'turn_end': [], 'turn_start': [], 'move_start': [], 'move_end': []}
-const register_repeated_action_args = {'num_times': 0, 'action': 0, 'caster': 0, 
+var actions = {'turn_end': [], 'turn_start': [], 'move_start': [], 'move_end': []}
+var register_repeated_action_args = {'num_times': 0, 'action': 0, 'caster': 0, 
 	'object': 0, 'action_type': 0, 'cleanup': 0, 'cleanup_type': 0}
 func register_repeated_action(args: Dictionary):
 	args['caster'] = curr_player
